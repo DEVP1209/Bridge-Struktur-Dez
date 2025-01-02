@@ -48,7 +48,6 @@ function createDropdownSection(title, categoryData) {
     accordionContent.className = 'main-accordion-content';
     accordionContent.style.opacity = '0';
     accordionContent.style.display = 'none';
-    accordionContent.style.width = '450px';
 
     // Assemble the structure
     plusWrapper.appendChild(plusLine1);
@@ -61,52 +60,10 @@ function createDropdownSection(title, categoryData) {
     mainWrap.appendChild(accordionTrigger);
     mainWrap.appendChild(accordionContent);
 
-    // Handle top-level values differently
-    if (categoryData.values && categoryData.values.length > 0) {
-        categoryData.values.forEach((value, index) => {
-            const singleCheckbox = createSingleCheckboxElement(value, `${title}-single-${index}`);
-            accordionContent.appendChild(singleCheckbox);
-        });
-    }
+    // Process nested content using the new function
+    processNestedContent(categoryData, accordionContent);
 
-    // Handle nested dropdowns
-    // Handle nested dropdowns
-Object.keys(categoryData).forEach(key => {
-        if (key !== 'values' && typeof categoryData[key] === 'object') {
-            Object.keys(categoryData[key]).forEach(subKey => {
-                if(subKey !== 'values' && typeof categoryData[key][subKey] === 'object') {
-                const nestedDropdown = createNestedDropdown(subKey, categoryData[key][subKey].values);
-                accordionContent.appendChild(nestedDropdown);
-                }
-                else
-                {
-                    const nestedDropdown_1 = createDropdown(key, categoryData[key].values);
-                    accordionContent.appendChild(nestedDropdown_1);
-                }
-            });
-        }
-    });
-
-
-    // Add necessary CSS
-    if (!document.getElementById('accordion-styles')) {
-        const style = document.createElement('style');
-        style.id = 'accordion-styles';
-        style.textContent = `
-            .plus-line._1 {
-                transition: transform 0.3s ease;
-            }
-            .main-accordion-content {
-                transition: all 0.3s ease;
-            }
-            .plus-wrapper {
-                transition: transform 0.3s ease;
-            }
-        `;
-        document.head.appendChild(style);
-    }
-
-    // Click handler
+    // Add click handler for accordion
     accordionTrigger.addEventListener('click', () => {
         const isCollapsed = accordionContent.style.display === 'none';
         
@@ -114,12 +71,10 @@ Object.keys(categoryData).forEach(key => {
             accordionContent.style.display = 'flex';
             accordionContent.offsetHeight;
             plusLine1.style.transform = 'translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg)';
-						plusLine1.style.transformStyle = 'preserve-3d'; 
             accordionContent.style.opacity = '1';
         } else {
             accordionContent.style.opacity = '0';
             plusLine1.style.transform = 'translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(90deg) skew(0deg, 0deg)';
-            plusLine1.style.transformStyle = 'preserve-3d';
             setTimeout(() => {
                 accordionContent.style.display = 'none';
             }, 300);
@@ -127,7 +82,35 @@ Object.keys(categoryData).forEach(key => {
         
         plusWrapper.classList.toggle('active');
     });
+
     return mainWrap;
+}
+
+function processNestedContent(categoryData, accordionContent) {
+    Object.entries(categoryData).forEach(([key, value]) => {
+        // Handle direct values array with single checkboxes
+        if (key === 'values' && Array.isArray(value)) {
+            value.forEach((item, index) => {
+                const singleCheckbox = createSingleCheckboxElement(item, `single-${index}`);
+                accordionContent.appendChild(singleCheckbox);
+            });
+        } 
+        // Handle nested objects
+        else if (typeof value === 'object' && value !== null) {
+            // If this is a second-level object (like "Gesellschaft" under "Thema")
+            const dropdown = createDropdown(key, value.values || []);
+            accordionContent.appendChild(dropdown);
+
+            // Process third-level objects (if any)
+            Object.entries(value).forEach(([subKey, subValue]) => {
+                if (subKey !== 'values' && typeof subValue === 'object' && subValue !== null) {
+                    // Create nested dropdown for third-level objects
+                    const nestedDropdown = createNestedDropdown(subKey, subValue.values || []);
+                    dropdown.querySelector('.checkbox-wrapper').appendChild(nestedDropdown);
+                }
+            });
+        }
+    });
 }
 function createSingleCheckboxElement(value, id) {
     const wrapper = document.createElement('div');
@@ -187,7 +170,6 @@ function createSingleCheckboxElement(value, id) {
     wrapper.appendChild(minusLabel);
     return wrapper;
 }
-
 // Function to create individual dropdown
 function createDropdown(title, values) {
     const dropdown = document.createElement('div');
@@ -344,12 +326,11 @@ function createCheckboxElement(value, id) {
 
     return wrapper;
 }
-function createNestedDropdown(category, categoryData) {
-    // Create the outer dropdown container
+
+function createNestedDropdown(title, values = []) {
     const dropdownContainer = document.createElement('div');
     dropdownContainer.className = 'dropdown inner w-dropdown';
 
-    // Create the dropdown toggle
     const dropdownToggle = document.createElement('div');
     dropdownToggle.className = 'filter-dropdown w-dropdown-toggle';
     dropdownToggle.setAttribute('aria-haspopup', 'menu');
@@ -357,7 +338,7 @@ function createNestedDropdown(category, categoryData) {
     dropdownToggle.setAttribute('tabindex', '0');
 
     const toggleLabel = document.createElement('div');
-    toggleLabel.textContent = category;
+    toggleLabel.textContent = title;
 
     const arrowIndicatorWrap = document.createElement('div');
     arrowIndicatorWrap.className = 'arrow-indicator-wrap';
@@ -366,45 +347,39 @@ function createNestedDropdown(category, categoryData) {
     filterIndicator.className = 'filter-indicator';
 
     const filterSpan = document.createElement('span');
-    filterSpan.id = `t_${category.replace(/\s+/g, '-').toLowerCase()}`;
+    filterSpan.id = `t_${title.replace(/\s+/g, '-').toLowerCase()}`;
     filterSpan.className = 'filter-span';
     filterSpan.textContent = '0';
 
     const dropdownArrow = document.createElement('img');
-    dropdownArrow.src =
-        'https://cdn.prod.website-files.com/6235c6aa0b614c4ab6ba68bb/62379155dbd5b4285817ec0d_Dropdown%20Arrow.svg';
+    dropdownArrow.src = 'https://cdn.prod.website-files.com/6235c6aa0b614c4ab6ba68bb/62379155dbd5b4285817ec0d_Dropdown%20Arrow.svg';
     dropdownArrow.alt = '';
     dropdownArrow.loading = 'lazy';
     dropdownArrow.className = 'dropdown-arrow';
 
-    filterIndicator.appendChild(filterSpan);
-    arrowIndicatorWrap.appendChild(filterIndicator);
-    arrowIndicatorWrap.appendChild(dropdownArrow);
-
-    dropdownToggle.appendChild(toggleLabel);
-    dropdownToggle.appendChild(arrowIndicatorWrap);
-
-    // Create the dropdown list
     const dropdownList = document.createElement('nav');
     dropdownList.className = 'dropdown-list w-dropdown-list';
-    dropdownList.setAttribute('aria-labelledby', dropdownToggle.id);
 
-    // Create checkboxes for categoryData using createCheckboxElement
     const checkboxWrapper = document.createElement('div');
     checkboxWrapper.className = 'checkbox-wrapper';
 
-    categoryData.forEach((option, index) => {
-        const checkboxElement = createCheckboxElement(option, `checkbox-${category.replace(/\s+/g, '-').toLowerCase()}-${index}`);
+    // Add checkboxes for values
+    values.forEach((value, index) => {
+        const checkboxElement = createCheckboxElement(value, `${title}-${index}`);
         checkboxWrapper.appendChild(checkboxElement);
     });
 
+    // Assemble the structure
+    filterIndicator.appendChild(filterSpan);
+    arrowIndicatorWrap.appendChild(filterIndicator);
+    arrowIndicatorWrap.appendChild(dropdownArrow);
+    dropdownToggle.appendChild(toggleLabel);
+    dropdownToggle.appendChild(arrowIndicatorWrap);
     dropdownList.appendChild(checkboxWrapper);
-
-    // Append the toggle and list to the dropdown container
     dropdownContainer.appendChild(dropdownToggle);
     dropdownContainer.appendChild(dropdownList);
 
-    // Add click handler to toggle dropdown
+    // Add click handler
     dropdownToggle.addEventListener('click', () => {
         const isExpanded = dropdownList.classList.contains('w--open');
         dropdownList.classList.toggle('w--open');
@@ -413,8 +388,3 @@ function createNestedDropdown(category, categoryData) {
 
     return dropdownContainer;
 }
-
-
-
-
-
