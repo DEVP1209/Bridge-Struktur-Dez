@@ -105,7 +105,7 @@ function processNestedContent(categoryData, accordionContent) {
             Object.entries(value).forEach(([subKey, subValue]) => {
                 if (subKey !== 'values' && typeof subValue === 'object' && subValue !== null) {
                     // Create nested dropdown for third-level objects
-                    const nestedDropdown = createNestedDropdown(subKey, subValue.values || []);
+                    const nestedDropdown = complexDropdown(subKey, subValue.values );
                     dropdown.querySelector('.checkbox-wrapper').appendChild(nestedDropdown);
                 }
             });
@@ -387,4 +387,188 @@ function createNestedDropdown(title, values = []) {
     });
 
     return dropdownContainer;
+}
+
+function complexDropdown(subKey, dataList) {
+    // Create main wrapper div
+    const mainDropdown = document.createElement('div');
+    mainDropdown.className = 'dropdown gesellschaft w-dropdown';
+    mainDropdown.setAttribute('data-hover', 'false');
+    mainDropdown.setAttribute('data-delay', '200');
+
+    // Create dropdown toggle
+    const filterDropdown = document.createElement('div');
+    filterDropdown.className = 'filter-dropdown w-dropdown-toggle';
+    filterDropdown.setAttribute('role', 'button');
+    filterDropdown.setAttribute('tabindex', '0');
+
+    // Add title text
+    const titleDiv = document.createElement('div');
+    titleDiv.textContent = 'Gesellschaft';
+    
+    // Create arrow indicator wrapper
+    const arrowWrap = document.createElement('div');
+    arrowWrap.className = 'arrow-indicator-wrap';
+    
+    // Create filter indicator
+    const filterIndicator = document.createElement('div');
+    filterIndicator.className = 'filter-indicator';
+    const counterDiv = document.createElement('div');
+    const counterSpan = document.createElement('span');
+    counterSpan.id = 't_gesellschaft';
+    counterSpan.className = 'filter-span';
+    counterSpan.textContent = '0';
+    counterDiv.appendChild(counterSpan);
+    filterIndicator.appendChild(counterDiv);
+
+    // Create dropdown arrow
+    const arrowImg = document.createElement('img');
+    arrowImg.src = 'https://cdn.prod.website-files.com/6235c6aa0b614c4ab6ba68bb/62379155dbd5b4285817ec0d_Dropdown%20Arrow.svg';
+    arrowImg.className = 'dropdown-arrow';
+    arrowImg.setAttribute('loading', 'lazy');
+    arrowImg.setAttribute('alt', '');
+
+    // Assemble arrow wrapper
+    arrowWrap.appendChild(filterIndicator);
+    arrowWrap.appendChild(arrowImg);
+
+    // Assemble toggle
+    filterDropdown.appendChild(titleDiv);
+    filterDropdown.appendChild(arrowWrap);
+
+    // Create dropdown list nav
+    const dropdownList = document.createElement('nav');
+    dropdownList.className = 'dropdown-list gesellschaft min-height w-dropdown-list';
+
+    // Create inner content div
+    const dropdownContent = document.createElement('div');
+    dropdownContent.className = 'dropdown-gesellschaft-div';
+
+    // Create wrapper for subcategory
+    const dropdownWrapper = document.createElement('div');
+    dropdownWrapper.className = 'dropdown-wrapper-gs last';
+
+    // Create indicator lines
+    const indicatorLine1 = document.createElement('div');
+    indicatorLine1.className = 'dropdown-indicator-line _2';
+    const indicatorLine2 = document.createElement('div');
+    indicatorLine2.className = 'dropdown-indicator-line';
+
+    // Create inner dropdown for subcategory
+    const innerDropdown = document.createElement('div');
+    innerDropdown.className = 'dropdown inner w-dropdown';
+    innerDropdown.setAttribute('data-hover', 'false');
+    innerDropdown.setAttribute('data-delay', '200');
+
+    // Create subcategory toggle
+    const subToggle = document.createElement('div');
+    subToggle.className = 'filter-dropdown w-dropdown-toggle';
+    
+    const subTitleDiv = document.createElement('div');
+    subTitleDiv.textContent = subKey;
+    
+    // Clone arrow wrapper for subcategory
+    const subArrowWrap = arrowWrap.cloneNode(true);
+    const subCounter = subArrowWrap.querySelector('span');
+    subCounter.id = `t_gesellschaft_${subKey.toLowerCase().replace('&', '').replace(' ', '-')}`;
+
+    subToggle.appendChild(subTitleDiv);
+    subToggle.appendChild(subArrowWrap);
+
+    // Create checkbox list
+    const checkboxList = document.createElement('nav');
+    checkboxList.className = 'dropdown-list w-dropdown-list';
+
+    const selectAllDiv = document.createElement('div');
+    selectAllDiv.className = 'select-all';
+
+    // Create checkboxes for each item in dataList
+    dataList.forEach((item, index) => {
+        const checkboxWrapper = document.createElement('div');
+        checkboxWrapper.className = 'checkbox-element-wrapper';
+        if (index === dataList.length - 1) checkboxWrapper.classList.add('last');
+
+        const label = document.createElement('label');
+        label.className = 'w-checkbox checkbox-field';
+        label.setAttribute('fs-mirrorclick-element', 'target-3');
+
+        const checkbox = document.createElement('div');
+        checkbox.className = 'w-checkbox-input w-checkbox-input--inputType-custom checkbox';
+
+        const input = document.createElement('input');
+        input.type = 'checkbox';
+        input.style.opacity = '0';
+        input.style.position = 'absolute';
+        input.style.zIndex = '-1';
+
+        const span = document.createElement('span');
+        span.className = 'filter-element-label w-form-label';
+        span.textContent = item;
+
+        label.appendChild(checkbox);
+        label.appendChild(input);
+        label.appendChild(span);
+        checkboxWrapper.appendChild(label);
+        selectAllDiv.appendChild(checkboxWrapper);
+    });
+
+    // Create buttons wrapper
+    const btnWrapper = document.createElement('div');
+    btnWrapper.className = 'dropdown-btn-wrapper';
+
+    // Create "Select All" button
+    const selectAllBtn = document.createElement('a');
+    selectAllBtn.href = '#';
+    selectAllBtn.className = 'select-all-btn w-inline-block';
+    const selectAllText = document.createElement('div');
+    selectAllText.textContent = 'Alle auswählen';
+    selectAllBtn.appendChild(selectAllText);
+
+    // Create "Reset" button
+    const resetBtn = document.createElement('a');
+    resetBtn.href = '#';
+    resetBtn.className = 'reset-btn w-inline-block';
+    const resetText = document.createElement('div');
+    resetText.textContent = 'Zurücksetzen';
+    resetBtn.appendChild(resetText);
+
+    btnWrapper.appendChild(selectAllBtn);
+    btnWrapper.appendChild(resetBtn);
+    selectAllDiv.appendChild(btnWrapper);
+
+    // Assemble all elements
+    checkboxList.appendChild(selectAllDiv);
+    innerDropdown.appendChild(subToggle);
+    innerDropdown.appendChild(checkboxList);
+    
+    dropdownWrapper.appendChild(indicatorLine1);
+    dropdownWrapper.appendChild(indicatorLine2);
+    dropdownWrapper.appendChild(innerDropdown);
+    
+    dropdownContent.appendChild(dropdownWrapper);
+    dropdownList.appendChild(dropdownContent);
+    
+    mainDropdown.appendChild(filterDropdown);
+    mainDropdown.appendChild(dropdownList);
+
+    // Add click event listeners
+    filterDropdown.addEventListener('click', () => {
+        mainDropdown.classList.toggle('w--open');
+        dropdownList.classList.toggle('w--open');
+        filterDropdown.classList.toggle('w--open');
+        filterDropdown.setAttribute('aria-expanded', 
+            filterDropdown.getAttribute('aria-expanded') === 'true' ? 'false' : 'true'
+        );
+    });
+
+    subToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        checkboxList.classList.toggle('w--open');
+        subToggle.classList.toggle('w--open');
+        subToggle.setAttribute('aria-expanded', 
+            subToggle.getAttribute('aria-expanded') === 'true' ? 'false' : 'true'
+        );
+    });
+
+    return mainDropdown;
 }
