@@ -1,0 +1,86 @@
+{
+  "1 neu": {
+    "Thema": {
+      "values": ["Geschichte"],
+      "Auto/technik/wissenschaft": {
+        "values": [
+          "Astronomie/raumfahrt",
+          "Atom",
+          "Auto",
+          "Chemie",
+          "Computer",
+          "Eisenbahn",
+          "Elektrizit\u00e4t",
+          "Erd\u00f6l",
+          "Flugzeug-luftfahrt",
+          "Funk",
+          "Kohle",
+          "Kommunikation",
+          "Motorrad",
+          "Panzer",
+          "Radio",
+          "Schiff",
+          "Telefon",
+          "Zeppelin"
+        ]
+      },
+      "Erotik": {
+        "values": [
+          "Bauch",
+          "Beine",
+          "Busen",
+          "Dreieck",
+          "Erotik",
+          "Frau/frau",
+          "Frau/mann",
+          "Ganzk\u00f6rper",
+          "Gesicht",
+          "Mund",
+          "Oberk\u00f6rper",
+          "Po",
+          "R\u00fccken",
+          "Schulter",
+          "Stellung"
+        ]
+      },
+      "Gesellschaft": {
+        "values": ["Nahrung", "Werte", "Wirtschaft/finanz"],
+        "Arbeit/bildung": {
+          "values": [
+            "Arbeitslosigkeit",
+            "Einkommen",
+            "Schule",
+            "Universit\u00e4t"
+          ]
+        },
+        "Ereignisse-konflikte": {
+          "values": [
+            "B\u00fcrgerkrieg",
+            "Demonstration",
+            "Gefangenschaft",
+            "Meisterschaft",
+            "Olympiade",
+            "Unfall",
+            "Versailles",
+            "Ww1",
+            "Ww2"
+          ]
+        },
+        "Feste/jahreszeiten": {
+          "values": [
+            "Advent",
+            "Fasching",
+            "Fr\u00fchling",
+            "Herbst",
+            "Hochzeit",
+            "Ostern",
+            "Silvester",
+            "Sommer",
+            "Weihnacht",
+            "Winter"
+          ]
+        }
+      }
+    }
+  }
+}

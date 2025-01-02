@@ -1,0 +1,522 @@
+{
+    "1 neu": {
+        "Bewertung": {
+            "values": [
+                "3",
+                "4",
+                "5",
+                "Special"
+            ]
+        },
+        "Ort": {
+            "values": [
+                "Afrika",
+                "Amerika",
+                "Arabien",
+                "England",
+                "Frankreich",
+                "\u00d6sterreich",
+                "Stadt",
+                "Usa"
+            ],
+            "Asien": {
+                "values": [
+                    "China",
+                    "Indien",
+                    "Japan"
+                ]
+            },
+            "Deutschland": {
+                "values": [
+                    "Berlin",
+                    "Bonn",
+                    "Bundesland",
+                    "Hamburg",
+                    "Leipzig",
+                    "M\u00fcnchen",
+                    "N\u00fcrnberg",
+                    "Rheinland",
+                    "Sachsen",
+                    "Stuttgart"
+                ]
+            },
+            "Landschaften": {
+                "values": [
+                    "Berge",
+                    "Eis",
+                    "Fluss",
+                    "Garten",
+                    "Meer",
+                    "See",
+                    "Wald",
+                    "W\u00fcste"
+                ]
+            }
+        },
+        "Pers\u00f6nlichkeiten": {
+            "values": [
+                "B\u00fchne",
+                "Literatur",
+                "Sport"
+            ],
+            "Auto": {
+                "values": [
+                    "Bmw",
+                    "Ferrari",
+                    "Lamborghini",
+                    "Mercedes",
+                    "Porsche",
+                    "Vw k\u00e4fer"
+                ]
+            },
+            "Film": {
+                "values": [
+                    "Angelina jolie",
+                    "Anita ekberg",
+                    "Audrey hepburn",
+                    "Ava gardner",
+                    "Brigitte bardot",
+                    "Buster keaton",
+                    "Catherine deneuve",
+                    "Charlie chaplin",
+                    "Christine kaufmann",
+                    "Claudia cardinale",
+                    "Curd j\u00fcrgens",
+                    "Elisabeth tailor",
+                    "Gina lolobridgida",
+                    "Grace kelly",
+                    "Greta garbo",
+                    "Hans albers",
+                    "Hans moser",
+                    "Hedy lamarr",
+                    "Heinz r\u00fchmann",
+                    "Hildegard knef",
+                    "Ingrid bergmann",
+                    "James dean",
+                    "Jane fonda",
+                    "Jane russell",
+                    "Jaqueline bisset",
+                    "Joan collins",
+                    "Katherine hepburn",
+                    "Maria schell",
+                    "Marilyn monroe",
+                    "Marlene dietrich",
+                    "Marlon brando",
+                    "Nastassja kinski",
+                    "Olga tschechowa",
+                    "Ornella muti",
+                    "Oskar werner",
+                    "Raquel welch",
+                    "Riefenstahl",
+                    "Robert redford",
+                    "Romy schneider",
+                    "Sean connery",
+                    "Senta berger",
+                    "Sophia loren",
+                    "Stan laurel & oliver hardy",
+                    "Terence hill",
+                    "Uschi glas",
+                    "Winnetou",
+                    "Zarah leander"
+                ]
+            },
+            "Gesellschaft": {
+                "values": [
+                    "A-promis",
+                    "Diana",
+                    "Jaquline kennedy",
+                    "Papst",
+                    "Royals",
+                    "Soraya",
+                    "Von monaco familie"
+                ]
+            },
+            "Graphik": {
+                "values": [
+                    "Bayros",
+                    "Dryden",
+                    "Gulbransson",
+                    "Hohlwein",
+                    "Kainer",
+                    "Knabe",
+                    "Kollwitz",
+                    "Kranke",
+                    "Lipus",
+                    "Scheurich",
+                    "Sch\u00fctz",
+                    "Trier"
+                ]
+            },
+            "Malerei": {
+                "values": [
+                    " van gogh",
+                    "Botticelli",
+                    "Chagall",
+                    "Da vinci",
+                    "Degas",
+                    "Helnwein",
+                    "Hodler",
+                    "Holbein",
+                    "Klimt",
+                    "Modigliani",
+                    "Oskar kokoschka",
+                    "Picasso",
+                    "Rembrandt",
+                    "Renoir",
+                    "Schiele"
+                ]
+            },
+            "Milit\u00e4r": {
+                "values": [
+                    "Dietrich",
+                    "Feldmarschall",
+                    "General",
+                    "G\u00f6ring",
+                    "Himmler",
+                    "Hindenburg",
+                    "Marine",
+                    "Rommel",
+                    "Sa",
+                    "Soldat",
+                    "Ss",
+                    "Wehrmacht"
+                ]
+            },
+            "Model": {
+                "values": [
+                    "Cindy crawford"
+                ]
+            },
+            "Musik": {
+                "values": [
+                    "Beethoven",
+                    "Richard strauss",
+                    "Wilhelm furtw\u00e4ngler",
+                    "Cher",
+                    "Louis armstrong",
+                    "Mozart",
+                    "Nena",
+                    "Nina hagen"
+                ]
+            },
+            "Politik": {
+                "values": [
+                    "Adenauer",
+                    "Bismarck",
+                    "Bundeskanzler",
+                    "Bundespr\u00e4sident",
+                    "Churchill",
+                    "G\u00f6bbels",
+                    "Henlein",
+                    "Hess",
+                    "Hitler",
+                    "Kaiser",
+                    "K\u00f6nig",
+                    "Minister",
+                    "Mussolini",
+                    "Nsdap",
+                    "Reichskanzler",
+                    "Ribbentrop",
+                    "Speer",
+                    "Stalin"
+                ]
+            },
+            "Skulptur": {
+                "values": [
+                    "Barlach"
+                ]
+            },
+            "Wissenschaft-wirtschaft": {
+                "values": [
+                    "Einstein"
+                ]
+            }
+        },
+        "Preis": {
+            "values": [
+                "29",
+                "45",
+                "85",
+                "Auf anfrage"
+            ]
+        },
+        "Quelle": {
+            "values": [
+                " anno.onb.ac.at",
+                " simplicissimus.info",
+                "Arthistoricum.net"
+            ]
+        },
+        "Thema": {
+            "values": [
+                "Geschichte"
+            ],
+            "Auto/technik/wissenschaft": {
+                "values": [
+                    "Astronomie/raumfahrt",
+                    "Atom",
+                    "Auto",
+                    "Chemie",
+                    "Computer",
+                    "Eisenbahn",
+                    "Elektrizit\u00e4t",
+                    "Erd\u00f6l",
+                    "Flugzeug-luftfahrt",
+                    "Funk",
+                    "Kohle",
+                    "Kommunikation",
+                    "Motorrad",
+                    "Panzer",
+                    "Radio",
+                    "Schiff",
+                    "Telefon",
+                    "Zeppelin"
+                ]
+            },
+            "Erotik": {
+                "values": [
+                    "Bauch",
+                    "Beine",
+                    "Busen",
+                    "Dreieck",
+                    "Erotik",
+                    "Frau/frau",
+                    "Frau/mann",
+                    "Ganzk\u00f6rper",
+                    "Gesicht",
+                    "Mund",
+                    "Oberk\u00f6rper",
+                    "Po",
+                    "R\u00fccken",
+                    "Schulter",
+                    "Stellung"
+                ]
+            },
+            "Gesellschaft": {
+                "values": [
+                    "Nahrung",
+                    "Werte",
+                    "Wirtschaft/finanz"
+                ],
+                "Arbeit/bildung": {
+                    "values": [
+                        "Arbeitslosigkeit",
+                        "Einkommen",
+                        "Schule",
+                        "Universit\u00e4t"
+                    ]
+                },
+                "Ereignisse-konflikte": {
+                    "values": [
+                        "B\u00fcrgerkrieg",
+                        "Demonstration",
+                        "Gefangenschaft",
+                        "Meisterschaft",
+                        "Olympiade",
+                        "Unfall",
+                        "Versailles",
+                        "Ww1",
+                        "Ww2"
+                    ]
+                },
+                "Feste/jahreszeiten": {
+                    "values": [
+                        "Advent",
+                        "Fasching",
+                        "Fr\u00fchling",
+                        "Herbst",
+                        "Hochzeit",
+                        "Ostern",
+                        "Silvester",
+                        "Sommer",
+                        "Weihnacht",
+                        "Winter"
+                    ]
+                },
+                "Freizeit/sport": {
+                    "values": [
+                        "Ballsport",
+                        "Bergsport",
+                        "Fussball",
+                        "Garten",
+                        "Jagd",
+                        "Motorsport",
+                        "Radsport",
+                        "Reitsport",
+                        "Spiel",
+                        "Wassersport",
+                        "Wintersport",
+                        "Reisen/urlaub"
+                    ]
+                },
+                "Gesundheit/medizin": {
+                    "values": [
+                        "Drogen-medikamente"
+                    ]
+                },
+                "Milit\u00e4r": {
+                    "values": [
+                        "Fallschirmj\u00e4ger",
+                        "Luftwaffe",
+                        "Marine",
+                        "Panzer",
+                        "Polizei-feuerwehr",
+                        "Ritterkreuz",
+                        "Uniform",
+                        "Waffe",
+                        "Wehrmacht",
+                        "X"
+                    ]
+                },
+                "Politik": {
+                    "values": [
+                        "Parteien",
+                        "Veranstaltung",
+                        "Wahlen"
+                    ]
+                },
+                "Religion/spiritualit\u00e4t": {
+                    "values": [
+                        "Christentum"
+                    ]
+                }
+            },
+            "Kultur": {
+                "values": [
+                    "Arch\u00e4ologie",
+                    "Architektur",
+                    "B\u00fchne",
+                    "Design",
+                    "Film",
+                    "Fotografie",
+                    "Grafik",
+                    "Literatur",
+                    "Malerei",
+                    "Musik",
+                    "Schrift",
+                    "Skulptur",
+                    "Tanz"
+                ]
+            },
+            "Mensch": {
+                "values": [
+                    "Alter",
+                    "Baby-kind",
+                    "Beziehung",
+                    "Ego",
+                    "Erziehung",
+                    "Familie",
+                    "Frau",
+                    "Gef\u00fchle",
+                    "Jugend",
+                    "K\u00f6rper",
+                    "Mutter",
+                    "Sexualit\u00e4t",
+                    "Sucht",
+                    "Vater"
+                ]
+            },
+            "Mode/sch\u00f6nheit": {
+                "values": [
+                    "Frisur"
+                ]
+            },
+            "Natur-umwelt": {
+                "values": [
+                    "B\u00e4ume",
+                    "Blumen",
+                    "Fr\u00fcchte",
+                    "Katastrophen",
+                    "Klima"
+                ]
+            }
+        },
+        "Zeitschrift": {
+            "values": [],
+            "Motiv": {
+                "values": [
+                    "Blume/baum/pflanze",
+                    "Engel",
+                    "Frau",
+                    "Kind",
+                    "Kosmos",
+                    "Kunst/bauwerk",
+                    "Landschaft",
+                    "Raum-haus-stadt",
+                    "Sache",
+                    "Sinnbild",
+                    "Symbol"
+                ],
+                "Mensch": {
+                    "values": [
+                        "Familie",
+                        "Female",
+                        "Gesicht",
+                        "Gruppe",
+                        "Jugend",
+                        "Kind",
+                        "K\u00f6rper/-teil",
+                        "Male",
+                        "Mann",
+                        "Mutter",
+                        "Paar",
+                        "Portrait",
+                        "Vater"
+                    ]
+                },
+                "Tier": {
+                    "values": [
+                        "Hund",
+                        "Katze",
+                        "Pferd"
+                    ]
+                }
+            },
+            "Titelseite": {
+                "values": [
+                    "Collage",
+                    "Foto",
+                    "Grafik",
+                    "Kunstwerk",
+                    "S/w",
+                    "Text"
+                ],
+                "Farbe": {
+                    "values": [
+                        "Blau",
+                        "Braun",
+                        "Gelb",
+                        "Gold",
+                        "Gr\u00fcn",
+                        "Lila",
+                        "Orange",
+                        "Rot",
+                        "Schwarz",
+                        "Silber",
+                        "Violett",
+                        "Wei\u00df"
+                    ]
+                }
+            },
+            "Genre": {
+                "values": [
+                    "Architektur",
+                    "Auto/motor",
+                    "Design/grafik",
+                    "Erotik",
+                    "Film",
+                    "Gesellschaft",
+                    "Iii reich",
+                    "Jugend",
+                    "Kunst/kultur",
+                    "Lifestyle",
+                    "Mode/sch\u00f6nheit/haushalt",
+                    "Natur/technik/wissenschaft",
+                    "Politik",
+                    "Religion",
+                    "Satire"
+                ]
+            }
+        }
+    }
+}
