@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -34,4 +34,249 @@
 
 </html>
 
+ -->
 
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* Styles for dropdown */
+        .dropdown-wrapper {
+            position: relative;
+            font-family: Arial, sans-serif;
+        }
+
+        .dropdown-toggle {
+            display: flex;
+            justify-content: space-between;
+            background-color: transparent;
+            border: 1px solid black;
+            padding: 10px;
+            cursor: pointer;
+            width: 300px;
+            font-weight: bold;
+        }
+
+        .dropdown-arrow {
+            transform: rotate(0deg);
+            transition: transform 0.3s ease;
+        }
+
+        .dropdown-toggle.active .dropdown-arrow {
+            transform: rotate(180deg);
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            background-color: white;
+            border: 1px solid #ddd;
+            width: 300px;
+            z-index: 10;
+        }
+
+        .dropdown-menu.open {
+            display: block;
+        }
+
+        .dropdown-item {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .sub-dropdown-toggle {
+            display: flex;
+            justify-content: space-between;
+            background-color: transparent;
+            border: none;
+            padding: 5px 10px;
+            width: 100%;
+            font-weight: normal;
+            cursor: pointer;
+        }
+
+        .sub-dropdown-toggle:hover {
+            background-color: #f1f1f1;
+        }
+
+        .sub-dropdown-arrow {
+            transform: rotate(0deg);
+            transition: transform 0.3s ease;
+        }
+
+        .sub-dropdown-toggle.active .sub-dropdown-arrow {
+            transform: rotate(90deg);
+        }
+
+        .sub-dropdown-menu {
+            display: none;
+            padding-left: 20px;
+            border-left: 1px solid #ddd;
+        }
+
+        .sub-dropdown-menu.open {
+            display: block;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+        }
+
+        .select-all-btn, .reset-btn {
+            cursor: pointer;
+            background-color: black;
+            color: white;
+            padding: 5px 10px;
+            text-decoration: none;
+        }
+
+        .select-all-btn:hover, .reset-btn:hover {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+
+<div id="dropdown-container"></div>
+
+<script>
+    function createDropdown(category, data) {
+        const container = document.createElement('div');
+        container.classList.add('dropdown-wrapper');
+
+        // Main dropdown toggle
+        const toggle = document.createElement('div');
+        toggle.classList.add('dropdown-toggle');
+        toggle.textContent = category;
+
+        const arrow = document.createElement('span');
+        arrow.classList.add('dropdown-arrow');
+        arrow.textContent = '▼';
+        toggle.appendChild(arrow);
+
+        const menu = document.createElement('div');
+        menu.classList.add('dropdown-menu');
+
+        // Create top-level items
+        data.values.forEach(value => {
+            const item = document.createElement('div');
+            item.classList.add('dropdown-item');
+            item.textContent = value;
+            menu.appendChild(item);
+        });
+
+        // Create subcategories with nested dropdowns
+        Object.keys(data).forEach(key => {
+            if (key !== 'values') {
+                const subToggle = document.createElement('button');
+                subToggle.classList.add('sub-dropdown-toggle');
+                subToggle.textContent = key.replace(/_/g, " ");
+
+                const subArrow = document.createElement('span');
+                subArrow.classList.add('sub-dropdown-arrow');
+                subArrow.textContent = '>';
+                subToggle.appendChild(subArrow);
+
+                const subMenu = document.createElement('div');
+                subMenu.classList.add('sub-dropdown-menu');
+
+                data[key].values.forEach(value => {
+                    const subItem = document.createElement('div');
+                    subItem.classList.add('dropdown-item');
+                    subItem.textContent = value;
+                    subMenu.appendChild(subItem);
+                });
+
+                // Toggle subcategory dropdown
+                subToggle.addEventListener('click', () => {
+                    subToggle.classList.toggle('active');
+                    subMenu.classList.toggle('open');
+                });
+
+                menu.appendChild(subToggle);
+                menu.appendChild(subMenu);
+            }
+        });
+
+        // Add "Select All" and "Reset" buttons
+        const buttonContainer = document.createElement('div');
+        buttonContainer.classList.add('buttons');
+        
+        const selectAllBtn = document.createElement('a');
+        selectAllBtn.classList.add('select-all-btn');
+        selectAllBtn.textContent = 'Alle auswählen';
+        buttonContainer.appendChild(selectAllBtn);
+
+        const resetBtn = document.createElement('a');
+        resetBtn.classList.add('reset-btn');
+        resetBtn.textContent = 'Zurücksetzen';
+        buttonContainer.appendChild(resetBtn);
+
+        menu.appendChild(buttonContainer);
+
+        // Toggle main dropdown
+        toggle.addEventListener('click', () => {
+            toggle.classList.toggle('active');
+            menu.classList.toggle('open');
+        });
+
+        container.appendChild(toggle);
+        container.appendChild(menu);
+
+        return container;
+    }
+
+    // Example data
+    const gesellschaftData = {
+        "values": ["Nahrung", "Werte", "Wirtschaft/finanz"],
+        "Arbeit/bildung": {
+            "values": [
+                "Arbeitslosigkeit",
+                "Einkommen",
+                "Schule",
+                "Universität"
+            ]
+        },
+        "Ereignisse-konflikte": {
+            "values": [
+                "Bürgerkrieg",
+                "Demonstration",
+                "Gefangenschaft",
+                "Meisterschaft",
+                "Olympiade",
+                "Unfall",
+                "Versailles",
+                "Ww1",
+                "Ww2"
+            ]
+        },
+        "Feste/jahreszeiten": {
+            "values": [
+                "Advent",
+                "Fasching",
+                "Frühling",
+                "Herbst",
+                "Hochzeit",
+                "Ostern",
+                "Silvester",
+                "Sommer",
+                "Weihnacht",
+                "Winter"
+            ]
+        }
+    };
+
+    // Add dropdown to container
+    document.getElementById('dropdown-container').appendChild(createDropdown('Gesellschaft', gesellschaftData));
+</script>
+
+</body>
+</html>
