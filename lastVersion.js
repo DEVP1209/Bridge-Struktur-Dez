@@ -540,10 +540,14 @@ function createDropdownStructure(title, data) {
         "dropdown-gesellschaft-div complex-dropdown-single-checkbox";
 
       valueDiv.innerHTML = `
-          <div class="dropdown-wrapper-gs last">
+          <div class="dropdown-wrapper-gs ${
+                      index === data.values.length - 1 ? " last" : ""
+                    }">
             <div class="dropdown-indicator-line"></div>
             <div class="dropdown-indicator-line _2"></div>
-            <div class="filter-dropdown single last">
+            <div class="filter-dropdown single complex-width ${
+                      index === data.values.length - 1 ? " last" : ""
+                    }">
               <label class="w-checkbox checkbox-field single">
                 <div class="w-checkbox-input w-checkbox-input--inputType-custom checkbox"></div>
                 <input type="checkbox" id="checkbox-single-${index}" 
