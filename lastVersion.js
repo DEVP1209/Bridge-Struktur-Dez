@@ -62,7 +62,7 @@ function createDropdownSection(title, categoryData) {
   mainWrap.appendChild(accordionContent);
 
   // Process nested content using the new function
-  processNestedContent(categoryData, accordionContent);
+  processNestedContent(title, categoryData, accordionContent);
 
   // Add click handler for accordion
   accordionTrigger.addEventListener("click", () => {
@@ -89,7 +89,7 @@ function createDropdownSection(title, categoryData) {
   return mainWrap;
 }
 
-function processNestedContent(categoryData, accordionContent) {
+function processNestedContent(title, categoryData, accordionContent) {
   for (const key in categoryData) {
     // Check if the value is an object (and not an array)
     if (
@@ -112,16 +112,17 @@ function processNestedContent(categoryData, accordionContent) {
       }
       // If it has nested object-type values (like "Gesellschaft")
       if (hasNestedObject) {
-        const nestedDropdown = createDropdownStructure(key, categoryData[key]);
+        const nestedDropdown = createDropdownStructure( key, categoryData[key]);
         accordionContent.appendChild(nestedDropdown);
       } else if (categoryData[key] !== null) {
-        const dropdown = createDropdown(key, categoryData[key].values || []);
+        const dropdown = createDropdown(title, key, categoryData[key].values || []);
         accordionContent.appendChild(dropdown);
       }
     } else {
       if (key === "values" && Array.isArray(categoryData[key])) {
         categoryData[key].forEach((item, index) => {
           const singleCheckbox = createSingleCheckboxElement(
+            title,
             item,
             `single-${index}`
           );
@@ -131,7 +132,7 @@ function processNestedContent(categoryData, accordionContent) {
     }
   }
 }
-function createSingleCheckboxElement(value, id) {
+function createSingleCheckboxElement(title, value, id) {
   const wrapper = document.createElement("div");
   wrapper.className = "filter-dropdown single";
 
@@ -169,6 +170,7 @@ function createSingleCheckboxElement(value, id) {
   const minusSpan = document.createElement("span");
   minusSpan.className = "filter-element-label is-hidden w-form-label";
   minusSpan.setAttribute("for", `${id}-minus`);
+  minusSpan.setAttribute("fs-cmsfilter-field", `${title.replace(/\//g, '-').toLowerCase()}`);
   minusSpan.textContent = `-${value}`;
 
   // Append minus checkbox elements
@@ -181,7 +183,7 @@ function createSingleCheckboxElement(value, id) {
   const span = document.createElement("span");
   span.className = "filter-element-label single w-form-label";
   span.setAttribute("for", id);
-  span.setAttribute("fs-cmsfilter-field", `M_${value}`);
+  span.setAttribute("fs-cmsfilter-field", `${title.toLowerCase()}`);
   span.textContent = value;
 
   label.appendChild(checkbox);
@@ -192,7 +194,7 @@ function createSingleCheckboxElement(value, id) {
   return wrapper;
 }
 // Function to create individual dropdown
-function createDropdown(title, values) {
+function createDropdown(main_title, title, values) {
   const dropdown = document.createElement("div");
   dropdown.className = "dropdown w-dropdown";
 
@@ -244,7 +246,7 @@ function createDropdown(title, values) {
 
   // Add checkbox elements
   values.forEach((value, index) => {
-    const checkboxElement = createCheckboxElement(value, `${title}-${index}`);
+    const checkboxElement = createCheckboxElement(main_title, title, value, `${title}-${index}`);
     checkboxWrapper.appendChild(checkboxElement);
   });
 
@@ -286,7 +288,7 @@ function createDropdown(title, values) {
   return dropdown;
 }
 // Function to create checkbox elements with minus label
-function createCheckboxElement(value, id) {
+function createCheckboxElement(main_title, title, value, id) {
   const wrapper = document.createElement("div");
   wrapper.className = "checkbox-element-wrapper";
 
@@ -308,6 +310,7 @@ function createCheckboxElement(value, id) {
 
   const span = document.createElement("span");
   span.className = "filter-element-label w-form-label";
+  span.setAttribute("fs-cmsfilter-field", `${main_title.toLowerCase().charAt(0)}_${title.replace(/\//g, '-')}`);
   span.setAttribute("for", id);
   span.textContent = value;
 
@@ -330,6 +333,7 @@ function createCheckboxElement(value, id) {
   const minusSpan = document.createElement("span");
   minusSpan.className = "filter-element-label is-hidden w-form-label";
   minusSpan.setAttribute("for", `${id}-minus`);
+  minusSpan.setAttribute("fs-cmsfilter-field", `${main_title.toLowerCase().charAt(0)}_${title.replace(/\//g, '-')}`);
   minusSpan.textContent = `-${value}`;
 
   // Append regular checkbox elements
@@ -544,7 +548,7 @@ function createDropdownStructure(title, data) {
                       index === data.values.length - 1 ? " last" : ""
                     }">
             <div class="dropdown-indicator-line"></div>
-            <div class="dropdown-indicator-line _2"></div>
+            ${index === data.values.length - 1 ? "<div class=\"dropdown-indicator-line _2\"></div>" : ""}
             <div class="filter-dropdown single complex-width ${
                       index === data.values.length - 1 ? " last" : ""
                     }">
