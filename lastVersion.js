@@ -112,7 +112,7 @@ function processNestedContent(title, categoryData, accordionContent) {
       }
       // If it has nested object-type values (like "Gesellschaft")
       if (hasNestedObject) {
-        const nestedDropdown = createDropdownStructure( key, categoryData[key]);
+        const nestedDropdown = createDropdownStructure(title, key, categoryData[key]);
         accordionContent.appendChild(nestedDropdown);
       } else if (categoryData[key] !== null) {
         const dropdown = createDropdown(title, key, categoryData[key].values || []);
@@ -363,70 +363,8 @@ function createCheckboxElement(main_title, title, value, id) {
   return wrapper;
 }
 
-function createNestedDropdown(title, values = []) {
-  const dropdownContainer = document.createElement("div");
-  dropdownContainer.className = "dropdown inner w-dropdown";
 
-  const dropdownToggle = document.createElement("div");
-  dropdownToggle.className = "filter-dropdown w-dropdown-toggle";
-  dropdownToggle.setAttribute("aria-haspopup", "menu");
-  dropdownToggle.setAttribute("role", "button");
-  dropdownToggle.setAttribute("tabindex", "0");
-
-  const toggleLabel = document.createElement("div");
-  toggleLabel.textContent = title;
-
-  const arrowIndicatorWrap = document.createElement("div");
-  arrowIndicatorWrap.className = "arrow-indicator-wrap";
-
-  const filterIndicator = document.createElement("div");
-  filterIndicator.className = "filter-indicator";
-
-  const filterSpan = document.createElement("span");
-  filterSpan.id = `t_${title.replace(/\s+/g, "-").toLowerCase()}`;
-  filterSpan.className = "filter-span";
-  filterSpan.textContent = "0";
-
-  const dropdownArrow = document.createElement("img");
-  dropdownArrow.src =
-    "https://cdn.prod.website-files.com/6235c6aa0b614c4ab6ba68bb/62379155dbd5b4285817ec0d_Dropdown%20Arrow.svg";
-  dropdownArrow.alt = "";
-  dropdownArrow.loading = "lazy";
-  dropdownArrow.className = "dropdown-arrow";
-
-  const dropdownList = document.createElement("nav");
-  dropdownList.className = "dropdown-list w-dropdown-list";
-
-  const checkboxWrapper = document.createElement("div");
-  checkboxWrapper.className = "checkbox-wrapper";
-
-  // Add checkboxes for values
-  values.forEach((value, index) => {
-    const checkboxElement = createCheckboxElement(value, `${title}-${index}`);
-    checkboxWrapper.appendChild(checkboxElement);
-  });
-
-  // Assemble the structure
-  filterIndicator.appendChild(filterSpan);
-  arrowIndicatorWrap.appendChild(filterIndicator);
-  arrowIndicatorWrap.appendChild(dropdownArrow);
-  dropdownToggle.appendChild(toggleLabel);
-  dropdownToggle.appendChild(arrowIndicatorWrap);
-  dropdownList.appendChild(checkboxWrapper);
-  dropdownContainer.appendChild(dropdownToggle);
-  dropdownContainer.appendChild(dropdownList);
-
-  // Add click handler
-  dropdownToggle.addEventListener("click", () => {
-    const isExpanded = dropdownList.classList.contains("w--open");
-    dropdownList.classList.toggle("w--open");
-    dropdownToggle.setAttribute("aria-expanded", !isExpanded);
-  });
-
-  return dropdownContainer;
-}
-
-function createDropdownStructure(title, data) {
+function createDropdownStructure(main_title, title, data) {
   const dropdown = document.createElement("div");
   dropdown.className = "dropdown gesellschaft w-dropdown";
   dropdown.setAttribute("data-hover", "false");
@@ -502,7 +440,7 @@ function createDropdownStructure(title, data) {
                                data-name="Checkbox ${categoryIndex}-${idx}" 
                                style="opacity:0;position:absolute;z-index:-1">
                         <span class="filter-element-label w-form-label" 
-                              for="checkbox-${categoryIndex}-${idx}">${option}</span>
+                              for="checkbox-${categoryIndex}-${idx}" fs-cmsfilter-field:"${main_title.toLowerCase().charAt(0)}_${title.replace(/\//g, '-')}_${categoryName.toLowerCase().replace(/[/]/g, "-")}">${option}</span>
                       </label>
                       <label fs-mirrorclick-element="trigger-50" class="w-checkbox checkbox-field is-minus">
                         <div class="w-checkbox-input w-checkbox-input--inputType-custom checkbox is-minus"></div>
@@ -511,7 +449,7 @@ function createDropdownStructure(title, data) {
                                data-name="Checkbox ${categoryIndex}-${idx}" 
                                style="opacity:0;position:absolute;z-index:-1">
                         <span class="filter-element-label is-hidden w-form-label" 
-                              for="checkbox-${categoryIndex}-${idx}-minus">-${option}</span>
+                              for="checkbox-${categoryIndex}-${idx}-minus" fs-cmsfilter-field:"${main_title.toLowerCase().charAt(0)}_${title.replace(/\//g, '-')}_${categoryName.toLowerCase().replace(/[/]/g, "-")}">-${option}</span>
                       </label>
                     </div>
                   `
@@ -559,9 +497,13 @@ function createDropdownStructure(title, data) {
                        data-name="Checkbox Single ${index}" 
                        style="opacity:0;position:absolute;z-index:-1">
                 <span class="filter-element-label single w-form-label" 
-                      for="checkbox-single-${index}">${value}</span>
+                      for="checkbox-single-${index}" fs-cmsfilter-field="${title.toLowerCase()}">${value}</span>
               </label>
+            <label class="w-checkbox checkbox-field is-minus">
               <div class="w-checkbox-input w-checkbox-input--inputType-custom checkbox is-minus"></div>
+              <input type="checkbox" id="checkbox-single-${index}-minus" name="checkbox-single-${index}-minus" style="opacity:0;position:absolute;z-index:-1">
+              <span class="filter-element-label is-hidden w-form-label" for="checkbox-single-${index}-minus" fs-cmsfilter-field="${title.toLowerCase()}">-${value}</span>
+            </label>
             </div>
           </div>
         `;
