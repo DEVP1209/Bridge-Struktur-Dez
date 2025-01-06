@@ -415,7 +415,7 @@ const randomMags = async (array) => {
       collection.append(fragment);
       list.prepend(collection);
       await pagination();
-      const lastQuery = window.location.href.includes("page") ? window.location.href.split("page=")[1].substring(2) : window.location.href.split("?")[1];
+      const lastQuery = window.location.href.includes("page=") ? window.location.href.split("page=")[1].substring(2) : window.location.href.split("?")[1];
       if (lastQuery == "") {
         fetch(
           "https://bildzeitschrift.netlify.app/.netlify/functions/randomize"
@@ -427,114 +427,232 @@ const randomMags = async (array) => {
     async function pagination() {
       const list = document.getElementsByClassName("w-dyn-list")[0];
       var paginationWrapper;
-      if (document.getElementsByClassName("w-pagination-wrapper pagination")[0]) {
-        paginationWrapper = document.getElementsByClassName("w-pagination-wrapper pagination")[0];
-        paginationWrapper.remove();
-      }
-      paginationWrapper = document.createElement("div");
-      paginationWrapper.className = "w-pagination-wrapper pagination";
-      paginationWrapper.style.display = "flex";
-    
-      const pageCount = data.pageCount;
-      const currentPage = data.currentPage || 1;
-      const lastQuery = window.location.href.includes("page") ? window.location.href.split("page=")[1].substring(2) : window.location.href.split("?")[1];
-    
-      const pageFragment = document.createDocumentFragment();
-    
+
       const handlePaginationClick = (event) => {
         const page = event.target.getAttribute("data-page");
         const url = lastQuery ? `?page=${page}&${lastQuery}` : `?page=${page}`;
         window.history.pushState({}, "", url);
         loadFData(null, true);
       };
-    
-      // Function to create a pagination button
-      const createPaginationButton = (pageNumber, isCurrent = false) => {
-        const pageButton = document.createElement("a");
-        const pageDiv = document.createElement("div");
-        pageDiv.textContent = pageNumber;
-        pageButton.className = "pagination-page-button w-inline-block";
-        if (isCurrent) {
-          pageButton.className = "pagination-page-button w-inline-block w--current";
-        }
-        pageButton.setAttribute("data-page", pageNumber);
-        pageButton.append(pageDiv);
-        pageButton.addEventListener("click", handlePaginationClick);
-        return pageButton;
-      };
-    
-      if (currentPage != 1) {
-        const leftArrowButton = createPaginationButton(currentPage - 1);
-        pageFragment.append(leftArrowButton);
-    
-        if (currentPage > 10) {
-          const leftArrowTenButton = createPaginationButton(currentPage - 10);
-          pageFragment.append(leftArrowTenButton);
-        }
+      if (document.getElementsByClassName("w-pagination-wrapper pagination")[0]) {
+        paginationWrapper = document.getElementsByClassName(
+          "w-pagination-wrapper pagination"
+        )[0];
+        paginationWrapper.remove();
       }
-    
-      if (pageCount <= 7) {
-        for (let i = 1; i <= pageCount; i++) {
-          const pageButton = createPaginationButton(i, i === currentPage);
-          pageFragment.append(pageButton);
+      paginationWrapper = document.createElement("div");
+      paginationWrapper.className = "w-pagination-wrapper pagination";
+      paginationWrapper.style.display = "flex";
+  
+  
+      const pageCount = data.pageCount;
+      const currentPage = data.currentPage || 1;
+  
+      const pageFragment = document.createDocumentFragment();
+      if (currentPage != 1) {
+        if (currentPage > 10) {
+          const leftArrowButton = document.createElement("div");
+          leftArrowButton.className =
+            "w-pagination-previous pagination-button-left keep-params 10xarrow";
+          leftArrowButton.setAttribute("aria-label", "Previous Page");
+          leftArrowButton.style.marginRight = 0;
+          const leftArrowImage = document.createElement("img");
+          leftArrowImage.width = "45";
+          leftArrowImage.loading = "lazy";
+          leftArrowImage.src =
+            "https://res.cloudinary.com/wdy-bzs/image/upload/v1661106376/asset/Group_42_1.svg";
+          leftArrowImage.className = "pagination-arrow left";
+          leftArrowButton.style.marginRight = "0px";
+          leftArrowButton.style.paddingRight = "0px";
+          leftArrowButton.append(leftArrowImage);
+          pageFragment.append(leftArrowButton);
+          leftArrowButton.setAttribute("data-page", currentPage - 10);
+          leftArrowButton.addEventListener("click", handlePaginationClick);
         }
+        const leftArrowButton = document.createElement("div");
+        leftArrowButton.className =
+          "w-pagination-previous pagination-button-left keep-params 10xarrow";
+        leftArrowButton.setAttribute("aria-label", "Previous Page");
+        const leftArrowImage = document.createElement("img");
+        leftArrowImage.width = "45";
+        leftArrowImage.loading = "lazy";
+        leftArrowImage.src =
+          "https://res.cloudinary.com/wdy-bzs/image/upload/v1651849092/asset/Arrow.svg";
+        leftArrowImage.className = "pagination-arrow left";
+        leftArrowButton.style.paddingLeft = "0px";
+        leftArrowButton.style.paddingRight = "0px";
+        leftArrowButton.append(leftArrowImage);
+        pageFragment.append(leftArrowButton);
+        leftArrowButton.setAttribute("data-page", currentPage - 1);
+        leftArrowButton.addEventListener("click", handlePaginationClick);
+      }
+      if (pageCount <= 7) {
+        for (i = 1; i <= pageCount; i++) {
+          const pageButton = document.createElement("div");
+          const pageDiv = document.createElement("div");
+          pageDiv.textContent = i;
+          pageButton.className = "pagination-page-button w-inline-block";
+          pageButton.setAttribute("data-page", i);
+          pageButton.addEventListener("click", handlePaginationClick);
+          pageButton.append(pageDiv);
+          pageFragment.append(pageButton);
+          if (i == currentPage) {
+            pageButton.className =
+              "pagination-page-button w-inline-block w--current";
+          }
+        }
+        paginationWrapper.append(pageFragment);
       } else {
         if (currentPage < 5) {
-          for (let i = 1; i <= 5; i++) {
-            const pageButton = createPaginationButton(i, i === currentPage);
+          for (i = 1; i <= 5; i++) {
+            const pageButton = document.createElement("div");
+            const pageDiv = document.createElement("div");
+            pageDiv.textContent = i;
+            pageButton.className = "pagination-page-button w-inline-block";
+            pageButton.setAttribute("data-page", i);
+            pageButton.addEventListener("click", handlePaginationClick);
+            ;
+            pageButton.append(pageDiv);
             pageFragment.append(pageButton);
+            if (i == currentPage) {
+              pageButton.className =
+                "pagination-page-button w-inline-block w--current";
+            }
           }
+  
           const pageDots = document.createElement("div");
           pageDots.textContent = "...";
           pageDots.className = "pagination-dots-button";
           pageFragment.append(pageDots);
-          const lastPageButton = createPaginationButton(pageCount);
+  
+          const lastPageButton = document.createElement("div");
+          const lastPageDiv = document.createElement("div");
+          lastPageDiv.textContent = pageCount;
+          lastPageButton.className = "pagination-page-button w-inline-block";
+          lastPageButton.setAttribute("data-page", pageCount);
+          lastPageButton.addEventListener("click", handlePaginationClick);
+  
+          lastPageButton.append(lastPageDiv);
           pageFragment.append(lastPageButton);
+          paginationWrapper.append(pageFragment);
         } else if (currentPage >= 5 && currentPage <= pageCount - 4) {
-          const firstPageButton = createPaginationButton(1);
+          const firstPageButton = document.createElement("div");
+          const firstPageDiv = document.createElement("div");
+          firstPageDiv.textContent = "1";
+          firstPageButton.className = "pagination-page-button w-inline-block";
+          firstPageButton.setAttribute("data-page", 1);
+          firstPageButton.addEventListener("click", handlePaginationClick);
+          firstPageButton.append(firstPageDiv);
           pageFragment.append(firstPageButton);
+  
           const pageDots = document.createElement("div");
           pageDots.textContent = "...";
           pageDots.className = "pagination-dots-button";
           pageFragment.append(pageDots);
-          for (let i = currentPage - 1; i <= currentPage + 1; i++) {
-            const pageButton = createPaginationButton(i, i === currentPage);
+          var j = currentPage - 1;
+          for (i = 0; i < 3; i++) {
+            const pageButton = document.createElement("div");
+            const pageDiv = document.createElement("div");
+  
+            pageDiv.textContent = j;
+            pageButton.className = "pagination-page-button w-inline-block";
+            pageButton.setAttribute("data-page", j);
+            pageButton.addEventListener("click", handlePaginationClick);
+            pageButton.append(pageDiv);
             pageFragment.append(pageButton);
+            if (j == currentPage) {
+              pageButton.className =
+                "pagination-page-button w-inline-block w--current";
+            }
+            j = j + 1;
           }
           const midPageDots = document.createElement("div");
           midPageDots.textContent = "...";
           midPageDots.className = "pagination-dots-button";
           pageFragment.append(midPageDots);
-          const lastPageButton = createPaginationButton(pageCount);
+  
+          const lastPageButton = document.createElement("div");
+          const lastPageDiv = document.createElement("div");
+          lastPageDiv.textContent = pageCount;
+          lastPageButton.className = "pagination-page-button w-inline-block";
+          lastPageButton.setAttribute("data-page", pageCount);   // Check here , maybe i 
+          lastPageButton.addEventListener("click", handlePaginationClick);
+          lastPageButton.append(lastPageDiv);
           pageFragment.append(lastPageButton);
+          paginationWrapper.append(pageFragment);
         } else {
-          const firstPageButton = createPaginationButton(1);
+          const firstPageButton = document.createElement("div");
+          const firstPageDiv = document.createElement("div");
+          firstPageDiv.textContent = "1";
+          firstPageButton.className = "pagination-page-button w-inline-block";
+          firstPageButton.setAttribute("data-page", 1);
+          firstPageButton.addEventListener("click", handlePaginationClick);
+  
+          firstPageButton.append(firstPageDiv);
           pageFragment.append(firstPageButton);
+  
           const pageDots = document.createElement("div");
           pageDots.textContent = "...";
           pageDots.className = "pagination-dots-button";
           pageFragment.append(pageDots);
-          for (let i = pageCount - 4; i <= pageCount; i++) {
-            const pageButton = createPaginationButton(i, i === currentPage);
+  
+          for (i = pageCount - 4; i <= pageCount; i++) {
+            const pageButton = document.createElement("div");
+            const pageDiv = document.createElement("div");
+            pageDiv.textContent = i;
+            pageButton.className = "pagination-page-button w-inline-block";
+            pageButton.setAttribute("data-page", i);
+            pageButton.addEventListener("click", handlePaginationClick);
+  
+            pageButton.append(pageDiv);
             pageFragment.append(pageButton);
+            if (i == currentPage) {
+              pageButton.className =
+                "pagination-page-button w-inline-block w--current";
+            }
+            j++;
           }
+          paginationWrapper.append(pageFragment);
         }
       }
-    
       if (currentPage != pageCount) {
-        const rightArrowButton = createPaginationButton(currentPage + 1);
-        pageFragment.append(rightArrowButton);
-    
+  
+        const rightArrowButton = document.createElement("div");
+        rightArrowButton.className =
+          "w-pagination-right pagination-button-next keep-params 10xarrow";
+        rightArrowButton.setAttribute("aria-label", "Next Page");
+        const rightArrowImage = document.createElement("img");
+        rightArrowButton.style.marginLeft = 10;
+        rightArrowImage.width = "45";
+        rightArrowImage.loading = "lazy";
+        rightArrowImage.src =
+          "https://res.cloudinary.com/wdy-bzs/image/upload/v1651849092/asset/Arrow.svg";
+        rightArrowImage.className = "pagination-arrow right";
+        rightArrowButton.append(rightArrowImage);
+        rightArrowButton.setAttribute("data-page", Number(currentPage) + 1);
+        rightArrowButton.addEventListener("click", handlePaginationClick);
+        paginationWrapper.append(rightArrowButton);
         if (pageCount - currentPage >= 10) {
-          const rightArrowTenButton = createPaginationButton(currentPage + 10);
-          pageFragment.append(rightArrowTenButton);
+          const rightArrowButton = document.createElement("div");
+          rightArrowButton.className =
+            "w-pagination-right pagination-button-next keep-params 10xarrow";
+          rightArrowButton.setAttribute("aria-label", "Next Page");
+          const rightArrowImage = document.createElement("img");
+          rightArrowImage.style;
+          rightArrowImage.width = "45";
+          rightArrowButton.style.marginLeft = "0px";
+          rightArrowImage.loading = "lazy";
+          rightArrowImage.src =
+            "https://res.cloudinary.com/wdy-bzs/image/upload/v1661106376/asset/Group_42_1.svg";
+          rightArrowImage.className = "pagination-arrow right";
+          rightArrowButton.append(rightArrowImage);
+          rightArrowButton.setAttribute("data-page", Number(currentPage) + 10);
+          rightArrowButton.addEventListener("click", handlePaginationClick);
+          paginationWrapper.append(rightArrowButton);
         }
       }
-    
-      paginationWrapper.append(pageFragment);
       list.append(paginationWrapper);
     }
-    
   }
 async function loadFData(e, preservePage = false) {
   if (e?.key == "Enter") {
@@ -718,3 +836,5 @@ async function updatePagination(newPage) {
   currentPage = newPage;
   await loadFData(null, true);
 }
+
+
