@@ -5,3 +5,6 @@ remove cookie use
 random number ---> done 
 pagination on filter apply => page 1 without reloading 
 on reset all dont reload rather remove all cmsfilteractive  ---> done
+
+all filter rest link remove 
+individual filter reset
