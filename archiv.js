@@ -461,9 +461,7 @@ async function handlePaginationClick(event) {
   } catch (error) {
     console.error('Error updating page content:', error);
   }
-}
-
-// Placeholder function - replace with your actual data fetching logic
+  // Placeholder function - replace with your actual data fetching logic
 async function fetchPageData(page) {
   // Replace this with your actual API endpoint
   const response = await fetch(`/api/your-endpoint?page=${page}`);
@@ -593,6 +591,9 @@ async function pagination() {
     }
     list.append(paginationWrapper);
 }
+}
+
+
 async function loadFData(e) {
   if (e?.key == "Enter") {
     let searchValue = document
