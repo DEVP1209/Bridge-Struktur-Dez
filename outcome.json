@@ -1,6 +1,6 @@
 {
-    "1 NEU": {
-        "BEWERTUNG": {
+    "1 Neu": {
+        "Bewertung": {
             "values": [
                 "3",
                 "4",
@@ -56,12 +56,12 @@
         "Pers\u00f6nlichkeiten": {
             "Auto": {
                 "values": [
-                    "BMW",
+                    "Bmw",
                     "Ferrari",
                     "Lamborghini",
                     "Mercedes",
                     "Porsche",
-                    "VW K\u00e4fer"
+                    "Vw K\u00e4fer"
                 ]
             },
             "values": [
@@ -128,7 +128,7 @@
                     "Papst",
                     "Royals",
                     "Soraya",
-                    "von Monaco Familie"
+                    "Von Monaco Familie"
                 ]
             },
             "Graphik": {
@@ -149,10 +149,10 @@
             },
             "Malerei": {
                 "values": [
-                    "van Gogh",
+                    "Van Gogh",
                     "Botticelli",
                     "Chagall",
-                    "da Vinci",
+                    "Da Vinci",
                     "Degas",
                     "Helnwein",
                     "Hodler",
@@ -176,9 +176,9 @@
                     "Hindenburg",
                     "Marine",
                     "Rommel",
-                    "SA",
+                    "Sa",
                     "Soldat",
-                    "SS",
+                    "Ss",
                     "Wehrmacht"
                 ]
             },
@@ -214,7 +214,7 @@
                     "K\u00f6nig",
                     "Minister",
                     "Mussolini",
-                    "NSDAP",
+                    "Nsdap",
                     "Reichskanzler",
                     "Ribbentrop",
                     "Speer",
@@ -232,22 +232,22 @@
                 ]
             }
         },
-        "PREIS": {
+        "Preis": {
             "values": [
                 "29",
                 "45",
                 "85",
-                "auf Anfrage"
+                "Auf Anfrage"
             ]
         },
-        "QUELLE": {
+        "Quelle": {
             "values": [
-                "anno.onb.ac.at",
-                "simplicissimus.info",
-                "arthistoricum.net"
+                "Anno.Onb.Ac.At",
+                "Simplicissimus.Info",
+                "Arthistoricum.Net"
             ]
         },
-        "THEMA": {
+        "Thema": {
             "Auto/Technik/Wissenschaft": {
                 "values": [
                     "Astronomie/Raumfahrt",
@@ -292,7 +292,7 @@
             "values": [
                 "Geschichte"
             ],
-            "GESELLSCHAFT": {
+            "Gesellschaft": {
                 "Arbeit/Bildung": {
                     "values": [
                         "Arbeitslosigkeit",
@@ -301,7 +301,7 @@
                         "Universit\u00e4t"
                     ]
                 },
-                "EREIGNISSE KONFLIKTE": {
+                "Ereignisse Konflikte": {
                     "values": [
                         "B\u00fcrgerkrieg",
                         "Demonstration",
@@ -310,8 +310,8 @@
                         "Olympiade",
                         "Unfall",
                         "Versailles",
-                        "WW1",
-                        "WW2"
+                        "Ww1",
+                        "Ww2"
                     ]
                 },
                 "Feste/Jahreszeiten": {
@@ -360,7 +360,7 @@
                         "Uniform",
                         "Waffe",
                         "Wehrmacht",
-                        "x"
+                        "X"
                     ]
                 },
                 "values": [
@@ -431,8 +431,8 @@
                 ]
             }
         },
-        "ZEITSCHRIFT": {
-            "MOTIV": {
+        "Zeitschrift": {
+            "Motiv": {
                 "values": [
                     "Blume/Baum/Pflanze",
                     "Engel",
@@ -449,13 +449,13 @@
                 "Mensch": {
                     "values": [
                         "Familie",
-                        "female",
+                        "Female",
                         "Gesicht",
                         "Gruppe",
                         "Jugend",
                         "Kind",
-                        "K\u00f6rper/ teil",
-                        "male",
+                        "K\u00f6rper/ Teil",
+                        "Male",
                         "Mann",
                         "Mutter",
                         "Paar",
@@ -471,7 +471,7 @@
                     ]
                 }
             },
-            "TITELSEITE": {
+            "Titelseite": {
                 "values": [
                     "Collage",
                     "Foto",
@@ -482,18 +482,18 @@
                 ],
                 "Farbe": {
                     "values": [
-                        "blau",
-                        "braun",
-                        "gelb",
-                        "gold",
-                        "gr\u00fcn",
-                        "lila",
-                        "orange",
-                        "rot",
-                        "schwarz",
-                        "silber",
-                        "violett",
-                        "wei\u00df"
+                        "Blau",
+                        "Braun",
+                        "Gelb",
+                        "Gold",
+                        "Gr\u00fcn",
+                        "Lila",
+                        "Orange",
+                        "Rot",
+                        "Schwarz",
+                        "Silber",
+                        "Violett",
+                        "Wei\u00df"
                     ]
                 }
             },
@@ -505,7 +505,7 @@
                     "Erotik",
                     "Film",
                     "Gesellschaft",
-                    "III Reich",
+                    "Iii Reich",
                     "Jugend",
                     "Kunst/Kultur",
                     "Lifestyle",

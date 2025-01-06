@@ -7,7 +7,8 @@ def format_name(name):
         # Handle cases with multiple colons by taking the last part
         if '-' in name:
             name = name.replace('-', ' ')
-    return name.strip()
+    # Capitalize the first letter of each word
+    return name.strip().title()
 
 def process_line(line):
     # Count leading tabs to determine level
@@ -80,17 +81,6 @@ def convert_text_to_json(content):
     lines = content.split('\n')
     return build_json_structure(lines)
 
-# # Example usage
-# content = """THEMA:Geschichte
-# \t\tTHEMA:GESELLSCHAFT
-# \t\t\tTHEMA:GESELLSCHAFT:Arbeit/Bildung
-# \t\t\t\tTHEMA:GESELLSCHAFT:ARBEIT-BILDUNG:Arbeitslosigkeit
-# \t\t\t\tTHEMA:GESELLSCHAFT:ARBEIT-BILDUNG:Einkommen
-# \t\t\t\tTHEMA:GESELLSCHAFT:ARBEIT-BILDUNG:Schule
-# \t\t\t\tTHEMA:GESELLSCHAFT:ARBEIT-BILDUNG:Universität"""
-
-# result = convert_text_to_json(content)
-# print(json.dumps(result, indent=4))
 
 with open('filters.txt', 'r') as file:
     content = file.read()
