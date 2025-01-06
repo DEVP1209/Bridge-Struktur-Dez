@@ -1,13 +1,4 @@
-function getC(cName) {
-  const name = cName + "=";
-  const cDecoded = document.cookie; //to be careful
-  const cArr = cDecoded.split("; ");
-  let res = "";
-  cArr.forEach((val) => {
-    if (val.indexOf(name) === 0) res = val.substring(name.length);
-  });
-  return res;
-}
+let sort_random = "true";
 const getQuery = () => {
   let lastQuery = window.location.href.includes("page=") ? window.location.href.split("page=")[1].substring(2) : null;
   if (lastQuery === null) {
@@ -428,7 +419,7 @@ async function renderData(data) {
     collection.append(fragment);
     list.prepend(collection);
     await pagination();
-    const lastQuery = getC("lastQuery");
+    const lastQuery = getQuery();
     if (lastQuery == "") {
       fetch(
         "https://bildzeitschrift.netlify.app/.netlify/functions/randomize"
@@ -708,11 +699,10 @@ async function loadFData(e) {
       try {
         let data;
         if (url.split("?").length > 1) {
-          const randomNumber = getC("randomNumber");
-          const sortToggle = getC("sort_random");
-          const selection_exclude = getC("selection_exclude")
+          const sortToggle = document.getElementsByClassName("random-switch")[0].classList.contains("is--on") ? "true" : "false";
+          const selection_exclude = "";
           const response = await fetch(
-            `https://bildzeitschrift.netlify.app/.netlify/functions/loadData?randomNumber=${randomNumber}&sort_toggle=${sortToggle}&selectExcl=${selection_exclude}&${getQuery}`, {
+            `https://bildzeitschrift.netlify.app/.netlify/functions/loadData?sort_toggle=${sortToggle}&selectExcl=${selection_exclude}&${getQuery}`, {
             headers: {
               Authorization: sessionStorage.getItem("auth")
             }
@@ -720,9 +710,9 @@ async function loadFData(e) {
           );
           data = await response.json();
         } else {
-          const sortToggle = getC("sort_random");
-          const randomOrder = getC("randomOrder");
-          const selection_exclude = getC("selection_exclude")
+          const sortToggle = document.getElementsByClassName("random-switch")[0].classList.contains("is--on") ? "true" : "false";;
+          const randomOrder = 1
+          const selection_exclude = "";
           const response = await fetch(
             `https://bildzeitschrift.netlify.app/.netlify/functions/loadData?page=1&sort_toggle=${sortToggle}&selectExcl=${selection_exclude}&randomOrder=${randomOrder}`, {
             headers: {
@@ -771,19 +761,14 @@ async function updatePagination(newPage) {
 }
 
 document.addEventListener("DOMContentLoaded", async function () {
-  let sort_random = "true";
+  sort_random = "true";
   let selection_excluding = "false"
   const sortToggle = document.getElementsByClassName("random-switch")[0];
   // const selectionExclude = document.getElementsByClassName("random-switch")[1];
   document.querySelector(".results-tag_wrapper").addEventListener("mouseup", loadFData)
   const toggle = document.getElementsByClassName("toggle")[0];
   
-  if (getC("sort_random") != "") {
-    sort_random = getC("sort_random");
-  } else {
-    document.cookie = "sort_random=" + sort_random + ";";
-  }
-
+  sort_random = document.getElementsByClassName("random-switch")[0].classList.contains("is--on") ? "true" : "false";
   if (sort_random == "false") {
     sortToggle.click();
   } 
@@ -792,18 +777,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   var randomNumber = Math.floor(Math.random() * (4 - 0 + 1));
   var randomOrder = Math.floor(Math.random() * (1 - 0 + 1));
   var randomOrderFinal = randomOrder == 0 ? -1 : 1;
-  if (getC("randomOrder") == "" && getC("randomNumber") == "") {
-    document.cookie =
-      "randomOrder=" +
-      randomOrderFinal +
-      ";path=/;expires=" +
-      cookieExpire.toUTCString();
-    document.cookie =
-      "randomNumber=" +
-      randomNumber +
-      ";path=/;expires=" +
-      cookieExpire.toUTCString();
-  }
+  
   await loadFData();
 
   const individualReset = document.getElementsByClassName(
@@ -850,7 +824,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     } else {
       sort_random = "false";
     }
-    document.cookie = "sort_random=" + sort_random + ";";
     loadFData();
   });
 
