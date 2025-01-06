@@ -423,175 +423,175 @@ async function renderData(data) {
     }
     return plan
   }
-
-}
-async function handlePaginationClick(event) {
-  // Prevent default behavior if the element is an anchor
-  event.preventDefault();
-  
-  // Get the page number from the clicked element
-  let targetPage;
-  const element = event.currentTarget;
-  
-  if (element.classList.contains('pagination-page-button')) {
-    targetPage = element.getAttribute('data-page');
-  } else if (element.classList.contains('w-pagination-previous')) {
-    targetPage = element.getAttribute('data-page');
-  } else if (element.classList.contains('w-pagination-right')) {
-    targetPage = element.getAttribute('data-page');
-  }
-
-  if (!targetPage) return;
-
-  try {
-    // Update URL without page reload
-    const url = new URL(window.location.href);
-    url.searchParams.set('page', targetPage);
-    window.history.pushState({}, '', url);
-
-    // Here you would fetch new data based on the page number
-    // This is a placeholder - replace with your actual data fetching logic
-    const response = await fetchPageData(targetPage);
+  async function handlePaginationClick(event) {
+    // Prevent default behavior if the element is an anchor
+    event.preventDefault();
     
-    // Update the content
-    updateContent(response);
+    // Get the page number from the clicked element
+    let targetPage;
+    const element = event.currentTarget;
     
-    // Update pagination
-    pagination();
-  } catch (error) {
-    console.error('Error updating page content:', error);
-  }
-  // Placeholder function - replace with your actual data fetching logic
-async function fetchPageData(page) {
-  // Replace this with your actual API endpoint
-  const response = await fetch(`/api/your-endpoint?page=${page}`);
-  return await response.json();
-}
-
-// Placeholder function - replace with your actual content update logic
-function updateContent(data) {
-  // Replace this with your actual content update logic
-  const contentContainer = document.querySelector('.w-dyn-list');
-  // Update the content based on your data structure
-}
-
-async function pagination() {
-    const list = document.getElementsByClassName("w-dyn-list")[0];
-    var paginationWrapper;
-    if (document.getElementsByClassName("w-pagination-wrapper pagination")[0]) {
-      paginationWrapper = document.getElementsByClassName(
-        "w-pagination-wrapper pagination"
-      )[0];
-      paginationWrapper.remove();
+    if (element.classList.contains('pagination-page-button')) {
+      targetPage = element.getAttribute('data-page');
+    } else if (element.classList.contains('w-pagination-previous')) {
+      targetPage = element.getAttribute('data-page');
+    } else if (element.classList.contains('w-pagination-right')) {
+      targetPage = element.getAttribute('data-page');
     }
-    paginationWrapper = document.createElement("div");
-    paginationWrapper.className = "w-pagination-wrapper pagination";
-    paginationWrapper.style.display = "flex";
-
-    const pageCount = data.pageCount;
-    const currentPage = data.currentPage || 1;
-
-    const lastQuery = window.location.href.includes("page=") 
-      ? window.location.href.split("page=")[1].split("&").slice(1).join("&") 
-      : window.location.href.split("?")[1];
-
-    const pageFragment = document.createDocumentFragment();
-    if (currentPage != 1) {
-      if (currentPage > 10) {
+  
+    if (!targetPage) return;
+  
+    try {
+      // Update URL without page reload
+      const url = new URL(window.location.href);
+      url.searchParams.set('page', targetPage);
+      window.history.pushState({}, '', url);
+  
+      // Here you would fetch new data based on the page number
+      // This is a placeholder - replace with your actual data fetching logic
+      const response = await fetchPageData(targetPage);
+      
+      // Update the content
+      updateContent(response);
+      
+      // Update pagination
+      pagination();
+    } catch (error) {
+      console.error('Error updating page content:', error);
+    }
+    // Placeholder function - replace with your actual data fetching logic
+  async function fetchPageData(page) {
+    // Replace this with your actual API endpoint
+    const response = await fetch(`/api/your-endpoint?page=${page}`);
+    return await response.json();
+  }
+  
+  // Placeholder function - replace with your actual content update logic
+  function updateContent(data) {
+    // Replace this with your actual content update logic
+    const contentContainer = document.querySelector('.w-dyn-list');
+    // Update the content based on your data structure
+  }
+  
+  async function pagination() {
+      const list = document.getElementsByClassName("w-dyn-list")[0];
+      var paginationWrapper;
+      if (document.getElementsByClassName("w-pagination-wrapper pagination")[0]) {
+        paginationWrapper = document.getElementsByClassName(
+          "w-pagination-wrapper pagination"
+        )[0];
+        paginationWrapper.remove();
+      }
+      paginationWrapper = document.createElement("div");
+      paginationWrapper.className = "w-pagination-wrapper pagination";
+      paginationWrapper.style.display = "flex";
+  
+      const pageCount = data.pageCount;
+      const currentPage = data.currentPage || 1;
+  
+      const lastQuery = window.location.href.includes("page=") 
+        ? window.location.href.split("page=")[1].split("&").slice(1).join("&") 
+        : window.location.href.split("?")[1];
+  
+      const pageFragment = document.createDocumentFragment();
+      if (currentPage != 1) {
+        if (currentPage > 10) {
+          const leftArrowButton = document.createElement("div");
+          leftArrowButton.addEventListener("click", handlePaginationClick);
+          leftArrowButton.className =
+            "w-pagination-previous pagination-button-left keep-params 10xarrow";
+          leftArrowButton.setAttribute("aria-label", "Previous Page");
+          leftArrowButton.setAttribute("data-page", (currentPage - 10).toString());
+          leftArrowButton.style.marginRight = 0;
+          const leftArrowImage = document.createElement("img");
+          leftArrowImage.width = "45";
+          leftArrowImage.loading = "lazy";
+          leftArrowImage.src =
+            "https://res.cloudinary.com/wdy-bzs/image/upload/v1661106376/asset/Group_42_1.svg";
+          leftArrowImage.className = "pagination-arrow left";
+          leftArrowButton.style.marginRight = "0px";
+          leftArrowButton.style.paddingRight = "0px";
+          leftArrowButton.append(leftArrowImage);
+          pageFragment.append(leftArrowButton);
+        }
+        
         const leftArrowButton = document.createElement("div");
-        leftArrowButton.addEventListener("click", handlePaginationClick);
         leftArrowButton.className =
-          "w-pagination-previous pagination-button-left keep-params 10xarrow";
+          "w-pagination-previous pagination-button-left keep-params";
         leftArrowButton.setAttribute("aria-label", "Previous Page");
-        leftArrowButton.setAttribute("data-page", (currentPage - 10).toString());
-        leftArrowButton.style.marginRight = 0;
+        leftArrowButton.setAttribute("data-page", (currentPage - 1).toString());
+        leftArrowButton.addEventListener("click", handlePaginationClick);
         const leftArrowImage = document.createElement("img");
         leftArrowImage.width = "45";
         leftArrowImage.loading = "lazy";
         leftArrowImage.src =
-          "https://res.cloudinary.com/wdy-bzs/image/upload/v1661106376/asset/Group_42_1.svg";
+          "https://res.cloudinary.com/wdy-bzs/image/upload/v1651849092/asset/Arrow.svg";
         leftArrowImage.className = "pagination-arrow left";
-        leftArrowButton.style.marginRight = "0px";
+        leftArrowButton.style.paddingLeft = "0px";
         leftArrowButton.style.paddingRight = "0px";
         leftArrowButton.append(leftArrowImage);
         pageFragment.append(leftArrowButton);
       }
-      
-      const leftArrowButton = document.createElement("div");
-      leftArrowButton.className =
-        "w-pagination-previous pagination-button-left keep-params";
-      leftArrowButton.setAttribute("aria-label", "Previous Page");
-      leftArrowButton.setAttribute("data-page", (currentPage - 1).toString());
-      leftArrowButton.addEventListener("click", handlePaginationClick);
-      const leftArrowImage = document.createElement("img");
-      leftArrowImage.width = "45";
-      leftArrowImage.loading = "lazy";
-      leftArrowImage.src =
-        "https://res.cloudinary.com/wdy-bzs/image/upload/v1651849092/asset/Arrow.svg";
-      leftArrowImage.className = "pagination-arrow left";
-      leftArrowButton.style.paddingLeft = "0px";
-      leftArrowButton.style.paddingRight = "0px";
-      leftArrowButton.append(leftArrowImage);
-      pageFragment.append(leftArrowButton);
-    }
-
-    // Pagination numbers logic
-    if (pageCount <= 7) {
-      for (let i = 1; i <= pageCount; i++) {
-        const pageButton = document.createElement("div");
-        const pageDiv = document.createElement("div");
-        pageDiv.textContent = i;
-        pageButton.className = "pagination-page-button w-inline-block";
-        pageButton.setAttribute("data-page", i.toString());
-        pageButton.addEventListener("click", handlePaginationClick);
-        pageButton.append(pageDiv);
-        pageFragment.append(pageButton);
-        if (i == currentPage) {
-          pageButton.className =
-            "pagination-page-button w-inline-block w--current";
+  
+      // Pagination numbers logic
+      if (pageCount <= 7) {
+        for (let i = 1; i <= pageCount; i++) {
+          const pageButton = document.createElement("div");
+          const pageDiv = document.createElement("div");
+          pageDiv.textContent = i;
+          pageButton.className = "pagination-page-button w-inline-block";
+          pageButton.setAttribute("data-page", i.toString());
+          pageButton.addEventListener("click", handlePaginationClick);
+          pageButton.append(pageDiv);
+          pageFragment.append(pageButton);
+          if (i == currentPage) {
+            pageButton.className =
+              "pagination-page-button w-inline-block w--current";
+          }
         }
+        paginationWrapper.append(pageFragment);
       }
-      paginationWrapper.append(pageFragment);
-    }
-    // ... rest of your pagination logic, converting all <a> tags to <div> 
-    // and adding event listeners and data-page attributes ...
-
-    if (currentPage != pageCount) {
-      const rightArrowButton = document.createElement("div");
-      rightArrowButton.className =
-        "w-pagination-right pagination-button-next keep-params";
-      rightArrowButton.setAttribute("aria-label", "Next Page");
-      rightArrowButton.setAttribute("data-page", (currentPage + 1).toString());
-      rightArrowButton.addEventListener("click", handlePaginationClick);
-      const rightArrowImage = document.createElement("img");
-      rightArrowImage.width = "45";
-      rightArrowImage.loading = "lazy";
-      rightArrowImage.src =
-        "https://res.cloudinary.com/wdy-bzs/image/upload/v1651849092/asset/Arrow.svg";
-      rightArrowImage.className = "pagination-arrow right";
-      rightArrowButton.append(rightArrowImage);
-      paginationWrapper.append(rightArrowButton);
-
-      if (pageCount - currentPage >= 10) {
+      // ... rest of your pagination logic, converting all <a> tags to <div> 
+      // and adding event listeners and data-page attributes ...
+  
+      if (currentPage != pageCount) {
         const rightArrowButton = document.createElement("div");
         rightArrowButton.className =
-          "w-pagination-right pagination-button-next keep-params 10xarrow";
+          "w-pagination-right pagination-button-next keep-params";
         rightArrowButton.setAttribute("aria-label", "Next Page");
-        rightArrowButton.setAttribute("data-page", (currentPage + 10).toString());
+        rightArrowButton.setAttribute("data-page", (currentPage + 1).toString());
         rightArrowButton.addEventListener("click", handlePaginationClick);
         const rightArrowImage = document.createElement("img");
         rightArrowImage.width = "45";
         rightArrowImage.loading = "lazy";
         rightArrowImage.src =
-          "https://res.cloudinary.com/wdy-bzs/image/upload/v1661106376/asset/Group_42_1.svg";
+          "https://res.cloudinary.com/wdy-bzs/image/upload/v1651849092/asset/Arrow.svg";
         rightArrowImage.className = "pagination-arrow right";
         rightArrowButton.append(rightArrowImage);
         paginationWrapper.append(rightArrowButton);
+  
+        if (pageCount - currentPage >= 10) {
+          const rightArrowButton = document.createElement("div");
+          rightArrowButton.className =
+            "w-pagination-right pagination-button-next keep-params 10xarrow";
+          rightArrowButton.setAttribute("aria-label", "Next Page");
+          rightArrowButton.setAttribute("data-page", (currentPage + 10).toString());
+          rightArrowButton.addEventListener("click", handlePaginationClick);
+          const rightArrowImage = document.createElement("img");
+          rightArrowImage.width = "45";
+          rightArrowImage.loading = "lazy";
+          rightArrowImage.src =
+            "https://res.cloudinary.com/wdy-bzs/image/upload/v1661106376/asset/Group_42_1.svg";
+          rightArrowImage.className = "pagination-arrow right";
+          rightArrowButton.append(rightArrowImage);
+          paginationWrapper.append(rightArrowButton);
+        }
       }
-    }
-    list.append(paginationWrapper);
+      list.append(paginationWrapper);
+  }
+  }
 }
-}
+
 
 
 async function loadFData(e) {
