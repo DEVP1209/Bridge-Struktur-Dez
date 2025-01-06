@@ -2,6 +2,10 @@
 let sortRandom = true;
 let selectionExcluding = false;
 let currentPage = 1;
+const getQuery = () => {
+  let lastQuery = window.location.href.includes("page=") ? window.location.href.split("page=")[1].substring(2) : (window.location.href.split("?")[1] ? window.location.href.split("?")[1] : "");
+  return lastQuery;
+}
 const randomMags = async (array) => {
     for (var i = array.length - 1; i > 0; i--) {
       var j = Math.floor(Math.random() * (i + 1));
@@ -415,7 +419,7 @@ const randomMags = async (array) => {
       collection.append(fragment);
       list.prepend(collection);
       await pagination();
-      const lastQuery = window.location.href.includes("page=") ? window.location.href.split("page=")[1].substring(2) : window.location.href.split("?")[1];
+      const lastQuery = getQuery();
       if (lastQuery == "") {
         fetch(
           "https://bildzeitschrift.netlify.app/.netlify/functions/randomize"
@@ -429,11 +433,11 @@ const randomMags = async (array) => {
       var paginationWrapper;
       
       const handlePaginationClick = (event) => {
-        const lastQuery = window.location.href.includes("page=") ? window.location.href.split("page=")[1].substring(2) : window.location.href.split("?")[1];
+        const lastQuery = getQuery();
         const page = event.target.getAttribute("data-page");
         const url = lastQuery ? `?page=${page}&${lastQuery}` : `?page=${page}`;
         window.history.pushState({}, "", url);
-        loadFData(null, true);
+        updatePagination(page);
       };
       if (document.getElementsByClassName("w-pagination-wrapper pagination")[0]) {
         paginationWrapper = document.getElementsByClassName(
