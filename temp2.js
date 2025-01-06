@@ -8,6 +8,13 @@ function getC(cName) {
   });
   return res;
 }
+const getQuery = () => {
+  let lastQuery = window.location.href.includes("page=") ? window.location.href.split("page=")[1].substring(2) : null;
+  if (lastQuery === null) {
+    lastQuery = window.location.href.includes("?") ? window.location.href.split("?")[1] : "";
+  }
+  return lastQuery;
+}
 const randomMags = async (array) => {
   for (var i = array.length - 1; i > 0; i--) {
     var j = Math.floor(Math.random() * (i + 1));
