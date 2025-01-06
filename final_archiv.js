@@ -926,11 +926,21 @@ document.addEventListener("DOMContentLoaded", async function () {
   const checkboxWrappers = document.getElementsByClassName(
     "checkbox-element-wrapper"
   );
-  const resetAllButton = document.getElementsByClassName("reset-all-btn")[0];
 
+  
+  const resetAllButton = document.getElementsByClassName("reset-all-btn")[0];
   resetAllButton.addEventListener("mouseup", () => {
-    let currentUrl = new URL(window.location.href);
-    window.location.assign(currentUrl.origin + currentUrl.pathname);
+    // Remove all active filters without page reload
+    document.querySelectorAll(".fs-cmsfilter_active").forEach((filter) => {
+      filter.classList.remove("fs-cmsfilter_active");
+    });
+    document.querySelectorAll(".w--redirected-checked").forEach((filter) => {
+      filter.classList.remove("w--redirected-checked");
+    });
+    // Reset URL without reload
+    const currentUrl = new URL(window.location.href);
+    window.history.pushState({}, "", currentUrl.origin + currentUrl.pathname);
+    loadFData(null, false);
   });
   resetAllButton.href = "#";
 
