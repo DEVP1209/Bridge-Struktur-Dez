@@ -510,7 +510,8 @@ async function fetchFilters() {
             throw new Error('Network response was not ok');
         }
         const data = await response.json();
-        return data
+        createMainDropdowns(data);
+        return;
     } catch (error) {
         console.error('Failed to fetch filters:', error);
     }
@@ -518,7 +519,6 @@ async function fetchFilters() {
 
 // Initialize dropdowns
 document.addEventListener('DOMContentLoaded', () => {
-  const filters = fetchFilters();
-  createMainDropdowns(filters);
+  fetchFilters();
 
 });

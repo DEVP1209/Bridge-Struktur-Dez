@@ -14,3 +14,19 @@ const handlePaginationClick = (event) => {
     return lastQuery;
   }
 
+
+  async function fetchFilters() {
+    try {
+        const response = await fetch('https://bildzeitschrift.netlify.app/.netlify/functions/filters');
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        console.log(data);
+        return data
+    } catch (error) {
+        console.error('Failed to fetch filters:', error);
+    }
+}
+fetchFilters();
+// console.log(fetchFilters());
