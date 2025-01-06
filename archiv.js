@@ -3,7 +3,10 @@ let sortRandom = true;
 let selectionExcluding = false;
 let currentPage = 1;
 const getQuery = () => {
-  let lastQuery = window.location.href.includes("page=") ? window.location.href.split("page=")[1].substring(2) : (window.location.href.split("?")[1] ? window.location.href.split("?")[1] : "");
+  let lastQuery = window.location.href.includes("page=") ? window.location.href.split("page=")[1].substring(2) : null;
+  if (lastQuery === null) {
+    lastQuery = window.location.href.includes("?") ? window.location.href.split("?")[1] : "";
+  }
   return lastQuery;
 }
 const randomMags = async (array) => {

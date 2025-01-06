@@ -4,3 +4,13 @@ const handlePaginationClick = (event) => {
     window.history.pushState({}, "", url);
     loadFData(null, true);
   };
+
+
+  const getQuery = () => {
+    let lastQuery = window.location.href.includes("page=") ? window.location.href.split("page=")[1].substring(2) : null;
+    if (lastQuery === null) {
+      lastQuery = window.location.href.includes("?") ? window.location.href.split("?")[1] : "";
+    }
+    return lastQuery;
+  }
+
