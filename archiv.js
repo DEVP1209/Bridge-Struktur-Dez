@@ -713,11 +713,10 @@ async function loadFData(e) {
       try {
         let data;
         if (url.split("?").length > 1) {
-          const randomNumber = getC("randomNumber");
           const sortToggle = getC("sort_random");
           const selection_exclude = getC("selection_exclude")
           const response = await fetch(
-            `https://bildzeitschrift.netlify.app/.netlify/functions/loadData?randomNumber=${randomNumber}&sort_toggle=${sortToggle}&selectExcl=${selection_exclude}&${getQuery}`, {
+            `https://bildzeitschrift.netlify.app/.netlify/functions/loadData?sort_toggle=${sortToggle}&selectExcl=${selection_exclude}&${getQuery}`, {
             headers: {
               Authorization: sessionStorage.getItem("auth")
             }
@@ -862,11 +861,20 @@ document.addEventListener("DOMContentLoaded", async function () {
   const checkboxWrappers = document.getElementsByClassName(
     "checkbox-element-wrapper"
   );
+  
   const resetAllButton = document.getElementsByClassName("reset-all-btn")[0];
-
   resetAllButton.addEventListener("mouseup", () => {
-    let currentUrl = new URL(window.location.href);
-    window.location.assign(currentUrl.origin + currentUrl.pathname);
+    // Remove all active filters without page reload
+    document.querySelectorAll('.fs-cmsfilter_active').forEach(filter => {
+      filter.classList.remove('fs-cmsfilter_active');
+    });
+    document.querySelectorAll('.w--redirected-checked').forEach(filter => {
+      filter.classList.remove('w--redirected-checked');
+    });
+    // Reset URL without reload
+    const currentUrl = new URL(window.location.href);
+    window.history.pushState({}, '', currentUrl.origin + currentUrl.pathname);
+    loadFData(null, false);
   });
   resetAllButton.href = "#";
 
