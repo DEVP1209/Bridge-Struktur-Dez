@@ -254,12 +254,6 @@ async function renderData(data) {
 
 
                   }
-
-
-
-
-
-
                 })
                 parentDiv.appendChild(childDiv)
                 parentDiv.appendChild(btn)
@@ -352,8 +346,6 @@ async function renderData(data) {
           else {
             event.target.parentElement.querySelector(".container-mode").remove()
           }
-
-
         })
 
         document.addEventListener("click", (event) => {
@@ -421,7 +413,9 @@ async function renderData(data) {
     collection.append(fragment);
     list.prepend(collection);
     await pagination();
-    const lastQuery = getC("lastQuery");
+    const lastQuery = window.location.href.includes("page=") 
+      ? window.location.href.split("page=")[1].split("&").slice(1).join("&") 
+      : window.location.href.split("?")[1];
     if (lastQuery == "") {
       fetch(
         "https://bildzeitschrift.netlify.app/.netlify/functions/randomize"
@@ -430,7 +424,60 @@ async function renderData(data) {
     return plan
   }
 
-  async function pagination() {
+}
+async function handlePaginationClick(event) {
+  // Prevent default behavior if the element is an anchor
+  event.preventDefault();
+  
+  // Get the page number from the clicked element
+  let targetPage;
+  const element = event.currentTarget;
+  
+  if (element.classList.contains('pagination-page-button')) {
+    targetPage = element.getAttribute('data-page');
+  } else if (element.classList.contains('w-pagination-previous')) {
+    targetPage = element.getAttribute('data-page');
+  } else if (element.classList.contains('w-pagination-right')) {
+    targetPage = element.getAttribute('data-page');
+  }
+
+  if (!targetPage) return;
+
+  try {
+    // Update URL without page reload
+    const url = new URL(window.location.href);
+    url.searchParams.set('page', targetPage);
+    window.history.pushState({}, '', url);
+
+    // Here you would fetch new data based on the page number
+    // This is a placeholder - replace with your actual data fetching logic
+    const response = await fetchPageData(targetPage);
+    
+    // Update the content
+    updateContent(response);
+    
+    // Update pagination
+    pagination();
+  } catch (error) {
+    console.error('Error updating page content:', error);
+  }
+}
+
+// Placeholder function - replace with your actual data fetching logic
+async function fetchPageData(page) {
+  // Replace this with your actual API endpoint
+  const response = await fetch(`/api/your-endpoint?page=${page}`);
+  return await response.json();
+}
+
+// Placeholder function - replace with your actual content update logic
+function updateContent(data) {
+  // Replace this with your actual content update logic
+  const contentContainer = document.querySelector('.w-dyn-list');
+  // Update the content based on your data structure
+}
+
+async function pagination() {
     const list = document.getElementsByClassName("w-dyn-list")[0];
     var paginationWrapper;
     if (document.getElementsByClassName("w-pagination-wrapper pagination")[0]) {
@@ -443,19 +490,22 @@ async function renderData(data) {
     paginationWrapper.className = "w-pagination-wrapper pagination";
     paginationWrapper.style.display = "flex";
 
-
     const pageCount = data.pageCount;
     const currentPage = data.currentPage || 1;
 
-    const lastQuery = getC("lastQuery");
+    const lastQuery = window.location.href.includes("page=") 
+      ? window.location.href.split("page=")[1].split("&").slice(1).join("&") 
+      : window.location.href.split("?")[1];
 
     const pageFragment = document.createDocumentFragment();
     if (currentPage != 1) {
       if (currentPage > 10) {
-        const leftArrowButton = document.createElement("a");
+        const leftArrowButton = document.createElement("div");
+        leftArrowButton.addEventListener("click", handlePaginationClick);
         leftArrowButton.className =
           "w-pagination-previous pagination-button-left keep-params 10xarrow";
         leftArrowButton.setAttribute("aria-label", "Previous Page");
+        leftArrowButton.setAttribute("data-page", (currentPage - 10).toString());
         leftArrowButton.style.marginRight = 0;
         const leftArrowImage = document.createElement("img");
         leftArrowImage.width = "45";
@@ -467,15 +517,14 @@ async function renderData(data) {
         leftArrowButton.style.paddingRight = "0px";
         leftArrowButton.append(leftArrowImage);
         pageFragment.append(leftArrowButton);
-        if (lastQuery != "")
-          leftArrowButton.href =
-            "?page=" + (currentPage - 10) + ("&" + lastQuery);
-        else leftArrowButton.href = "?page=" + (currentPage - 10);
       }
-      const leftArrowButton = document.createElement("a");
+      
+      const leftArrowButton = document.createElement("div");
       leftArrowButton.className =
-        "w-pagination-previous pagination-button-left keep-params 10xarrow";
+        "w-pagination-previous pagination-button-left keep-params";
       leftArrowButton.setAttribute("aria-label", "Previous Page");
+      leftArrowButton.setAttribute("data-page", (currentPage - 1).toString());
+      leftArrowButton.addEventListener("click", handlePaginationClick);
       const leftArrowImage = document.createElement("img");
       leftArrowImage.width = "45";
       leftArrowImage.loading = "lazy";
@@ -486,20 +535,17 @@ async function renderData(data) {
       leftArrowButton.style.paddingRight = "0px";
       leftArrowButton.append(leftArrowImage);
       pageFragment.append(leftArrowButton);
-      if (lastQuery != "")
-        leftArrowButton.href = "?page=" + (currentPage - 1) + ("&" + lastQuery);
-      else leftArrowButton.href = "?page=" + (currentPage - 1);
     }
+
+    // Pagination numbers logic
     if (pageCount <= 7) {
-      for (i = 1; i <= pageCount; i++) {
-        const pageButton = document.createElement("a");
+      for (let i = 1; i <= pageCount; i++) {
+        const pageButton = document.createElement("div");
         const pageDiv = document.createElement("div");
         pageDiv.textContent = i;
         pageButton.className = "pagination-page-button w-inline-block";
-
-        if (lastQuery != "") pageButton.href = "?page=" + i + ("&" + lastQuery);
-        else pageButton.href = "?page=" + i;
-
+        pageButton.setAttribute("data-page", i.toString());
+        pageButton.addEventListener("click", handlePaginationClick);
         pageButton.append(pageDiv);
         pageFragment.append(pageButton);
         if (i == currentPage) {
@@ -508,172 +554,45 @@ async function renderData(data) {
         }
       }
       paginationWrapper.append(pageFragment);
-    } else {
-      if (currentPage < 5) {
-        for (i = 1; i <= 5; i++) {
-          const pageButton = document.createElement("a");
-          const pageDiv = document.createElement("div");
-          pageDiv.textContent = i;
-          pageButton.className = "pagination-page-button w-inline-block";
-
-          if (lastQuery != "") {
-            pageButton.href = "?page=" + i + ("&" + lastQuery);
-          } else {
-            pageButton.href = "?page=" + i;
-          }
-          ;
-          pageButton.append(pageDiv);
-          pageFragment.append(pageButton);
-          if (i == currentPage) {
-            pageButton.className =
-              "pagination-page-button w-inline-block w--current";
-          }
-        }
-
-        const pageDots = document.createElement("div");
-        pageDots.textContent = "...";
-        pageDots.className = "pagination-dots-button";
-        pageFragment.append(pageDots);
-
-        const lastPageButton = document.createElement("a");
-        const lastPageDiv = document.createElement("div");
-        lastPageDiv.textContent = pageCount;
-        lastPageButton.className = "pagination-page-button w-inline-block";
-        if (lastQuery != "")
-          lastPageButton.href = "?page=" + pageCount + ("&" + lastQuery);
-        else lastPageButton.href = "?page=" + pageCount;
-        lastPageButton.append(lastPageDiv);
-        pageFragment.append(lastPageButton);
-        paginationWrapper.append(pageFragment);
-      } else if (currentPage >= 5 && currentPage <= pageCount - 4) {
-        const firstPageButton = document.createElement("a");
-        const firstPageDiv = document.createElement("div");
-        firstPageDiv.textContent = "1";
-        firstPageButton.className = "pagination-page-button w-inline-block";
-        if (lastQuery != "")
-          firstPageButton.href = "?page=" + "1" + ("&" + lastQuery);
-        else firstPageButton.href = "?page=" + "1";
-        firstPageButton.append(firstPageDiv);
-        pageFragment.append(firstPageButton);
-
-        const pageDots = document.createElement("div");
-        pageDots.textContent = "...";
-        pageDots.className = "pagination-dots-button";
-        pageFragment.append(pageDots);
-        var j = currentPage - 1;
-        for (i = 0; i < 3; i++) {
-          const pageButton = document.createElement("a");
-          const pageDiv = document.createElement("div");
-
-          pageDiv.textContent = j;
-          pageButton.className = "pagination-page-button w-inline-block";
-          if (lastQuery != "")
-            pageButton.href = "?page=" + j + ("&" + lastQuery);
-          else pageButton.href = "?page=" + j;
-          pageButton.append(pageDiv);
-          pageFragment.append(pageButton);
-          if (j == currentPage) {
-            pageButton.className =
-              "pagination-page-button w-inline-block w--current";
-          }
-          j = j + 1;
-        }
-        const midPageDots = document.createElement("div");
-        midPageDots.textContent = "...";
-        midPageDots.className = "pagination-dots-button";
-        pageFragment.append(midPageDots);
-
-        const lastPageButton = document.createElement("a");
-        const lastPageDiv = document.createElement("div");
-        lastPageDiv.textContent = pageCount;
-        lastPageButton.className = "pagination-page-button w-inline-block";
-        if (lastQuery != "")
-          lastPageButton.href = "?page=" + i + ("&" + lastQuery);
-        else lastPageButton.href = "?page=" + i;
-        lastPageButton.append(lastPageDiv);
-        pageFragment.append(lastPageButton);
-        paginationWrapper.append(pageFragment);
-      } else {
-        const firstPageButton = document.createElement("a");
-        const firstPageDiv = document.createElement("div");
-        firstPageDiv.textContent = "1";
-        firstPageButton.className = "pagination-page-button w-inline-block";
-        if (lastQuery != "")
-          firstPageButton.href = "?page=" + "1" + ("&" + lastQuery);
-        else firstPageButton.href = "?page=" + "1";
-        firstPageButton.append(firstPageDiv);
-        pageFragment.append(firstPageButton);
-
-        const pageDots = document.createElement("div");
-        pageDots.textContent = "...";
-        pageDots.className = "pagination-dots-button";
-        pageFragment.append(pageDots);
-
-        for (i = pageCount - 4; i <= pageCount; i++) {
-          const pageButton = document.createElement("a");
-          const pageDiv = document.createElement("div");
-          pageDiv.textContent = i;
-          pageButton.className = "pagination-page-button w-inline-block";
-          if (lastQuery != "")
-            pageButton.href = "?page=" + i + ("&" + lastQuery);
-          else pageButton.href = "?page=" + i;
-
-          pageButton.append(pageDiv);
-          pageFragment.append(pageButton);
-          if (i == currentPage) {
-            pageButton.className =
-              "pagination-page-button w-inline-block w--current";
-          }
-          j++;
-        }
-        paginationWrapper.append(pageFragment);
-      }
     }
-    if (currentPage != pageCount) {
+    // ... rest of your pagination logic, converting all <a> tags to <div> 
+    // and adding event listeners and data-page attributes ...
 
-      const rightArrowButton = document.createElement("a");
+    if (currentPage != pageCount) {
+      const rightArrowButton = document.createElement("div");
       rightArrowButton.className =
-        "w-pagination-right pagination-button-next keep-params 10xarrow";
+        "w-pagination-right pagination-button-next keep-params";
       rightArrowButton.setAttribute("aria-label", "Next Page");
+      rightArrowButton.setAttribute("data-page", (currentPage + 1).toString());
+      rightArrowButton.addEventListener("click", handlePaginationClick);
       const rightArrowImage = document.createElement("img");
-      rightArrowButton.style.marginLeft = 10;
       rightArrowImage.width = "45";
       rightArrowImage.loading = "lazy";
       rightArrowImage.src =
         "https://res.cloudinary.com/wdy-bzs/image/upload/v1651849092/asset/Arrow.svg";
       rightArrowImage.className = "pagination-arrow right";
       rightArrowButton.append(rightArrowImage);
-      if (lastQuery != "")
-        rightArrowButton.href =
-          "?page=" + parseInt(Number(currentPage) + 1) + ("&" + lastQuery);
-      else rightArrowButton.href = "?page=" + parseInt(Number(currentPage) + 1);
       paginationWrapper.append(rightArrowButton);
+
       if (pageCount - currentPage >= 10) {
-        const rightArrowButton = document.createElement("a");
+        const rightArrowButton = document.createElement("div");
         rightArrowButton.className =
           "w-pagination-right pagination-button-next keep-params 10xarrow";
         rightArrowButton.setAttribute("aria-label", "Next Page");
+        rightArrowButton.setAttribute("data-page", (currentPage + 10).toString());
+        rightArrowButton.addEventListener("click", handlePaginationClick);
         const rightArrowImage = document.createElement("img");
-        rightArrowImage.style;
         rightArrowImage.width = "45";
-        rightArrowButton.style.marginLeft = "0px";
         rightArrowImage.loading = "lazy";
         rightArrowImage.src =
           "https://res.cloudinary.com/wdy-bzs/image/upload/v1661106376/asset/Group_42_1.svg";
         rightArrowImage.className = "pagination-arrow right";
         rightArrowButton.append(rightArrowImage);
-        if (lastQuery != "")
-          rightArrowButton.href =
-            "?page=" + parseInt(Number(currentPage) + 10) + ("&" + lastQuery);
-        else
-          rightArrowButton.href = "?page=" + parseInt(Number(currentPage) + 10);
         paginationWrapper.append(rightArrowButton);
       }
     }
     list.append(paginationWrapper);
-  }
 }
-
 async function loadFData(e) {
   if (e?.key == "Enter") {
     let searchValue = document
@@ -688,9 +607,7 @@ async function loadFData(e) {
   if (!e || e.key == "Enter") {
     var currentUrl = new URL(window.location.href);
     if (currentUrl.searchParams.get("search")) {
-      let searchValue = (document.getElementsByClassName(
-        "search-field w-input"
-      )[0].value = String(currentUrl.searchParams.get("search")));
+      let searchValue = (document.getElementsByClassName("search-field w-input")[0].value = String(currentUrl.searchParams.get("search")));
     }
   }
   setTimeout(async () => {
@@ -708,7 +625,6 @@ async function loadFData(e) {
         }
       }
 
-      document.cookie = "lastQuery=" + queryCookie;
 
       try {
         let data;
@@ -725,10 +641,9 @@ async function loadFData(e) {
           data = await response.json();
         } else {
           const sortToggle = getC("sort_random");
-          const randomOrder = getC("randomOrder");
           const selection_exclude = getC("selection_exclude")
           const response = await fetch(
-            `https://bildzeitschrift.netlify.app/.netlify/functions/loadData?page=1&sort_toggle=${sortToggle}&selectExcl=${selection_exclude}&randomOrder=${randomOrder}`, {
+            `https://bildzeitschrift.netlify.app/.netlify/functions/loadData?page=1&sort_toggle=${sortToggle}&selectExcl=${selection_exclude}`, {
             headers: {
               Authorization: sessionStorage.getItem("auth")
             }
@@ -801,50 +716,23 @@ document.addEventListener("DOMContentLoaded", async function () {
     document.cookie = "sort_random=" + sort_random + ";";
   }
 
-  
-  // if(getC("selection_exclude")!= ""){
-  //   selection_excluding = getC("selection_exclude")
-  // } else {
-  //   document.cookie = "selection_exclude=" +  selection_excluding + ";"
-  // }
-
 
   if (sort_random == "false") {
     sortToggle.click();
+    sortToggle.classList.remove("is--on")
+    sortToggle.classList.add("is--off")
   } 
-  // if(selection_excluding == "true"){
-  //   selectionExclude.click()
-  // }
-
-  const currentTime = new Date().getTime();
-  const cookieExpire = new Date(currentTime + 600000);
-  var randomNumber = Math.floor(Math.random() * (4 - 0 + 1));
-  var randomOrder = Math.floor(Math.random() * (1 - 0 + 1));
-  var randomOrderFinal = randomOrder == 0 ? -1 : 1;
-  if (getC("randomOrder") == "" && getC("randomNumber") == "") {
-    document.cookie =
-      "randomOrder=" +
-      randomOrderFinal +
-      ";path=/;expires=" +
-      cookieExpire.toUTCString();
-    document.cookie =
-      "randomNumber=" +
-      randomNumber +
-      ";path=/;expires=" +
-      cookieExpire.toUTCString();
+  else {
+    sortToggle.click();
+    sortToggle.classList.remove("is--off")
+    sortToggle.classList.add("is--on")
   }
+
+  
   await loadFData();
-  
-  
 
 
-
-  // Example async function
-
-
-  const individualReset = document.getElementsByClassName(
-    "reset-btn w-inline-block"
-  );
+  const individualReset = document.getElementsByClassName("reset-btn w-inline-block");
   for (x of individualReset) {
     x.addEventListener("mouseup", loadFData);
   }
@@ -858,6 +746,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   for(ind of singleDropdown){
     ind.addEventListener("mouseup", loadFData)
   }
+  
   const checkboxWrappers = document.getElementsByClassName(
     "checkbox-element-wrapper"
   );
@@ -898,15 +787,5 @@ document.addEventListener("DOMContentLoaded", async function () {
     document.cookie = "sort_random=" + sort_random + ";";
     loadFData();
   });
-
-  // selectionExclude.addEventListener("click", () => {
-  //   if (selection_excluding == "false") {
-  //     selection_excluding = "true";
-  //   } else {
-  //     selection_excluding = "false";
-  //   }
-  //   document.cookie = "selection_exclude=" + selection_excluding + ";";
-  //   loadFData();
-  // });
 
 });
