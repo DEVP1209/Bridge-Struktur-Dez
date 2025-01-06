@@ -427,8 +427,9 @@ const randomMags = async (array) => {
     async function pagination() {
       const list = document.getElementsByClassName("w-dyn-list")[0];
       var paginationWrapper;
-
+      
       const handlePaginationClick = (event) => {
+        const lastQuery = window.location.href.includes("page=") ? window.location.href.split("page=")[1].substring(2) : window.location.href.split("?")[1];
         const page = event.target.getAttribute("data-page");
         const url = lastQuery ? `?page=${page}&${lastQuery}` : `?page=${page}`;
         window.history.pushState({}, "", url);
