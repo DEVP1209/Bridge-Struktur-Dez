@@ -904,22 +904,26 @@ function createMainDropdowns(data) {
   });
 }
 
+// Get the results wrapper element
 function handleCheckboxClick(event) {
-  console.log("Reached Here")
-  const checkbox = event.target;
-  const label = checkbox.nextElementSibling;
-  const isMinusCheckbox = checkbox.id.includes('-minus');
-  const value = isMinusCheckbox ? `-${label.textContent}` : label.textContent;
-  
+  console.log("Hello")
+  // Only proceed if the clicked element is part of the plus checkbox (not minus)
+  const resultsTagWrapper = document.querySelector('.results-tag_wrapper');
+  const label = event.target.closest('.filter-dropdown.single').querySelector('label');
+  const checkbox = label.querySelector('.w-checkbox-input.checkbox');
+  const labelSpan = label.querySelector('.filter-element-label');
+  const value = labelSpan.textContent;
+  const prefix = labelSpan.getAttribute('fs-cmsfilter-field') || '';
+  // Toggle checkbox state
   // Get current URL parameters
   const urlParams = new URLSearchParams(window.location.search);
-  const currentJahrzehnt = urlParams.get('d_Jahrzehnt') || '';
-  let jahrzehntValues = currentJahrzehnt ? currentJahrzehnt.split(',') : [];
+  const currentFilter = urlParams.get(prefix) || '';
+  let filterValues = currentFilter ? currentFilter.split(',') : [];
   
-  if (checkbox.checked) {
+  if (checkbox.classList.contains('w--redirected-checked')) {
     // Add value if not already present
-    if (!jahrzehntValues.includes(value)) {
-      jahrzehntValues.push(value);
+    if (!filterValues.includes(value)) {
+      filterValues.push(value);
       
       // Add tag
       const tagHTML = `
@@ -936,7 +940,7 @@ function handleCheckboxClick(event) {
     }
   } else {
     // Remove value
-    jahrzehntValues = jahrzehntValues.filter(v => v !== value);
+    filterValues = filterValues.filter(v => v !== value);
     
     // Remove tag
     const existingTag = document.querySelector(`[data-tag-value="${value}"]`);
@@ -946,18 +950,18 @@ function handleCheckboxClick(event) {
   }
   
   // Update or remove the parameter
-  if (jahrzehntValues.length > 0) {
-    urlParams.set('d_Jahrzehnt', jahrzehntValues.join(','));
+  if (filterValues.length > 0) {
+    urlParams.set(prefix, filterValues.join(','));
   } else {
-    urlParams.delete('d_Jahrzehnt');
+    urlParams.delete(prefix);
   }
-  
   // Update URL without refreshing page
   const newUrl = `${window.location.pathname}?${urlParams.toString()}`;
   window.history.pushState({}, '', newUrl);
+  loadFData();
+  event.preventDefault();
 }
 
-// Function to remove tag and uncheck corresponding checkbox
 function removeTag(value) {
   // Remove tag element
   const tag = document.querySelector(`[data-tag-value="${value}"]`);
@@ -966,17 +970,19 @@ function removeTag(value) {
   }
   
   // Find and uncheck corresponding checkbox
-  const isMinusValue = value.startsWith('-');
-  const cleanValue = isMinusValue ? value.substring(1) : value;
-  const checkboxId = isMinusValue ? `${cleanValue}-minus` : cleanValue;
-  
+  const checkboxId = `single-${value}`;
   const checkbox = document.getElementById(checkboxId);
   if (checkbox) {
     checkbox.checked = false;
-    // Trigger click handler to update URL
-    checkbox.dispatchEvent(new Event('click'));
+    // Trigger click handler on the parent dropdown
+    checkbox.closest('.filter-dropdown.single').click();
   }
 }
+
+// Add click handler only to the single filter dropdown
+document.querySelectorAll('.filter-dropdown.single').forEach(dropdown => {
+  dropdown.addEventListener('click', handleSingleFilterClick);
+});
 function createDropdownSection(title, categoryData) {
   const mainWrap = document.createElement("div");
   mainWrap.className = "main-cat-wrap first";
@@ -1113,16 +1119,13 @@ function processNestedContent(title, categoryData, accordionContent) {
 function createSingleCheckboxElement(title, value, id) {
   const wrapper = document.createElement("div");
   wrapper.className = "filter-dropdown single";
-  wrapper.onclick = () => {
-    loadFData();
-  };
+  wrapper.addEventListener("click", handleCheckboxClick);
   const label = document.createElement("label");
   label.className = "w-checkbox checkbox-field single";
 
   const checkbox = document.createElement("div");
   checkbox.className =
     "w-checkbox-input w-checkbox-input--inputType-custom checkbox";
- checkbox.addEventListener("click", handleCheckboxClick);
   const input = document.createElement("input");
   input.type = "checkbox";
   input.id = id;
