@@ -887,30 +887,14 @@ async function updatePagination(newPage) {
   currentPage = newPage;
   await loadFData();
 }
-function toTitleCase(str) {
-  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
-}
-function createMainDropdowns(data) {
-  const mainCategories = Object.keys(data["1 NEU"]);
-  const form = document.getElementById("email-form"); // Get the existing form
-
-  mainCategories.forEach((category) => {
-    const categoryData = data["1 NEU"][category];
-    const dropdownSection = createDropdownSection(
-      toTitleCase(category),
-      categoryData
-    );
-    // Insert before the form's closing tag
-    form.insertBefore(dropdownSection, form.querySelector(".w-form-done"));
-  });
-}
 
 ////////// Checkbox Click logic
 function handleQueryParamChange() {
   // Get the current URL and its search parameters
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.search);
-
+  // Remove the 'page' parameter if it exists
+  params.delete('page');
   // Iterate over each parameter in the URL
   params.forEach((values, category) => {
     // Split the values by comma in case there are multiple values for a category
@@ -1021,6 +1005,24 @@ function handleCheckboxClick(event) {
   const value = checkbox.getAttribute("data-name");
   updateQueryParam(category, value);
   toggleTag(category, value);
+}
+
+function toTitleCase(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+}
+function createMainDropdowns(data) {
+  const mainCategories = Object.keys(data["1 NEU"]);
+  const form = document.getElementById("email-form"); // Get the existing form
+
+  mainCategories.forEach((category) => {
+    const categoryData = data["1 NEU"][category];
+    const dropdownSection = createDropdownSection(
+      toTitleCase(category),
+      categoryData
+    );
+    // Insert before the form's closing tag
+    form.insertBefore(dropdownSection, form.querySelector(".w-form-done"));
+  });
 }
 function createDropdownSection(title, categoryData) {
   const mainWrap = document.createElement("div");
@@ -1646,6 +1648,7 @@ async function fetchFilters() {
 }
 
 document.addEventListener("DOMContentLoaded", async function () {
+  handleQueryParamChange();
   sort_random = "true";
   let selection_excluding = "false";
   const sortToggle = document.getElementsByClassName("random-switch")[0];
@@ -1666,17 +1669,6 @@ document.addEventListener("DOMContentLoaded", async function () {
   const selectAllBtn = document.getElementsByClassName("dropdown-btn-wrapper");
   for (s of selectAllBtn) {
     s.addEventListener("mouseup", loadFData);
-  }
-
-  const singleDropdown = document.querySelectorAll(".filter-dropdown.single");
-  for (ind of singleDropdown) {
-    ind.addEventListener("mouseup", loadFData);
-  }
-  const checkboxWrappers = document.getElementsByClassName(
-    "checkbox-element-wrapper"
-  );
-  for (q of checkboxWrappers) {
-    q.addEventListener("mouseup", loadFData);
   }
 
   const resetAllButton = document.getElementsByClassName("reset-all-btn")[0];
