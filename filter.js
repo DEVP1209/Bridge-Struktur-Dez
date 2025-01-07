@@ -4,7 +4,7 @@ function createMainDropdowns(data) {
 
     mainCategories.forEach(category => {
         const categoryData = data['1 NEU'][category];
-        const dropdownSection = createDropdownSection(category, categoryData);
+        const dropdownSection = createDropdownSection(category.title(), categoryData);
         // Insert before the form's closing tag
         form.insertBefore(dropdownSection, form.querySelector('.w-form-done'));
     });
@@ -61,7 +61,7 @@ function createDropdownSection(title, categoryData) {
     mainWrap.appendChild(accordionContent);
 
     // Process nested content using the new function
-    processNestedContent(title, categoryData, accordionContent);
+    processNestedContent(title.title(), categoryData, accordionContent);
 
     // Add click handler for accordion
     accordionTrigger.addEventListener('click', () => {

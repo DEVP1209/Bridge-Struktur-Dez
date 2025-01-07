@@ -893,7 +893,7 @@ function createMainDropdowns(data) {
 
   mainCategories.forEach(category => {
       const categoryData = data['1 NEU'][category];
-      const dropdownSection = createDropdownSection(category, categoryData);
+      const dropdownSection = createDropdownSection(category.title(), categoryData);
       // Insert before the form's closing tag
       form.insertBefore(dropdownSection, form.querySelector('.w-form-done'));
   });
@@ -1004,7 +1004,7 @@ function processNestedContent(title, categoryData, accordionContent) {
       const nestedDropdown = createDropdownStructure(title, key, categoryData[key]);
       accordionContent.appendChild(nestedDropdown);
     } else if (categoryData[key] !== null) {
-      const dropdown = createDropdown(title, key, categoryData[key].values || []);
+      const dropdown = createDropdown(title, key.title(), categoryData[key].values || []);
       accordionContent.appendChild(dropdown);
     }
   } else {
@@ -1024,7 +1024,9 @@ function processNestedContent(title, categoryData, accordionContent) {
 function createSingleCheckboxElement(title, value, id) {
   const wrapper = document.createElement('div');
   wrapper.className = 'filter-dropdown single';
-
+  wrapper.onclick = ()=>{
+    loadFData();
+  };
   const label = document.createElement('label');
   label.className = 'w-checkbox checkbox-field single';
 
@@ -1256,7 +1258,7 @@ toggleBtn.setAttribute("role", "button");
 toggleBtn.setAttribute("tabindex", "0");
 
 toggleBtn.innerHTML = `
-    <div>${title}</div>
+    <div>${title.title()}</div>
     <div class="arrow-indicator-wrap">
       <div class="filter-indicator">
         <div><span id="t_${title.toLowerCase()}" class="filter-span">0</span></div>
