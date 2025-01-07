@@ -977,9 +977,12 @@ function handleCheckboxClick(event) {
     updateQueryParam(category, value);
     toggleTag(category, value);
   }
-  const checkbox = event.target.closest(".checkbox-field");
-  if (!checkbox) {
-  }
+  const checkbox = event.target;
+  const category = checkbox.getAttribute("id").split("__")[0];
+  const value = checkbox.getAttribute("data-name");
+  updateQueryParam(category, value);
+  toggleTag(category, value);
+  console.log("Category:", category, "Value:", value);
 }
 function createDropdownSection(title, categoryData) {
   const mainWrap = document.createElement("div");
@@ -1119,12 +1122,12 @@ function createSingleCheckboxElement(title, value, id) {
   wrapper.className = "filter-dropdown single";
   const label = document.createElement("label");
   label.className = "w-checkbox checkbox-field single";
-  label.addEventListener("click", handleCheckboxClick);
   const checkbox = document.createElement("div");
   checkbox.className =
     "w-checkbox-input w-checkbox-input--inputType-custom checkbox";
   checkbox.id = `${title.replace(/\//g, "-").toLowerCase()}__${value.toLowerCase()}`;
   checkbox.setAttribute("data-name", value);
+  checkbox.addEventListener("click", handleCheckboxClick);
   const input = document.createElement("input");
   input.type = "checkbox";
   input.id = id;
@@ -1136,12 +1139,12 @@ function createSingleCheckboxElement(title, value, id) {
   // Create the "minus" label
   const minusLabel = document.createElement("label");
   minusLabel.className = "w-checkbox checkbox-field is-minus";
-  minusLabel.addEventListener("click", handleCheckboxClick);
   const minusCheckbox = document.createElement("div");
   minusCheckbox.className =
     "w-checkbox-input w-checkbox-input--inputType-custom checkbox is-minus";
   minusCheckbox.id = `${title.replace(/\//g, "-").toLowerCase()}__${value.toLowerCase()}-minus`;
   minusCheckbox.setAttribute("data-name", value);
+  minusCheckbox.addEventListener("click", handleCheckboxClick);
   const minusInput = document.createElement("input");
   minusInput.type = "checkbox";
   minusInput.id = `${id}-minus`;
@@ -1300,6 +1303,7 @@ function createCheckboxElement(main_title, title, value, id) {
     "-"
   )}__${value.toLowerCase()}`;
   checkbox.setAttribute("data-name", value);
+  checkbox.addEventListener("click", handleCheckboxClick);
   const input = document.createElement("input");
   input.type = "checkbox";
   input.id = id;
@@ -1329,6 +1333,7 @@ function createCheckboxElement(main_title, title, value, id) {
     "-"
   )}__${value.toLowerCase()}-minus`;
   minusCheckbox.setAttribute("data-name", value);
+  minusCheckbox.addEventListener("click", handleCheckboxClick);
   const minusInput = document.createElement("input");
   minusInput.type = "checkbox";
   minusInput.id = `${id}-minus`;
@@ -1522,6 +1527,9 @@ function createDropdownStructure(main_title, title, data) {
           });
         }
       }
+      categoryDiv.getElementsByClassName("w-checkbox-input--inputType-custom").forEach((checkbox) => {
+        checkbox.addEventListener("click", handleCheckboxClick);
+      });
       dropdownList.appendChild(categoryDiv);
       categoryIndex++;
     }
@@ -1571,6 +1579,9 @@ function createDropdownStructure(main_title, title, data) {
           loadFData();
         };
       }
+      valueDiv.getElementsByClassName("w-checkbox-input--inputType-custom").forEach((checkbox) => {
+        checkbox.addEventListener("click", handleCheckboxClick);
+      });
       dropdownList.appendChild(valueDiv);
     });
   }
