@@ -1427,7 +1427,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     .querySelector(".results-tag_wrapper")
     .addEventListener("mouseup", loadFData);
   const toggle = document.getElementsByClassName("toggle")[0];
-
+  await fetchFilters();
   await loadFData();
 
   const individualReset = document.getElementsByClassName(
