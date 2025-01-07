@@ -574,7 +574,7 @@ async function renderData(data) {
         leftArrowImage.loading = "lazy";
         leftArrowImage.src =
           "https://res.cloudinary.com/wdy-bzs/image/upload/v1661106376/asset/Group_42_1.svg";
-        leftArrowImage.className = "pagination-arrow left";
+        leftArrowImage.className = "pagination-arrow left disabled-clicks";
         leftArrowButton.style.marginRight = "0px";
         leftArrowButton.style.paddingRight = "0px";
         leftArrowButton.append(leftArrowImage);
@@ -591,7 +591,7 @@ async function renderData(data) {
       leftArrowImage.loading = "lazy";
       leftArrowImage.src =
         "https://res.cloudinary.com/wdy-bzs/image/upload/v1651849092/asset/Arrow.svg";
-      leftArrowImage.className = "pagination-arrow left";
+      leftArrowImage.className = "pagination-arrow left disabled-clicks";
       leftArrowButton.style.paddingLeft = "0px";
       leftArrowButton.style.paddingRight = "0px";
       leftArrowButton.append(leftArrowImage);
@@ -603,6 +603,7 @@ async function renderData(data) {
       for (i = 1; i <= pageCount; i++) {
         const pageButton = document.createElement("div");
         const pageDiv = document.createElement("div");
+        pageDiv.className = "disabled-clicks";
         pageDiv.textContent = i;
         pageButton.className = "pagination-page-button w-inline-block";
         pageButton.setAttribute("data-page", i);
@@ -620,6 +621,7 @@ async function renderData(data) {
         for (i = 1; i <= 5; i++) {
           const pageButton = document.createElement("div");
           const pageDiv = document.createElement("div");
+          pageDiv.className = "disabled-clicks";
           pageDiv.textContent = i;
           pageButton.className = "pagination-page-button w-inline-block";
           pageButton.setAttribute("data-page", i);
@@ -639,6 +641,7 @@ async function renderData(data) {
 
         const lastPageButton = document.createElement("div");
         const lastPageDiv = document.createElement("div");
+        lastPageDiv.className = "disabled-clicks";
         lastPageDiv.textContent = pageCount;
         lastPageButton.className = "pagination-page-button w-inline-block";
         lastPageButton.setAttribute("data-page", pageCount);
@@ -650,6 +653,7 @@ async function renderData(data) {
       } else if (currentPage >= 5 && currentPage <= pageCount - 4) {
         const firstPageButton = document.createElement("div");
         const firstPageDiv = document.createElement("div");
+        firstPageDiv.className = "disabled-clicks";
         firstPageDiv.textContent = "1";
         firstPageButton.className = "pagination-page-button w-inline-block";
         firstPageButton.setAttribute("data-page", 1);
@@ -659,13 +663,13 @@ async function renderData(data) {
 
         const pageDots = document.createElement("div");
         pageDots.textContent = "...";
-        pageDots.className = "pagination-dots-button";
+        pageDots.className = "pagination-dots-button disabled-clicks";
         pageFragment.append(pageDots);
         var j = currentPage - 1;
         for (i = 0; i < 3; i++) {
           const pageButton = document.createElement("div");
           const pageDiv = document.createElement("div");
-
+          pageDiv.className = "disabled-clicks";
           pageDiv.textContent = j;
           pageButton.className = "pagination-page-button w-inline-block";
           pageButton.setAttribute("data-page", j);
@@ -680,11 +684,12 @@ async function renderData(data) {
         }
         const midPageDots = document.createElement("div");
         midPageDots.textContent = "...";
-        midPageDots.className = "pagination-dots-button";
+        midPageDots.className = "pagination-dots-button disabled-clicks";
         pageFragment.append(midPageDots);
 
         const lastPageButton = document.createElement("div");
         const lastPageDiv = document.createElement("div");
+        lastPageDiv.className = "disabled-clicks";
         lastPageDiv.textContent = pageCount;
         lastPageButton.className = "pagination-page-button w-inline-block";
         lastPageButton.setAttribute("data-page", pageCount); // Check here , maybe i
@@ -695,6 +700,7 @@ async function renderData(data) {
       } else {
         const firstPageButton = document.createElement("div");
         const firstPageDiv = document.createElement("div");
+        firstPageDiv.className = "disabled-clicks";
         firstPageDiv.textContent = "1";
         firstPageButton.className = "pagination-page-button w-inline-block";
         firstPageButton.setAttribute("data-page", 1);
@@ -711,6 +717,7 @@ async function renderData(data) {
         for (i = pageCount - 4; i <= pageCount; i++) {
           const pageButton = document.createElement("div");
           const pageDiv = document.createElement("div");
+          pageDiv.className = "disabled-clicks";
           pageDiv.textContent = i;
           pageButton.className = "pagination-page-button w-inline-block";
           pageButton.setAttribute("data-page", i);
@@ -738,7 +745,7 @@ async function renderData(data) {
       rightArrowImage.loading = "lazy";
       rightArrowImage.src =
         "https://res.cloudinary.com/wdy-bzs/image/upload/v1651849092/asset/Arrow.svg";
-      rightArrowImage.className = "pagination-arrow right";
+      rightArrowImage.className = "pagination-arrow right disabled-clicks";
       rightArrowButton.append(rightArrowImage);
       rightArrowButton.setAttribute("data-page", Number(currentPage) + 1);
       rightArrowButton.addEventListener("click", handlePaginationClick);
@@ -755,7 +762,7 @@ async function renderData(data) {
         rightArrowImage.loading = "lazy";
         rightArrowImage.src =
           "https://res.cloudinary.com/wdy-bzs/image/upload/v1661106376/asset/Group_42_1.svg";
-        rightArrowImage.className = "pagination-arrow right";
+        rightArrowImage.className = "pagination-arrow right disabled-clicks";
         rightArrowButton.append(rightArrowImage);
         rightArrowButton.setAttribute("data-page", Number(currentPage) + 10);
         rightArrowButton.addEventListener("click", handlePaginationClick);
@@ -891,14 +898,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     .addEventListener("mouseup", loadFData);
   const toggle = document.getElementsByClassName("toggle")[0];
 
-  sort_random = document
-    .getElementsByClassName("random-switch")[0]
-    .classList.contains("is--on")
-    ? "true"
-    : "false";
-  if (sort_random == "false") {
-    sortToggle.click();
-  }
+  sort_random = true;
   const currentTime = new Date().getTime();
   const cookieExpire = new Date(currentTime + 600000);
   var randomNumber = Math.floor(Math.random() * (4 - 0 + 1));
@@ -926,7 +926,9 @@ document.addEventListener("DOMContentLoaded", async function () {
   const checkboxWrappers = document.getElementsByClassName(
     "checkbox-element-wrapper"
   );
-
+  for (q of checkboxWrappers) {
+    q.addEventListener("mouseup", loadFData);
+  }
   
   const resetAllButton = document.getElementsByClassName("reset-all-btn")[0];
   resetAllButton.addEventListener("mouseup", () => {
@@ -944,9 +946,6 @@ document.addEventListener("DOMContentLoaded", async function () {
   });
   resetAllButton.href = "#";
 
-  for (q of checkboxWrappers) {
-    q.addEventListener("mouseup", loadFData);
-  }
   const search = document.getElementsByClassName("search-field w-input")[0];
   search.addEventListener("keypress", (event) => {
     if (event.key == "Enter") {
@@ -956,8 +955,16 @@ document.addEventListener("DOMContentLoaded", async function () {
   sortToggle.addEventListener("click", () => {
     if (sort_random == "false") {
       sort_random = "true";
+      if (sortToggle.classList.contains("is--off")) {
+        sortToggle.classList.remove("is--off");
+        sortToggle.classList.add("is--on");
+      }
     } else {
       sort_random = "false";
+      if (sortToggle.classList.contains("is--on")) {
+        sortToggle.classList.remove("is--on");
+        sortToggle.classList.add("is--off");
+      }
     }
     loadFData();
   });
