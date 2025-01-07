@@ -1175,7 +1175,7 @@ function createDropdown(main_title, title, values) {
 function createCheckboxElement(main_title, title, value, id) {
   const wrapper = document.createElement('div');
   wrapper.className = 'checkbox-element-wrapper';
-
+  wrapper.onclick = () => { loadFData(); };
   // Create the regular label
   const label = document.createElement('label');
   label.className = 'w-checkbox checkbox-field';
@@ -1347,7 +1347,11 @@ Object.entries(data).forEach(([key, value]) => {
           </div>
         </div>
       `;
-
+    categoryDiv.querySelectorAll('.checkbox-element-wrapper').forEach(wrapper => {
+      wrapper.addEventListener('click', () => {
+        loadFData();
+      });
+    });
     dropdownList.appendChild(categoryDiv);
     categoryIndex++;
   }
@@ -1368,7 +1372,8 @@ if (data.values && data.values.length > 0) {
           ${index === data.values.length - 1 ? "<div class=\"dropdown-indicator-line _2\"></div>" : ""}
           <div class="filter-dropdown single complex-width ${
                     index === data.values.length - 1 ? " last" : ""
-                  }">
+                  }" >
+            
             <label class="w-checkbox checkbox-field single">
               <div class="w-checkbox-input w-checkbox-input--inputType-custom checkbox"></div>
               <input type="checkbox" id="checkbox-single-${index}" 
@@ -1386,7 +1391,10 @@ if (data.values && data.values.length > 0) {
           </div>
         </div>
       `;
-
+    const closestDropdown = valueDiv.closest('.filter-dropdown.single');
+    if (closestDropdown) {
+        closestDropdown.onclick = () => { loadFData(); };
+    }
     dropdownList.appendChild(valueDiv);
   });
 }
