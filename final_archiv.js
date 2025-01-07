@@ -1114,7 +1114,7 @@ function createSingleCheckboxElement(title, value, id) {
   const checkbox = document.createElement("div");
   checkbox.className =
     "w-checkbox-input w-checkbox-input--inputType-custom checkbox";
-  checkbox.id = `${main_title.toLowerCase().charAt(0)}_${title.replace(/\//g, "-")}`;
+  checkbox.id = `${title.replace(/\//g, "-").toLowerCase()}`;
   checkbox.name = value;
   const input = document.createElement("input");
   input.type = "checkbox";
@@ -1131,7 +1131,7 @@ function createSingleCheckboxElement(title, value, id) {
   const minusCheckbox = document.createElement("div");
   minusCheckbox.className =
     "w-checkbox-input w-checkbox-input--inputType-custom checkbox is-minus";
-  minusCheckbox.id = `${main_title.toLowerCase().charAt(0)}_${title.replace(/\//g, "-")}`;
+  minusCheckbox.id = `${title.replace(/\//g, "-").toLowerCase()}`;
   minusCheckbox.name = value
   const minusInput = document.createElement("input");
   minusInput.type = "checkbox";
