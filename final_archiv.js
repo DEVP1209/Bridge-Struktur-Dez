@@ -907,16 +907,71 @@ function createMainDropdowns(data) {
 
 // Get the results wrapper element
 function handleCheckboxClick(event) {
-  console.log(event.target);
+  function updateQueryParam(category, value) {
+    // Get the current URL and its search parameters
+    const url = new URL(window.location.href);
+    const params = new URLSearchParams(url.search);
   
+    // Get the existing values for the category, if any
+    const existingValues = params.get(category) ? params.get(category).split(',') : [];
+  
+    if (existingValues.includes(value)) {
+      // Remove the value if it already exists
+      const updatedValues = existingValues.filter(v => v !== value);
+      if (updatedValues.length > 0) {
+        params.set(category, updatedValues.join(','));
+      } else {
+        // Remove the category if no values remain
+        params.delete(category);
+      }
+    } else {
+      // Add the value if it doesn't exist
+      existingValues.push(value);
+      params.set(category, existingValues.join(','));
+    }
+  
+    // Update the URL without reloading the page
+    const newUrl = `${url.pathname}?${params.toString()}`;
+    window.history.pushState({}, '', newUrl);
+  }
+  function toggleTag(category,value) {
+    // Find the result-wrapper container
+    const container = document.querySelector(".results-tag_wrapper");
+    if (!container) {
+      console.error('Result wrapper not found');
+      return;
+    }
+  
+    // Check if the tag with the specific value exists
+    const existingTag = Array.from(container.querySelectorAll('[fs-cmsfilter-element="tag-template"]')).find(tag => 
+      tag.querySelector('[fs-cmsfilter-element="tag-text"]').textContent.trim() === value
+    );
+  
+    if (existingTag) {
+      // Remove the tag if it exists
+      existingTag.remove();
+    } else {
+      // Create a new tag element
+      const newTag = document.createElement('div');
+      newTag.setAttribute('fs-cmsfilter-element', 'tag-template');
+      newTag.className = 'tag_wrap';
+      newTag.innerHTML = `
+        <div fs-cmsfilter-element="tag-text">${value}</div>
+        <img src="https://cdn.prod.website-files.com/6235c6aa0b614c4ab6ba68bb/661784b0cad022727b38036c_Vector.svg" loading="lazy" alt="" class="tag-remove">
+      `;
+      newTag.addEventListener('click', () => {handleToggleClick(category, value)});
+      // Append the new tag to the container
+      container.appendChild(newTag);
+    }
+  }
+  function handleToggleClick(category, value) {
+    updateQueryParam(category, value);
+    toggleTag(category, value);
+  }
+  const checkbox = event.target.closest('.checkbox-field');
+  if (!checkbox) {
 }
-
-
-
-// Add click handler only to the single filter dropdown
-document.querySelectorAll('.filter-dropdown.single').forEach(dropdown => {
-  dropdown.addEventListener('click', handleSingleFilterClick);
-});
+}
 function createDropdownSection(title, categoryData) {
   const mainWrap = document.createElement("div");
   mainWrap.className = "main-cat-wrap first";
@@ -1059,6 +1114,8 @@ function createSingleCheckboxElement(title, value, id) {
   const checkbox = document.createElement("div");
   checkbox.className =
     "w-checkbox-input w-checkbox-input--inputType-custom checkbox";
+  checkbox.id = `${main_title.toLowerCase().charAt(0)}_${title.replace(/\//g, "-")}`;
+  checkbox.name = value;
   const input = document.createElement("input");
   input.type = "checkbox";
   input.id = id;
@@ -1074,7 +1131,8 @@ function createSingleCheckboxElement(title, value, id) {
   const minusCheckbox = document.createElement("div");
   minusCheckbox.className =
     "w-checkbox-input w-checkbox-input--inputType-custom checkbox is-minus";
-
+  minusCheckbox.id = `${main_title.toLowerCase().charAt(0)}_${title.replace(/\//g, "-")}`;
+  minusCheckbox.name = value
   const minusInput = document.createElement("input");
   minusInput.type = "checkbox";
   minusInput.id = `${id}-minus`;
@@ -1228,7 +1286,8 @@ function createCheckboxElement(main_title, title, value, id) {
   const checkbox = document.createElement("div");
   checkbox.className =
     "w-checkbox-input w-checkbox-input--inputType-custom checkbox";
-  
+  checkbox.id = `${main_title.toLowerCase().charAt(0)}_${title.replace(/\//g, "-")}`;
+  checkbox.name = value;
   const input = document.createElement("input");
   input.type = "checkbox";
   input.id = id;
@@ -1253,7 +1312,8 @@ function createCheckboxElement(main_title, title, value, id) {
   const minusCheckbox = document.createElement("div");
   minusCheckbox.className =
     "w-checkbox-input w-checkbox-input--inputType-custom checkbox is-minus";
-
+  minusCheckbox.id = `${main_title.toLowerCase().charAt(0)}_${title.replace(/\//g, "-")}`;
+  minusCheckbox.name = value;
   const minusInput = document.createElement("input");
   minusInput.type = "checkbox";
   minusInput.id = `${id}-minus`;
@@ -1374,7 +1434,7 @@ function createDropdownStructure(main_title, title, data) {
                     idx === options.length - 1 ? " last" : ""
                   }">
                     <label fs-mirrorclick-element="target-3" class="w-checkbox checkbox-field">
-                      <div class="w-checkbox-input w-checkbox-input--inputType-custom checkbox"></div>
+                      <div class="w-checkbox-input w-checkbox-input--inputType-custom checkbox" name=${value} id=${main_title.toLowerCase().charAt(0)}_${title.replace(/\//g, "-")}></div>
                       <input type="checkbox" id="checkbox-${categoryIndex}-${idx}" 
                              name="checkbox-${categoryIndex}-${idx}" 
                              data-name="Checkbox ${categoryIndex}-${idx}" 
@@ -1387,7 +1447,7 @@ function createDropdownStructure(main_title, title, data) {
                       .replace(/[/]/g, "-")}">${option}</span>
                     </label>
                     <label fs-mirrorclick-element="trigger-50" class="w-checkbox checkbox-field is-minus">
-                      <div class="w-checkbox-input w-checkbox-input--inputType-custom checkbox is-minus"></div>
+                      <div class="w-checkbox-input w-checkbox-input--inputType-custom checkbox is-minus" name="${value}" id="${main_title.toLowerCase().charAt(0)}_${title.replace(/\//g, "-")}"></div>
                       <input type="checkbox" id="checkbox-${categoryIndex}-${idx}-minus" 
                              name="checkbox-${categoryIndex}-${idx}-minus" 
                              data-name="Checkbox ${categoryIndex}-${idx}" 
@@ -1462,7 +1522,7 @@ function createDropdownStructure(main_title, title, data) {
           }" >
             
             <label class="w-checkbox checkbox-field single">
-              <div class="w-checkbox-input w-checkbox-input--inputType-custom checkbox"></div>
+              <div class="w-checkbox-input w-checkbox-input--inputType-custom checkbox" name="${value}" id="${main_title.toLowerCase().charAt(0)}_${title.replace(/\//g, "-")}"></div>
               <input type="checkbox" id="checkbox-single-${index}" 
                      name="checkbox-single-${index}" 
                      data-name="Checkbox Single ${index}" 
@@ -1471,7 +1531,7 @@ function createDropdownStructure(main_title, title, data) {
                     for="checkbox-single-${index}" fs-cmsfilter-field="${title.toLowerCase()}">${value}</span>
             </label>
           <label class="w-checkbox checkbox-field is-minus">
-            <div class="w-checkbox-input w-checkbox-input--inputType-custom checkbox is-minus"></div>
+            <div class="w-checkbox-input w-checkbox-input--inputType-custom checkbox is-minus" name="${value}" id="${main_title.toLowerCase().charAt(0)}_${title.replace(/\//g, "-")}"></div>
             <input type="checkbox" id="checkbox-single-${index}-minus" name="checkbox-single-${index}-minus" style="opacity:0;position:absolute;z-index:-1">
             <span class="filter-element-label is-hidden w-form-label" for="checkbox-single-${index}-minus" fs-cmsfilter-field="${title.toLowerCase()}">-${value}</span>
           </label>
