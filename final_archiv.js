@@ -905,84 +905,122 @@ function createMainDropdowns(data) {
   });
 }
 
+////////// Checkbox Click logic
+function handleQueryParamChange() {
+  // Get the current URL and its search parameters
+  const url = new URL(window.location.href);
+  const params = new URLSearchParams(url.search);
+
+  // Iterate over each parameter in the URL
+  params.forEach((values, category) => {
+    // Split the values by comma in case there are multiple values for a category
+    const valueArray = values.split(",");
+
+    // Iterate over the values and call toggleTag for each
+    valueArray.forEach((value) => {
+      toggleTag(category, value);
+
+      // Add 'w--redirected-checked' class to the corresponding checkbox
+      if (value.charAt(0) == "-") {
+        const currentDiv = document.querySelector(`#${category}__${value.toLowerCase()}-minus`);
+        if (currentDiv) {
+          currentDiv.classList.add("w--redirected-checked");
+        }
+      } else {
+        const currentDiv = document.querySelector(`#${category}__${value.toLowerCase()}`);
+        if (currentDiv) {
+          currentDiv.classList.add("w--redirected-checked");
+        }
+      }
+    });
+  });
+}
+function updateQueryParam(category, value) {
+  // Get the current URL and its search parameters
+  const url = new URL(window.location.href);
+  const params = new URLSearchParams(url.search);
+
+  // Get the existing values for the category, if any
+  const existingValues = params.get(category)
+    ? params.get(category).split(",")
+    : [];
+
+  if (existingValues.includes(value)) {
+    // Remove the value if it already exists
+    const updatedValues = existingValues.filter((v) => v !== value);
+    if (updatedValues.length > 0) {
+      params.set(category, updatedValues.join(","));
+    } else {
+      // Remove the category if no values remain
+      params.delete(category);
+    }
+  } else {
+    // Add the value if it doesn't exist
+    existingValues.push(value);
+    params.set(category, existingValues.join(","));
+  }
+
+  // Update the URL without reloading the page
+  const newUrl = `${url.pathname}?${params.toString()}`;
+  window.history.pushState({}, "", newUrl);
+}
+function toggleTag(category, value) {
+  // Find the result-wrapper container
+  const container = document.querySelector(".results-tag_wrapper");
+  if (!container) {
+    console.error("Result wrapper not found");
+    return;
+  }
+
+  // Check if the tag with the specific value exists
+  const existingTag = Array.from(
+    container.querySelectorAll('[fs-cmsfilter-element="tag-template"]')
+  ).find(
+    (tag) =>
+      tag
+        .querySelector('[fs-cmsfilter-element="tag-text"]')
+        .textContent.trim() === value
+  );
+
+  if (existingTag) {
+    // Remove the tag if it exists
+    existingTag.remove();
+  } else {
+    // Create a new tag element
+    const newTag = document.createElement("div");
+    newTag.setAttribute("fs-cmsfilter-element", "tag-template");
+    newTag.className = "tag_wrap";
+    newTag.innerHTML = `
+      <div fs-cmsfilter-element="tag-text">${value}</div>
+      <img src="https://cdn.prod.website-files.com/6235c6aa0b614c4ab6ba68bb/661784b0cad022727b38036c_Vector.svg" loading="lazy" alt="" class="tag-remove">
+    `;
+    newTag.addEventListener("click", () => {
+      handleToggleClick(category, value);
+    });
+    // Append the new tag to the container
+    container.appendChild(newTag);
+  }
+}
+function handleToggleClick(category, value) {
+  updateQueryParam(category, value);
+  toggleTag(category, value);
+  if(value.charAt(0) == "-") {
+    const currentDiv = document.querySelector(`#${category}__${value.toLowerCase()}-minus`);
+    currentDiv.classList.remove("w--redirected-checked")
+  }
+  else{
+    const currentDiv = document.querySelector(`#${category}__${value.toLowerCase()}`);
+    currentDiv.classList.remove("w--redirected-checked")
+  }
+
+}
 // Get the results wrapper element
 function handleCheckboxClick(event) {
-  function updateQueryParam(category, value) {
-    // Get the current URL and its search parameters
-    const url = new URL(window.location.href);
-    const params = new URLSearchParams(url.search);
-
-    // Get the existing values for the category, if any
-    const existingValues = params.get(category)
-      ? params.get(category).split(",")
-      : [];
-
-    if (existingValues.includes(value)) {
-      // Remove the value if it already exists
-      const updatedValues = existingValues.filter((v) => v !== value);
-      if (updatedValues.length > 0) {
-        params.set(category, updatedValues.join(","));
-      } else {
-        // Remove the category if no values remain
-        params.delete(category);
-      }
-    } else {
-      // Add the value if it doesn't exist
-      existingValues.push(value);
-      params.set(category, existingValues.join(","));
-    }
-
-    // Update the URL without reloading the page
-    const newUrl = `${url.pathname}?${params.toString()}`;
-    window.history.pushState({}, "", newUrl);
-  }
-  function toggleTag(category, value) {
-    // Find the result-wrapper container
-    const container = document.querySelector(".results-tag_wrapper");
-    if (!container) {
-      console.error("Result wrapper not found");
-      return;
-    }
-
-    // Check if the tag with the specific value exists
-    const existingTag = Array.from(
-      container.querySelectorAll('[fs-cmsfilter-element="tag-template"]')
-    ).find(
-      (tag) =>
-        tag
-          .querySelector('[fs-cmsfilter-element="tag-text"]')
-          .textContent.trim() === value
-    );
-
-    if (existingTag) {
-      // Remove the tag if it exists
-      existingTag.remove();
-    } else {
-      // Create a new tag element
-      const newTag = document.createElement("div");
-      newTag.setAttribute("fs-cmsfilter-element", "tag-template");
-      newTag.className = "tag_wrap";
-      newTag.innerHTML = `
-        <div fs-cmsfilter-element="tag-text">${value}</div>
-        <img src="https://cdn.prod.website-files.com/6235c6aa0b614c4ab6ba68bb/661784b0cad022727b38036c_Vector.svg" loading="lazy" alt="" class="tag-remove">
-      `;
-      newTag.addEventListener("click", () => {
-        handleToggleClick(category, value);
-      });
-      // Append the new tag to the container
-      container.appendChild(newTag);
-    }
-  }
-  function handleToggleClick(category, value) {
-    updateQueryParam(category, value);
-    toggleTag(category, value);
-  }
   const checkbox = event.target;
   const category = checkbox.getAttribute("id").split("__")[0];
   const value = checkbox.getAttribute("data-name");
   updateQueryParam(category, value);
   toggleTag(category, value);
-  console.log("Category:", category, "Value:", value);
 }
 function createDropdownSection(title, categoryData) {
   const mainWrap = document.createElement("div");
