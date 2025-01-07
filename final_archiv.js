@@ -886,14 +886,16 @@ async function updatePagination(newPage) {
   currentPage = newPage;
   await loadFData(null, true);
 }
-
+function toTitleCase(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()
+}
 function createMainDropdowns(data) {
   const mainCategories = Object.keys(data['1 NEU']);
   const form = document.getElementById('email-form'); // Get the existing form
 
   mainCategories.forEach(category => {
       const categoryData = data['1 NEU'][category];
-      const dropdownSection = createDropdownSection(category.title(), categoryData);
+      const dropdownSection = createDropdownSection(toTitleCase(category), categoryData);
       // Insert before the form's closing tag
       form.insertBefore(dropdownSection, form.querySelector('.w-form-done'));
   });
@@ -1004,7 +1006,7 @@ function processNestedContent(title, categoryData, accordionContent) {
       const nestedDropdown = createDropdownStructure(title, key, categoryData[key]);
       accordionContent.appendChild(nestedDropdown);
     } else if (categoryData[key] !== null) {
-      const dropdown = createDropdown(title, key.title(), categoryData[key].values || []);
+      const dropdown = createDropdown(title, toTitleCase(key), categoryData[key].values || []);
       accordionContent.appendChild(dropdown);
     }
   } else {
@@ -1258,7 +1260,7 @@ toggleBtn.setAttribute("role", "button");
 toggleBtn.setAttribute("tabindex", "0");
 
 toggleBtn.innerHTML = `
-    <div>${title.title()}</div>
+    <div>${toTitleCase(title)}</div>
     <div class="arrow-indicator-wrap">
       <div class="filter-indicator">
         <div><span id="t_${title.toLowerCase()}" class="filter-span">0</span></div>
