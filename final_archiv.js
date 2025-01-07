@@ -543,7 +543,6 @@ async function renderData(data) {
     const handlePaginationClick = (event) => {
       const lastQuery = getQuery();
       const page = event.target.getAttribute("data-page");
-      console.log("Page:"+ page);
       const url = lastQuery ? `?page=${page}&${lastQuery}` : `?page=${page}`;
       window.history.pushState({}, "", url);
       updatePagination(page);
@@ -966,6 +965,9 @@ document.addEventListener("DOMContentLoaded", async function () {
         sortToggle.classList.add("is--off");
       }
     }
+    window.addEventListener('popstate', function(event) {
+      loadFData();
+    });
     loadFData();
   });
 });
