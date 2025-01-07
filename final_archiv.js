@@ -1301,6 +1301,7 @@ function createDropdown(main_title, title, values) {
   const resetBtn = document.createElement("a");
   resetBtn.href = "#";
   resetBtn.className = "reset-btn w-inline-block";
+  resetBtn.addEventListener("click", handleResetClick);
   resetBtn.setAttribute("tabindex", "0");
   resetBtn.textContent = "Zurücksetzen";
   checkboxWrapper.appendChild(resetBtn);
@@ -1564,11 +1565,11 @@ function createDropdownStructure(main_title, title, data) {
             loadFData();
           });
         });
-      let i = 0;
+
       const toggleButtons =
         categoryDiv.getElementsByClassName("w-dropdown-toggle");
       for (let toggleButton of toggleButtons) {
-        const dropdownList = toggleButton.nextElementSibling; // Assumes .w-dropdown-list is the immediate sibling
+        const dropdownList = toggleButton.nextElementSibling;
         if (
           dropdownList &&
           dropdownList.classList.contains("w-dropdown-list")
@@ -1580,12 +1581,15 @@ function createDropdownStructure(main_title, title, data) {
           });
         }
       }
+
       const checkboxes = categoryDiv.getElementsByClassName(
         "w-checkbox-input--inputType-custom"
       );
       for (let i = 0; i < checkboxes.length; i++) {
         checkboxes[i].addEventListener("click", handleCheckboxClick);
       }
+      const resetBtn = categoryDiv.getElementsByClassName("reset-btn")[0];
+      resetBtn.addEventListener("click", handleResetClick);
       dropdownList.appendChild(categoryDiv);
       categoryIndex++;
     }
@@ -1635,11 +1639,12 @@ function createDropdownStructure(main_title, title, data) {
           loadFData();
         };
       }
-      valueDiv
-        .getElementsByClassName("w-checkbox-input--inputType-custom")
-        .forEach((checkbox) => {
-          checkbox.addEventListener("click", handleCheckboxClick);
-        });
+      const checkboxes = valueDiv.getElementsByClassName(
+        "w-checkbox-input--inputType-custom"
+      );
+      for (let i = 0; i < checkboxes.length; i++) {
+        checkboxes[i].addEventListener("click", handleCheckboxClick);
+      }
       dropdownList.appendChild(valueDiv);
     });
   }
@@ -1649,6 +1654,25 @@ function createDropdownStructure(main_title, title, data) {
 
   return dropdown;
 }
+function handleResetClick(event) {
+  event.preventDefault(); // Prevent default action of the button
+
+  // Find the parent .checkbox-wrapper of the clicked reset button
+  const checkboxWrapper = event.target.closest(".checkbox-wrapper");
+
+  if (checkboxWrapper) {
+    // Find all elements with the class "w--redirected-checked" within this specific checkbox-wrapper
+    const checkedDivs = checkboxWrapper.querySelectorAll(
+      ".w--redirected-checked"
+    );
+
+    checkedDivs.forEach((div) => {
+      // Trigger a click event on the div itself
+      div.click(); // This assumes the div has an event listener for 'click'
+    });
+  }
+}
+
 async function fetchFilters() {
   try {
     const response = await fetch(
@@ -1677,13 +1701,6 @@ document.addEventListener("DOMContentLoaded", async function () {
   const toggle = document.getElementsByClassName("toggle")[0];
   await fetchFilters();
   await loadFData();
-  const individualReset = document.getElementsByClassName(
-    "reset-btn w-inline-block"
-  );
-  for (x of individualReset) {
-    x.addEventListener("mouseup", loadFData);
-  }
-
   const selectAllBtn = document.getElementsByClassName("dropdown-btn-wrapper");
   for (s of selectAllBtn) {
     s.addEventListener("mouseup", loadFData);
@@ -1725,27 +1742,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         sortToggle.classList.add("is--off");
       }
     }
-    const resetButtons = document.querySelectorAll(".reset-btn");
-    resetButtons.forEach((button) => {
-      button.addEventListener("click", function (event) {
-        event.preventDefault(); // Prevent default action of the button
-
-        // Find the parent .checkbox-wrapper of the clicked reset button
-        const checkboxWrapper = event.target.closest(".checkbox-wrapper");
-
-        if (checkboxWrapper) {
-          // Find all elements with the class "w--redirected-checked" within this specific checkbox-wrapper
-          const checkedDivs = checkboxWrapper.querySelectorAll(
-            ".w--redirected-checked"
-          );
-
-          checkedDivs.forEach((div) => {
-            // Trigger a click event on the div itself
-            div.click(); // This assumes the div has an event listener for 'click'
-          });
-        }
-      });
-    });
     // window.addEventListener("popstate", function (event) {
     //   loadFData();
     // });
