@@ -546,6 +546,7 @@ async function renderData(data) {
       const url = lastQuery ? `?page=${page}&${lastQuery}` : `?page=${page}`;
       window.history.pushState({}, "", url);
       updatePagination(page);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     };
     if (document.getElementsByClassName("w-pagination-wrapper pagination")[0]) {
       paginationWrapper = document.getElementsByClassName(
@@ -910,7 +911,7 @@ function handleCheckboxClick(event) {
   // Only proceed if the clicked element is part of the plus checkbox (not minus)
   const resultsTagWrapper = document.querySelector('.results-tag_wrapper');
   const label = event.target.closest('.filter-dropdown.single').querySelector('label');
-  const checkbox = label.querySelector('.w-checkbox-input.checkbox');
+  const checkbox = label.querySelector('.w-checkbox-input');
   const labelSpan = label.querySelector('.filter-element-label');
   const value = labelSpan.textContent;
   const prefix = labelSpan.getAttribute('fs-cmsfilter-field') || '';
@@ -921,7 +922,6 @@ function handleCheckboxClick(event) {
   let filterValues = currentFilter ? currentFilter.split(',') : [];
   
   if (checkbox.classList.contains('w--redirected-checked')) {
-    // Add value if not already present
     if (!filterValues.includes(value)) {
       filterValues.push(value);
       
@@ -939,17 +939,14 @@ function handleCheckboxClick(event) {
       resultsTagWrapper.insertAdjacentHTML('beforeend', tagHTML);
     }
   } else {
-    // Remove value
     filterValues = filterValues.filter(v => v !== value);
     
-    // Remove tag
     const existingTag = document.querySelector(`[data-tag-value="${value}"]`);
     if (existingTag) {
       existingTag.remove();
     }
   }
   
-  // Update or remove the parameter
   if (filterValues.length > 0) {
     urlParams.set(prefix, filterValues.join(','));
   } else {
@@ -963,13 +960,10 @@ function handleCheckboxClick(event) {
 }
 
 function removeTag(value) {
-  // Remove tag element
   const tag = document.querySelector(`[data-tag-value="${value}"]`);
   if (tag) {
     tag.remove();
   }
-  
-  // Find and uncheck corresponding checkbox
   const checkboxId = `single-${value}`;
   const checkbox = document.getElementById(checkboxId);
   if (checkbox) {
