@@ -907,71 +907,11 @@ function createMainDropdowns(data) {
 
 // Get the results wrapper element
 function handleCheckboxClick(event) {
-  console.log("Hello")
-  // Only proceed if the clicked element is part of the plus checkbox (not minus)
-  const resultsTagWrapper = document.querySelector('.results-tag_wrapper');
-  const label = event.target.closest('.filter-dropdown.single').querySelector('label');
-  const checkbox = label.querySelector('.w-checkbox-input');
-  const labelSpan = label.querySelector('.filter-element-label');
-  const value = labelSpan.textContent;
-  const prefix = labelSpan.getAttribute('fs-cmsfilter-field') || '';
-  // Toggle checkbox state
-  // Get current URL parameters
-  const urlParams = new URLSearchParams(window.location.search);
-  const currentFilter = urlParams.get(prefix) || '';
-  let filterValues = currentFilter ? currentFilter.split(',') : [];
+  console.log(event.target);
   
-  if (checkbox.classList.contains('w--redirected-checked')) {
-    if (!filterValues.includes(value)) {
-      filterValues.push(value);
-      
-      // Add tag
-      const tagHTML = `
-        <div fs-cmsfilter-element="tag-template" class="tag_wrap" data-tag-value="${value}">
-          <div fs-cmsfilter-element="tag-text">${value}</div>
-          <img src="https://cdn.prod.website-files.com/6235c6aa0b614c4ab6ba68bb/661784b0cad022727b38036c_Vector.svg" 
-               loading="lazy" 
-               alt="" 
-               class="tag-remove" 
-               onclick="removeTag('${value}')">
-        </div>
-      `;
-      resultsTagWrapper.insertAdjacentHTML('beforeend', tagHTML);
-    }
-  } else {
-    filterValues = filterValues.filter(v => v !== value);
-    
-    const existingTag = document.querySelector(`[data-tag-value="${value}"]`);
-    if (existingTag) {
-      existingTag.remove();
-    }
-  }
-  
-  if (filterValues.length > 0) {
-    urlParams.set(prefix, filterValues.join(','));
-  } else {
-    urlParams.delete(prefix);
-  }
-  // Update URL without refreshing page
-  const newUrl = `${window.location.pathname}?${urlParams.toString()}`;
-  window.history.pushState({}, '', newUrl);
-  loadFData();
-  event.preventDefault();
 }
 
-function removeTag(value) {
-  const tag = document.querySelector(`[data-tag-value="${value}"]`);
-  if (tag) {
-    tag.remove();
-  }
-  const checkboxId = `single-${value}`;
-  const checkbox = document.getElementById(checkboxId);
-  if (checkbox) {
-    checkbox.checked = false;
-    // Trigger click handler on the parent dropdown
-    checkbox.closest('.filter-dropdown.single').click();
-  }
-}
+
 
 // Add click handler only to the single filter dropdown
 document.querySelectorAll('.filter-dropdown.single').forEach(dropdown => {
@@ -1113,10 +1053,9 @@ function processNestedContent(title, categoryData, accordionContent) {
 function createSingleCheckboxElement(title, value, id) {
   const wrapper = document.createElement("div");
   wrapper.className = "filter-dropdown single";
-  wrapper.addEventListener("click", handleCheckboxClick);
   const label = document.createElement("label");
   label.className = "w-checkbox checkbox-field single";
-
+  label.addEventListener("click", handleCheckboxClick);
   const checkbox = document.createElement("div");
   checkbox.className =
     "w-checkbox-input w-checkbox-input--inputType-custom checkbox";
@@ -1131,7 +1070,7 @@ function createSingleCheckboxElement(title, value, id) {
   // Create the "minus" label
   const minusLabel = document.createElement("label");
   minusLabel.className = "w-checkbox checkbox-field is-minus";
-
+  minusLabel.addEventListener("click", handleCheckboxClick);
   const minusCheckbox = document.createElement("div");
   minusCheckbox.className =
     "w-checkbox-input w-checkbox-input--inputType-custom checkbox is-minus";
