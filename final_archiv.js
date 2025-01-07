@@ -546,6 +546,7 @@ async function renderData(data) {
       const url = lastQuery ? `?page=${page}&${lastQuery}` : `?page=${page}`;
       window.history.pushState({}, "", url);
       updatePagination(page);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     };
     if (document.getElementsByClassName("w-pagination-wrapper pagination")[0]) {
       paginationWrapper = document.getElementsByClassName(
@@ -884,8 +885,7 @@ window.loadFData = async function (e) {
 };
 async function updatePagination(newPage) {
   currentPage = newPage;
-  await loadFData(null, true);
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  await loadFData();
 }
 function toTitleCase(str) {
   return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
