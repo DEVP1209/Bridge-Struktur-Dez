@@ -1123,7 +1123,7 @@ function createSingleCheckboxElement(title, value, id) {
   const checkbox = document.createElement("div");
   checkbox.className =
     "w-checkbox-input w-checkbox-input--inputType-custom checkbox";
-  checkbox.id = `${title.replace(/\//g, "-").toLowerCase()}`;
+  checkbox.id = `${title.replace(/\//g, "-").toLowerCase()}__${value.toLowerCase()}`;
   checkbox.setAttribute("data-name", value);
   const input = document.createElement("input");
   input.type = "checkbox";
@@ -1140,7 +1140,7 @@ function createSingleCheckboxElement(title, value, id) {
   const minusCheckbox = document.createElement("div");
   minusCheckbox.className =
     "w-checkbox-input w-checkbox-input--inputType-custom checkbox is-minus";
-  minusCheckbox.id = `${title.replace(/\//g, "-").toLowerCase()}`;
+  minusCheckbox.id = `${title.replace(/\//g, "-").toLowerCase()}__${value.toLowerCase()}-minus`;
   minusCheckbox.setAttribute("data-name", value);
   const minusInput = document.createElement("input");
   minusInput.type = "checkbox";
@@ -1298,7 +1298,7 @@ function createCheckboxElement(main_title, title, value, id) {
   checkbox.id = `${main_title.toLowerCase().charAt(0)}_${title.replace(
     /\//g,
     "-"
-  )}`;
+  )}__${value.toLowerCase()}`;
   checkbox.setAttribute("data-name", value);
   const input = document.createElement("input");
   input.type = "checkbox";
@@ -1327,7 +1327,7 @@ function createCheckboxElement(main_title, title, value, id) {
   minusCheckbox.id = `${main_title.toLowerCase().charAt(0)}_${title.replace(
     /\//g,
     "-"
-  )}`;
+  )}__${value.toLowerCase()}-minus`;
   minusCheckbox.setAttribute("data-name", value);
   const minusInput = document.createElement("input");
   minusInput.type = "checkbox";
@@ -1449,9 +1449,9 @@ function createDropdownStructure(main_title, title, data) {
                     idx === options.length - 1 ? " last" : ""
                   }">
                     <label fs-mirrorclick-element="target-3" class="w-checkbox checkbox-field">
-                      <div class="w-checkbox-input w-checkbox-input--inputType-custom checkbox" data-name=${value} id=${main_title
+                      <div class="w-checkbox-input w-checkbox-input--inputType-custom checkbox" data-name=${value} id="${main_title
                       .toLowerCase()
-                      .charAt(0)}_${title.replace(/\//g, "-")}></div>
+                      .charAt(0)}_${title.replace(/\//g, "-")}__${value.toLowerCase()}"></div>
                       <input type="checkbox" id="checkbox-${categoryIndex}-${idx}" 
                              name="checkbox-${categoryIndex}-${idx}" 
                              data-name="Checkbox ${categoryIndex}-${idx}" 
@@ -1466,7 +1466,7 @@ function createDropdownStructure(main_title, title, data) {
                     <label fs-mirrorclick-element="trigger-50" class="w-checkbox checkbox-field is-minus">
                       <div class="w-checkbox-input w-checkbox-input--inputType-custom checkbox is-minus" data-name="${value}" id="${main_title
                       .toLowerCase()
-                      .charAt(0)}_${title.replace(/\//g, "-")}"></div>
+                      .charAt(0)}_${title.replace(/\//g, "-")}__${value.toLowerCase()}-minus"></div>
                       <input type="checkbox" id="checkbox-${categoryIndex}-${idx}-minus" 
                              name="checkbox-${categoryIndex}-${idx}-minus" 
                              data-name="Checkbox ${categoryIndex}-${idx}" 
@@ -1547,7 +1547,7 @@ function createDropdownStructure(main_title, title, data) {
             <label class="w-checkbox checkbox-field single">
               <div class="w-checkbox-input w-checkbox-input--inputType-custom checkbox" data-name="${value}" id="${main_title
         .toLowerCase()
-        .charAt(0)}_${title.replace(/\//g, "-")}"></div>
+        .charAt(0)}_${title.replace(/\//g, "-")}__${value.toLowerCase()}"></div>
               <input type="checkbox" id="checkbox-single-${index}" 
                      name="checkbox-single-${index}" 
                      data-name="Checkbox Single ${index}" 
@@ -1558,7 +1558,7 @@ function createDropdownStructure(main_title, title, data) {
           <label class="w-checkbox checkbox-field is-minus">
             <div class="w-checkbox-input w-checkbox-input--inputType-custom checkbox is-minus" data-name="${value}" id="${main_title
         .toLowerCase()
-        .charAt(0)}_${title.replace(/\//g, "-")}"></div>
+        .charAt(0)}_${title.replace(/\//g, "-")}__${value.toLowerCase()}-minus"></div>
             <input type="checkbox" id="checkbox-single-${index}-minus" name="checkbox-single-${index}-minus" style="opacity:0;position:absolute;z-index:-1">
             <span class="filter-element-label is-hidden w-form-label" for="checkbox-single-${index}-minus" fs-cmsfilter-field="${title.toLowerCase()}">-${value}</span>
           </label>
