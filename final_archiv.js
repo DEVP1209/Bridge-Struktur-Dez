@@ -772,7 +772,7 @@ async function renderData(data) {
   }
 }
 
-async function loadFData(e) {
+window.loadFData = async function (e) {
   if (e?.key == "Enter") {
     let searchValue = document
       .getElementsByClassName("search-field w-input")[0]
