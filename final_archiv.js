@@ -1434,13 +1434,17 @@ function createDropdownStructure(main_title, title, data) {
           });
         });
       let i = 0;
-      const categoryDivDropdownList = categoryDiv.closest(".w-dropdown-list");
-      const categoryDivToggleBtn = categoryDiv.closest(".w-dropdown-toggle")
-      categoryDivToggleBtn.addEventListener("click", () => {
-          const isExpanded = categoryDivDropdownList.classList.contains("w--open");
-          categoryDivDropdownList.classList.toggle("w--open");
-          categoryDivToggleBtn.setAttribute("aria-expanded", !isExpanded);
-        });
+      const toggleButtons = categoryDiv.getElementsByClassName("w-dropdown-toggle");
+      for (let toggleButton of toggleButtons) {
+        const dropdownList = toggleButton.nextElementSibling; // Assumes .w-dropdown-list is the immediate sibling
+        if (dropdownList && dropdownList.classList.contains("w-dropdown-list")) {
+          toggleButton.addEventListener("click", () => {
+            const isExpanded = dropdownList.classList.contains("w--open");
+            dropdownList.classList.toggle("w--open");
+            toggleButton.setAttribute("aria-expanded", !isExpanded);
+          });
+        }
+      }
       dropdownList.appendChild(categoryDiv);
       categoryIndex++;
     }
