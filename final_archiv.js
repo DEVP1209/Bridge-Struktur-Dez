@@ -1434,14 +1434,13 @@ function createDropdownStructure(main_title, title, data) {
           });
         });
       let i = 0;
-      const categoryDivDropdownList = categoryDiv.querySelectorAll("w-dropdown-list");
-      categoryDiv.querySelectorAll("w-dropdown-toggle").forEach((toggleBtn) => {
-          toggleBtn.addEventListener("click", () => {
+      const categoryDivDropdownList = categoryDiv.closest(".w-dropdown-list");
+      const categoryDivToggleBtn = categoryDiv.closest(".w-dropdown-toggle")
+      categoryDivToggleBtn.addEventListener("click", () => {
           const isExpanded = categoryDivDropdownList.classList.contains("w--open");
-          categoryDivDropdownList[i].classList.toggle("w--open");
-          toggleBtn.setAttribute("aria-expanded", !isExpanded);
+          categoryDivDropdownList.classList.toggle("w--open");
+          categoryDivToggleBtn.setAttribute("aria-expanded", !isExpanded);
         });
-      });
       dropdownList.appendChild(categoryDiv);
       categoryIndex++;
     }
