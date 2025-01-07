@@ -894,7 +894,7 @@ function handleQueryParamChange() {
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.search);
   // Remove the 'page' parameter if it exists
-  params.delete('page');
+  params.delete("page");
   // Iterate over each parameter in the URL
   params.forEach((values, category) => {
     // Split the values by comma in case there are multiple values for a category
@@ -906,12 +906,16 @@ function handleQueryParamChange() {
 
       // Add 'w--redirected-checked' class to the corresponding checkbox
       if (value.charAt(0) == "-") {
-        const currentDiv = document.querySelector(`#${category}__${value.toLowerCase()}-minus`);
+        const currentDiv = document.querySelector(
+          `#${category}__${value.toLowerCase()}-minus`
+        );
         if (currentDiv) {
           currentDiv.classList.add("w--redirected-checked");
         }
       } else {
-        const currentDiv = document.querySelector(`#${category}__${value.toLowerCase()}`);
+        const currentDiv = document.querySelector(
+          `#${category}__${value.toLowerCase()}`
+        );
         if (currentDiv) {
           currentDiv.classList.add("w--redirected-checked");
         }
@@ -988,15 +992,17 @@ function toggleTag(category, value) {
 function handleToggleClick(category, value) {
   updateQueryParam(category, value);
   toggleTag(category, value);
-  if(value.charAt(0) == "-") {
-    const currentDiv = document.querySelector(`#${category}__${value.toLowerCase()}-minus`);
-    currentDiv.classList.remove("w--redirected-checked")
+  if (value.charAt(0) == "-") {
+    const currentDiv = document.querySelector(
+      `#${category}__${value.toLowerCase()}-minus`
+    );
+    currentDiv.classList.remove("w--redirected-checked");
+  } else {
+    const currentDiv = document.querySelector(
+      `#${category}__${value.toLowerCase()}`
+    );
+    currentDiv.classList.remove("w--redirected-checked");
   }
-  else{
-    const currentDiv = document.querySelector(`#${category}__${value.toLowerCase()}`);
-    currentDiv.classList.remove("w--redirected-checked")
-  }
-
 }
 // Get the results wrapper element
 function handleCheckboxClick(event) {
@@ -1165,7 +1171,9 @@ function createSingleCheckboxElement(title, value, id) {
   const checkbox = document.createElement("div");
   checkbox.className =
     "w-checkbox-input w-checkbox-input--inputType-custom checkbox";
-  checkbox.id = `${title.replace(/\//g, "-").toLowerCase()}__${value.toLowerCase()}`;
+  checkbox.id = `${title
+    .replace(/\//g, "-")
+    .toLowerCase()}__${value.toLowerCase()}`;
   checkbox.setAttribute("data-name", value);
   checkbox.addEventListener("click", handleCheckboxClick);
   const input = document.createElement("input");
@@ -1182,7 +1190,9 @@ function createSingleCheckboxElement(title, value, id) {
   const minusCheckbox = document.createElement("div");
   minusCheckbox.className =
     "w-checkbox-input w-checkbox-input--inputType-custom checkbox is-minus";
-  minusCheckbox.id = `${title.replace(/\//g, "-").toLowerCase()}__${value.toLowerCase()}-minus`;
+  minusCheckbox.id = `${title
+    .replace(/\//g, "-")
+    .toLowerCase()}__${value.toLowerCase()}-minus`;
   minusCheckbox.setAttribute("data-name", `-${value}`);
   minusCheckbox.addEventListener("click", handleCheckboxClick);
   const minusInput = document.createElement("input");
@@ -1495,10 +1505,10 @@ function createDropdownStructure(main_title, title, data) {
                   }">
                     <label fs-mirrorclick-element="target-3" class="w-checkbox checkbox-field">
                       <div class="w-checkbox-input w-checkbox-input--inputType-custom checkbox" data-name="${value}" id="${main_title
-                    .charAt(0)
-                    .toLowerCase()}_${title.toLowerCase()}_${categoryName
-        .toLowerCase()
-        .replace(/[/]/g, "-")}__${option.toLowerCase()}"></div>
+                      .charAt(0)
+                      .toLowerCase()}_${title.toLowerCase()}_${categoryName
+                      .toLowerCase()
+                      .replace(/[/]/g, "-")}__${option.toLowerCase()}"></div>
                       <input type="checkbox" id="checkbox-${categoryIndex}-${idx}" 
                              name="checkbox-${categoryIndex}-${idx}" 
                              data-name="Checkbox ${categoryIndex}-${idx}" 
@@ -1512,10 +1522,13 @@ function createDropdownStructure(main_title, title, data) {
                     </label>
                     <label fs-mirrorclick-element="trigger-50" class="w-checkbox checkbox-field is-minus">
                       <div class="w-checkbox-input w-checkbox-input--inputType-custom checkbox is-minus" data-name="-${option}" id="${main_title
-                    .charAt(0)
-                    .toLowerCase()}_${title.toLowerCase()}_${categoryName
-        .toLowerCase()
-        .replace(/[/]/g, "-")}__${option.toLowerCase()}-minus"></div>
+                      .charAt(0)
+                      .toLowerCase()}_${title.toLowerCase()}_${categoryName
+                      .toLowerCase()
+                      .replace(
+                        /[/]/g,
+                        "-"
+                      )}__${option.toLowerCase()}-minus"></div>
                       <input type="checkbox" id="checkbox-${categoryIndex}-${idx}-minus" 
                              name="checkbox-${categoryIndex}-${idx}-minus" 
                              data-name="Checkbox ${categoryIndex}-${idx}" 
@@ -1567,9 +1580,12 @@ function createDropdownStructure(main_title, title, data) {
           });
         }
       }
-      categoryDiv.getElementsByClassName("w-checkbox-input--inputType-custom").forEach((checkbox) => {
-        checkbox.addEventListener("click", handleCheckboxClick);
-      });
+      const checkboxes = categoryDiv.getElementsByClassName(
+        "w-checkbox-input--inputType-custom"
+      );
+      for (let i = 0; i < checkboxes.length; i++) {
+        checkboxes[i].addEventListener("click", handleCheckboxClick);
+      }
       dropdownList.appendChild(categoryDiv);
       categoryIndex++;
     }
@@ -1619,9 +1635,11 @@ function createDropdownStructure(main_title, title, data) {
           loadFData();
         };
       }
-      valueDiv.getElementsByClassName("w-checkbox-input--inputType-custom").forEach((checkbox) => {
-        checkbox.addEventListener("click", handleCheckboxClick);
-      });
+      valueDiv
+        .getElementsByClassName("w-checkbox-input--inputType-custom")
+        .forEach((checkbox) => {
+          checkbox.addEventListener("click", handleCheckboxClick);
+        });
       dropdownList.appendChild(valueDiv);
     });
   }
@@ -1707,19 +1725,21 @@ document.addEventListener("DOMContentLoaded", async function () {
         sortToggle.classList.add("is--off");
       }
     }
-    const resetButtons = document.querySelectorAll('.reset-btn');
-    resetButtons.forEach(button => {
-      button.addEventListener('click', function(event) {
+    const resetButtons = document.querySelectorAll(".reset-btn");
+    resetButtons.forEach((button) => {
+      button.addEventListener("click", function (event) {
         event.preventDefault(); // Prevent default action of the button
-  
+
         // Find the parent .checkbox-wrapper of the clicked reset button
-        const checkboxWrapper = event.target.closest('.checkbox-wrapper');
-  
+        const checkboxWrapper = event.target.closest(".checkbox-wrapper");
+
         if (checkboxWrapper) {
           // Find all elements with the class "w--redirected-checked" within this specific checkbox-wrapper
-          const checkedDivs = checkboxWrapper.querySelectorAll('.w--redirected-checked');
-  
-          checkedDivs.forEach(div => {
+          const checkedDivs = checkboxWrapper.querySelectorAll(
+            ".w--redirected-checked"
+          );
+
+          checkedDivs.forEach((div) => {
             // Trigger a click event on the div itself
             div.click(); // This assumes the div has an event listener for 'click'
           });
