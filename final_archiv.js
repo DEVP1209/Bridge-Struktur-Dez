@@ -1707,9 +1707,28 @@ document.addEventListener("DOMContentLoaded", async function () {
         sortToggle.classList.add("is--off");
       }
     }
-    window.addEventListener("popstate", function (event) {
-      loadFData();
+    const resetButtons = document.querySelectorAll('.reset-btn');
+    resetButtons.forEach(button => {
+      button.addEventListener('click', function(event) {
+        event.preventDefault(); // Prevent default action of the button
+  
+        // Find the parent .checkbox-wrapper of the clicked reset button
+        const checkboxWrapper = event.target.closest('.checkbox-wrapper');
+  
+        if (checkboxWrapper) {
+          // Find all elements with the class "w--redirected-checked" within this specific checkbox-wrapper
+          const checkedDivs = checkboxWrapper.querySelectorAll('.w--redirected-checked');
+  
+          checkedDivs.forEach(div => {
+            // Trigger a click event on the div itself
+            div.click(); // This assumes the div has an event listener for 'click'
+          });
+        }
+      });
     });
+    // window.addEventListener("popstate", function (event) {
+    //   loadFData();
+    // });
     loadFData();
   });
 });
