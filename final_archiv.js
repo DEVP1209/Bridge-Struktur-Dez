@@ -1434,7 +1434,7 @@ function createDropdownStructure(main_title, title, data) {
           });
         });
       let i = 0;
-      const categoryDivDropdownList = categoryDiv.querySelector("w-dropdown-list");
+      const categoryDivDropdownList = categoryDiv.querySelectorAll("w-dropdown-list");
       categoryDiv.querySelectorAll("w-dropdown-toggle").forEach((toggleBtn) => {
           toggleBtn.addEventListener("click", () => {
           const isExpanded = categoryDivDropdownList.classList.contains("w--open");
