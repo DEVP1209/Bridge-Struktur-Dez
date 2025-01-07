@@ -1272,16 +1272,21 @@ toggleBtn.innerHTML = `
 // Create main dropdown list
 const dropdownList = document.createElement("nav");
 dropdownList.className =
-  `dropdown-list ${title.toLowerCase()} min-height w-dropdown-list`;
+  `dropdown-list gesellschaft min-height w-dropdown-list`;
 dropdownList.id = "w-dropdown-list-12";
 dropdownList.setAttribute("aria-labelledby", "w-dropdown-toggle-12");
 
+toggleBtn.addEventListener('click', () => {
+  const isExpanded = dropdownList.classList.contains('w--open');
+  dropdownList.classList.toggle('w--open');
+  trigger.setAttribute('aria-expanded', !isExpanded);
+});
 // Add nested category dropdowns
 let categoryIndex = 13;
 Object.entries(data).forEach(([key, value]) => {
   if (key !== "values") {
     const categoryDiv = document.createElement("div");
-    categoryDiv.className = `dropdown-${title.toLowerCase()}-div`;
+    categoryDiv.className = `dropdown-gesellschaft-div`;
 
     const categoryName = key;
     const options = value.values;
@@ -1296,7 +1301,7 @@ Object.entries(data).forEach(([key, value]) => {
               <div>${categoryName}</div>
               <div class="arrow-indicator-wrap">
                 <div class="filter-indicator">
-                  <div><span id="t_gesellschaft_${categoryName
+                  <div><span id="${main_title.charAt(0).toLowerCase()}_${title.toLowerCase()}_${categoryName
                     .toLowerCase()
                     .replace(/[/]/g, "-")}" class="filter-span">0</span></div>
                 </div>
@@ -1429,7 +1434,6 @@ document.addEventListener("DOMContentLoaded", async function () {
   const toggle = document.getElementsByClassName("toggle")[0];
   await fetchFilters();
   await loadFData();
-
   const individualReset = document.getElementsByClassName(
     "reset-btn w-inline-block"
   );
