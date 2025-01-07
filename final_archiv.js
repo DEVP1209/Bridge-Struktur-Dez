@@ -903,26 +903,80 @@ function createMainDropdowns(data) {
     form.insertBefore(dropdownSection, form.querySelector(".w-form-done"));
   });
 }
-const handleCheckboxChange = (event) => {
-  const { name, value, checked } = event.target;
-  const lastQuery = getQuery();
-  const url = new URL(window.location.href);
-  const resultTagDiv = `<div class="results-tag_wrapper">
-  <div fs-cmsfilter-element="tag-template" class="tag_wrap">
-  <div fs-cmsfilter-element="tag-text">${value}
-  </div>
-  <img src="https://cdn.prod.website-files.com/6235c6aa0b614c4ab6ba68bb/661784b0cad022727b38036c_Vector.svg" loading="lazy" alt="" class="tag-remove">
-  </div>
-  </div>`;
-  if (checked) {
-    url.searchParams.append(name, value);
-  } else {
-    url.searchParams.delete(value);
-  }
 
-  window.history.pushState({}, "", url.href);
-  loadFData();
-};
+function handleCheckboxClick(event) {
+  console.log("Reached Here")
+  const checkbox = event.target;
+  const label = checkbox.nextElementSibling;
+  const isMinusCheckbox = checkbox.id.includes('-minus');
+  const value = isMinusCheckbox ? `-${label.textContent}` : label.textContent;
+  
+  // Get current URL parameters
+  const urlParams = new URLSearchParams(window.location.search);
+  const currentJahrzehnt = urlParams.get('d_Jahrzehnt') || '';
+  let jahrzehntValues = currentJahrzehnt ? currentJahrzehnt.split(',') : [];
+  
+  if (checkbox.checked) {
+    // Add value if not already present
+    if (!jahrzehntValues.includes(value)) {
+      jahrzehntValues.push(value);
+      
+      // Add tag
+      const tagHTML = `
+        <div fs-cmsfilter-element="tag-template" class="tag_wrap" data-tag-value="${value}">
+          <div fs-cmsfilter-element="tag-text">${value}</div>
+          <img src="https://cdn.prod.website-files.com/6235c6aa0b614c4ab6ba68bb/661784b0cad022727b38036c_Vector.svg" 
+               loading="lazy" 
+               alt="" 
+               class="tag-remove" 
+               onclick="removeTag('${value}')">
+        </div>
+      `;
+      resultsTagWrapper.insertAdjacentHTML('beforeend', tagHTML);
+    }
+  } else {
+    // Remove value
+    jahrzehntValues = jahrzehntValues.filter(v => v !== value);
+    
+    // Remove tag
+    const existingTag = document.querySelector(`[data-tag-value="${value}"]`);
+    if (existingTag) {
+      existingTag.remove();
+    }
+  }
+  
+  // Update or remove the parameter
+  if (jahrzehntValues.length > 0) {
+    urlParams.set('d_Jahrzehnt', jahrzehntValues.join(','));
+  } else {
+    urlParams.delete('d_Jahrzehnt');
+  }
+  
+  // Update URL without refreshing page
+  const newUrl = `${window.location.pathname}?${urlParams.toString()}`;
+  window.history.pushState({}, '', newUrl);
+}
+
+// Function to remove tag and uncheck corresponding checkbox
+function removeTag(value) {
+  // Remove tag element
+  const tag = document.querySelector(`[data-tag-value="${value}"]`);
+  if (tag) {
+    tag.remove();
+  }
+  
+  // Find and uncheck corresponding checkbox
+  const isMinusValue = value.startsWith('-');
+  const cleanValue = isMinusValue ? value.substring(1) : value;
+  const checkboxId = isMinusValue ? `${cleanValue}-minus` : cleanValue;
+  
+  const checkbox = document.getElementById(checkboxId);
+  if (checkbox) {
+    checkbox.checked = false;
+    // Trigger click handler to update URL
+    checkbox.dispatchEvent(new Event('click'));
+  }
+}
 function createDropdownSection(title, categoryData) {
   const mainWrap = document.createElement("div");
   mainWrap.className = "main-cat-wrap first";
@@ -1068,7 +1122,7 @@ function createSingleCheckboxElement(title, value, id) {
   const checkbox = document.createElement("div");
   checkbox.className =
     "w-checkbox-input w-checkbox-input--inputType-custom checkbox";
-
+ checkbox.addEventListener("click", handleCheckboxClick);
   const input = document.createElement("input");
   input.type = "checkbox";
   input.id = id;
@@ -1238,7 +1292,7 @@ function createCheckboxElement(main_title, title, value, id) {
   const checkbox = document.createElement("div");
   checkbox.className =
     "w-checkbox-input w-checkbox-input--inputType-custom checkbox";
-
+  
   const input = document.createElement("input");
   input.type = "checkbox";
   input.id = id;
