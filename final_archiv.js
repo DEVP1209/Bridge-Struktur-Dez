@@ -1009,6 +1009,7 @@ function handleCheckboxClick(event) {
   const value = checkbox.getAttribute("data-name");
   updateQueryParam(category, value);
   toggleTag(category, value);
+  loadFData();
 }
 
 function toTitleCase(str) {
@@ -1337,9 +1338,9 @@ function createDropdown(main_title, title, values) {
 function createCheckboxElement(main_title, title, value, id) {
   const wrapper = document.createElement("div");
   wrapper.className = "checkbox-element-wrapper";
-  wrapper.onclick = () => {
-    loadFData();
-  };
+  // wrapper.onclick = () => {
+  //   loadFData();
+  // };
   // Create the regular label
   const label = document.createElement("label");
   label.className = "w-checkbox checkbox-field";
@@ -1559,9 +1560,9 @@ function createDropdownStructure(main_title, title, data) {
       categoryDiv
         .querySelectorAll(".checkbox-element-wrapper")
         .forEach((wrapper) => {
-          wrapper.addEventListener("click", () => {
-            loadFData();
-          });
+          // wrapper.addEventListener("click", () => {
+          //   loadFData();
+          // });
         });
 
       const toggleButtons =
@@ -1639,9 +1640,9 @@ function createDropdownStructure(main_title, title, data) {
       `;
       const closestDropdown = valueDiv.closest(".filter-dropdown.single");
       if (closestDropdown) {
-        closestDropdown.onclick = () => {
-          loadFData();
-        };
+        // closestDropdown.onclick = () => {
+        //   loadFData();
+        // };
       }
       const checkboxes = valueDiv.getElementsByClassName(
         "w-checkbox-input--inputType-custom"
@@ -1675,6 +1676,7 @@ function handleSelectAllClick(event) {
       div.click(); // This assumes the div has an event listener for 'click'
     });
   }
+  loadFData();
 }
 function handleStructuredResetClick(event) {
       event.preventDefault();
@@ -1691,6 +1693,7 @@ function handleStructuredResetClick(event) {
       checkedCheckboxes.forEach((checkbox) => {
         checkbox.click(); // This triggers the checkbox's event listener
       });
+      loadFData();
 }
 function handleResetClick(event) {
   event.preventDefault();
@@ -1707,6 +1710,7 @@ function handleResetClick(event) {
       div.click(); // This assumes the div has an event listener for 'click'
     });
   }
+  loadFData();
 }
 
 async function fetchFilters() {
