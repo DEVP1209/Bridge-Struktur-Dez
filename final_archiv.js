@@ -1356,7 +1356,7 @@ function createCheckboxElement(main_title, title, value, id) {
   checkbox.id = `${currentIdPrefix}${title.replace(
     /\//g,
     "-"
-  )}__${value.toLowerCase()}`;
+  ).toLowerCase()}__${value.toLowerCase()}`;
   checkbox.setAttribute("data-name", value);
   checkbox.addEventListener("click", handleCheckboxClick);
   const input = document.createElement("input");
@@ -1372,7 +1372,7 @@ function createCheckboxElement(main_title, title, value, id) {
   span.setAttribute("for", id);
   span.setAttribute(
     "fs-cmsfilter-field",
-    `${main_title.toLowerCase().charAt(0)}_${title.replace(/\//g, "-")}`
+    `${main_title.toLowerCase().charAt(0)}_${title.replace(/\//g, "-").toLowerCase()}`
   );
   span.textContent = value;
 
@@ -1386,7 +1386,7 @@ function createCheckboxElement(main_title, title, value, id) {
   minusCheckbox.id = `${currentIdPrefix}${title.replace(
     /\//g,
     "-"
-  )}__${value.toLowerCase()}-minus`;
+  ).toLowerCase()}__${value.toLowerCase()}-minus`;
   minusCheckbox.setAttribute("data-name", `-${value}`);
   minusCheckbox.addEventListener("click", handleCheckboxClick);
   const minusInput = document.createElement("input");
@@ -1682,10 +1682,14 @@ function handleSelectAllClick(event) {
 }
 function handleResetAllClick(event) {
   event.preventDefault();
-  const resetBtns = document.querySelectorAll(".reset-btn");
-  for (let i = 0; i < resetBtns.length; i++) {
-    resetBtns[i].click();
-  }
+  const selectedCheckboxes = document.querySelectorAll( '.w--redirected-checked' );
+  selectedCheckboxes.forEach((checkbox) => {
+    checkbox.classList.remove("w--redirected-checked");
+  });
+  document.querySelector(".results-tag_wrapper")[0].innerHTML = "";
+  const url = new URL(window.location.href);
+  url.search = "";
+  window.history.pushState({}, "", url.href);
 }
 function handleStructuredResetClick(event) {
       event.preventDefault();
@@ -1740,11 +1744,10 @@ async function fetchFilters() {
 
 document.addEventListener("DOMContentLoaded", async function () {
   await fetchFilters();
+  document.getElementsByClassName(".reset-all-btn")[0].removeAttribute("href");
   handleQueryParamChange();
   sort_random = "true";
-  let selection_excluding = "false";
   const sortToggle = document.getElementsByClassName("random-switch")[0];
-  // const selectionExclude = document.getElementsByClassName("random-switch")[1];
   document
     .querySelector(".results-tag_wrapper")
     .addEventListener("mouseup", loadFData);
@@ -1780,9 +1783,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         sortToggle.classList.add("is--off");
       }
     }
-    // window.addEventListener("popstate", function (event) {
-    //   loadFData();
-    // });
-    // loadFData();
+    loadFData();
   });
 });
