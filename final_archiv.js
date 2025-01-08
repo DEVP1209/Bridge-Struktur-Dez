@@ -946,7 +946,7 @@ function updateQueryParam(category, value) {
   }
 
   // Update the URL without reloading the page
-  const newUrl = `${url.pathname}?${params.toString()}`;
+  const newUrl = params.toString() ? `${url.pathname}?${params.toString()}` : url.pathname;
   window.history.pushState({}, "", newUrl);
 }
 function toggleTag(category, value) {
