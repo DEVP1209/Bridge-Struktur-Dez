@@ -1,14 +1,21 @@
 let sort_random = "true";
 const getQuery = () => {
-  let lastQuery = window.location.href.includes("page=")
-    ? window.location.href.split("page=")[1].substring(2)
-    : null;
-  if (lastQuery === null) {
-    lastQuery = window.location.href.includes("?")
-      ? window.location.href.split("?")[1]
-      : "";
+  // let lastQuery = window.location.href.includes("page=")
+  //   ? window.location.href.split("page=")[1].substring(2)
+  //   : null;
+  // if (lastQuery === null) {
+  //   lastQuery = window.location.href.includes("?")
+  //     ? window.location.href.split("?")[1]
+  //     : "";
+  // }
+  const url = window.location.href;
+  if (url.includes("page=")) {
+    // Split by `&`, remove the first element (before or including `page=xyz`)
+    return url.split("&").slice(1).join("&");
+  } else {
+    // If `page` is not present, return everything after the `?`
+    return url.split("?")[1] || "";
   }
-  return lastQuery;
 };
 const randomMags = async (array) => {
   for (var i = array.length - 1; i > 0; i--) {
