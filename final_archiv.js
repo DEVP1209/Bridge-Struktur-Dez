@@ -896,21 +896,18 @@ function handleQueryParamChange() {
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.search);
   // Remove the 'page' parameter if it exists
-  params.delete("page");
+  params.delete("https://www.bildzeitschrift.com/dev-archiv?page");
   // Iterate over each parameter in the URL
   params.forEach((values, category) => {
     // Split the values by comma in case there are multiple values for a category
     const valueArray = values.split(",");
-
     // Iterate over the values and call toggleTag for each
     valueArray.forEach((value) => {
       toggleTag(category, value);
 
       // Add 'w--redirected-checked' class to the corresponding checkbox
       if (value.charAt(0) == "-") {
-        const currentDiv = document.querySelector(
-          `#${category}__${value.toLowerCase().substring(1)}-minus`
-        );
+        const currentDiv = document.getElementById(`${category}__${value.toLowerCase().substring(1)}-minus`);
         if (currentDiv) {
           currentDiv.classList.add("w--redirected-checked");
         }
