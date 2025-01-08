@@ -1505,7 +1505,7 @@ function createDropdownStructure(main_title, title, data) {
                     idx === options.length - 1 ? " last" : ""
                   }">
                     <label fs-mirrorclick-element="target-3" class="w-checkbox checkbox-field">
-                      <div class="w-checkbox-input w-checkbox-input--inputType-custom checkbox" data-name="${value}" id="${main_title
+                      <div class="w-checkbox-input w-checkbox-input--inputType-custom checkbox" data-name="${option}" id="${main_title
                       .charAt(0)
                       .toLowerCase()}_${title.toLowerCase()}_${categoryName
                       .toLowerCase()
