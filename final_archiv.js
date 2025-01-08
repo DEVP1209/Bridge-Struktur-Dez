@@ -1744,7 +1744,6 @@ async function fetchFilters() {
 
 document.addEventListener("DOMContentLoaded", async function () {
   await fetchFilters();
-  document.getElementsByClassName(".reset-all-btn")[0].removeAttribute("href");
   handleQueryParamChange();
   sort_random = "true";
   const sortToggle = document.getElementsByClassName("random-switch")[0];
@@ -1754,6 +1753,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   const toggle = document.getElementsByClassName("toggle")[0];
   
   await loadFData();
+  document.getElementsByClassName(".reset-all-btn")[0].removeAttribute("href");
   const selectAllBtn = document.getElementsByClassName("dropdown-btn-wrapper");
   for (s of selectAllBtn) {
     s.addEventListener("mouseup", loadFData);
