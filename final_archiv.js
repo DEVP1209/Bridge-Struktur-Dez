@@ -894,9 +894,9 @@ async function updatePagination(newPage) {
  function handleQueryParamChange() {
   // Get the current URL and its search parameters
   const url = new URL(window.location.href);
-  const params = new URLSearchParams(url.search);
+  let params = new URLSearchParams(url.search);
   // Remove the 'page' parameter if it exists
-  params.delete("https://www.bildzeitschrift.com/dev-archiv?page");
+  params.delete("page");
   // Iterate over each parameter in the URL
   params.forEach((values, category) => {
     // Split the values by comma in case there are multiple values for a category
@@ -906,13 +906,13 @@ async function updatePagination(newPage) {
       toggleTag(category, value);
       
       // Add 'w--redirected-checked' class to the corresponding checkbox
-      if (value.charAt(0) == "-") {
+      if (value.startsWith("-")) {
         const currentDiv = document.getElementById(`${category}__${value.toLowerCase().substring(1)}-minus`);
         if (currentDiv) {
           currentDiv.classList.add("w--redirected-checked");
         }
       } else {
-        const currentDiv = document.getElementById(`#${category}__${value.toLowerCase()}`);
+        const currentDiv = document.getElementById(`${category}__${value.toLowerCase()}`);
         if (currentDiv) {
           currentDiv.classList.add("w--redirected-checked");
         }
@@ -923,7 +923,7 @@ async function updatePagination(newPage) {
 function updateQueryParam(category, value) {
   // Get the current URL and its search parameters
   const url = new URL(window.location.href);
-  const params = new URLSearchParams(url.search);
+  let params = new URLSearchParams(url.search);
   params.delete("page");
   // Get the existing values for the category, if any
   const existingValues = params.get(category)
