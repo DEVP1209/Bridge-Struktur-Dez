@@ -993,9 +993,7 @@ function handleToggleClick(category, value) {
   updateQueryParam(category, value);
   toggleTag(category, value);
   if (value.charAt(0) == "-") {
-    const currentDiv = document.querySelector(
-      `#${category}__${value.toLowerCase()}-minus`
-    );
+    const currentDiv = document.querySelector(`div[data-name="${value}"]`);
     currentDiv.classList.remove("w--redirected-checked");
   } else {
     const currentDiv = document.querySelector(
