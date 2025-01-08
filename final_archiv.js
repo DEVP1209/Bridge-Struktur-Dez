@@ -1753,7 +1753,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   const toggle = document.getElementsByClassName("toggle")[0];
   
   await loadFData();
-  document.getElementsByClassName(".reset-all-btn")[0].removeAttribute("href");
+  document.getElementsByClassName("reset-all-btn")[0].removeAttribute("href");
   const selectAllBtn = document.getElementsByClassName("dropdown-btn-wrapper");
   for (s of selectAllBtn) {
     s.addEventListener("mouseup", loadFData);
