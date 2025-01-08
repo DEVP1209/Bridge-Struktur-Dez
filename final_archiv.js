@@ -1677,11 +1677,11 @@ function handleSelectAllClick(event) {
   }
 }
 function handleStructuredResetClick(event) {
-      e.preventDefault();
+      event.preventDefault();
 
       // Get the parent container of this "Reset" button
-      const parentContainer = resetBtn.closest(".select-all");
-
+      const parentContainer = event.target.closest(".select-all");
+      if(!parentContainer) return;
       // Get all checked checkboxes within this parent container
       const checkedCheckboxes = parentContainer.querySelectorAll(
         '.checkbox-element-wrapper .w-checkbox-input.w--redirected-checked'
