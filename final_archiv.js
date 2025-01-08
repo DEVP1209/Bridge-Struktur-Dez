@@ -1472,6 +1472,7 @@ function createDropdownStructure(main_title, title, data) {
   });
   // Add nested category dropdowns
   let categoryIndex = 13;
+  let currentIdPrefix = (title == "Titelseite" || title == "Titel") ?  "" : `${main_title.toLowerCase().charAt(0)}_`
   Object.entries(data).forEach(([key, value]) => {
     if (key !== "values") {
       const categoryDiv = document.createElement("div");
@@ -1509,9 +1510,7 @@ function createDropdownStructure(main_title, title, data) {
                     idx === options.length - 1 ? " last" : ""
                   }">
                     <label fs-mirrorclick-element="target-3" class="w-checkbox checkbox-field">
-                      <div class="w-checkbox-input w-checkbox-input--inputType-custom checkbox" data-name="${option}" id="${main_title
-                      .charAt(0)
-                      .toLowerCase()}_${title.toLowerCase()}_${categoryName
+                      <div class="w-checkbox-input w-checkbox-input--inputType-custom checkbox" data-name="${option}" id="${currentIdPrefix}${title.toLowerCase()}_${categoryName
                       .toLowerCase()
                       .replace(/[/]/g, "-")}__${option.toLowerCase()}"></div>
                       <input type="checkbox" id="checkbox-${categoryIndex}-${idx}" 
@@ -1526,9 +1525,7 @@ function createDropdownStructure(main_title, title, data) {
                       .replace(/[/]/g, "-")}">${option}</span>
                     </label>
                     <label fs-mirrorclick-element="trigger-50" class="w-checkbox checkbox-field is-minus">
-                      <div class="w-checkbox-input w-checkbox-input--inputType-custom checkbox is-minus" data-name="-${option}" id="${main_title
-                      .charAt(0)
-                      .toLowerCase()}_${title.toLowerCase()}_${categoryName
+                      <div class="w-checkbox-input w-checkbox-input--inputType-custom checkbox is-minus" data-name="-${option}" id="${currentIdPrefix}${title.toLowerCase()}_${categoryName
                       .toLowerCase()
                       .replace(
                         /[/]/g,
