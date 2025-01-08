@@ -1655,12 +1655,23 @@ function createDropdownStructure(main_title, title, data) {
   return dropdown;
 }
 function handleResetClick(event) {
-  event.preventDefault(); // Prevent default action of the button
+  event.preventDefault(); 
 
   // Find the parent .checkbox-wrapper of the clicked reset button
   const checkboxWrapper = event.target.closest(".checkbox-wrapper");
+  // Get the parent container of this "Reset" button for structure dropdown
+  const parentContainer = resetBtn.closest(".select-all");
+  if (parentContainer) {
+    // Get all checked checkboxes within this parent container
+    const checkedCheckboxes = parentContainer.querySelectorAll(
+      ".checkbox-element-wrapper .w-checkbox-input.w--redirected-checked"
+    );
 
-  if (checkboxWrapper) {
+    // Simulate a click on each of those checkboxes to uncheck them
+    checkedCheckboxes.forEach((checkbox) => {
+      checkbox.click(); // This triggers the checkbox's event listener
+    });
+  } else if (checkboxWrapper) {
     // Find all elements with the class "w--redirected-checked" within this specific checkbox-wrapper
     const checkedDivs = checkboxWrapper.querySelectorAll(
       ".w--redirected-checked"
