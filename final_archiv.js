@@ -1686,7 +1686,7 @@ function handleResetAllClick(event) {
   selectedCheckboxes.forEach((checkbox) => {
     checkbox.classList.remove("w--redirected-checked");
   });
-  document.querySelector(".results-tag_wrapper")[0].innerHTML = "";
+  document.querySelector(".results-tag_wrapper").innerHTML = "";
   const url = new URL(window.location.href);
   url.search = "";
   window.history.pushState({}, "", url.href);
@@ -1753,13 +1753,12 @@ document.addEventListener("DOMContentLoaded", async function () {
   const toggle = document.getElementsByClassName("toggle")[0];
   
   await loadFData();
-  document.getElementsByClassName("reset-all-btn")[0].removeAttribute("href");
   const selectAllBtn = document.getElementsByClassName("dropdown-btn-wrapper");
   for (s of selectAllBtn) {
     s.addEventListener("mouseup", loadFData);
   }
-
   const resetAllButton = document.getElementsByClassName("reset-all-btn")[0];
+  resetAllButton.removeAttribute("href");
   resetAllButton.addEventListener("mouseup", handleResetAllClick);
   resetAllButton.href = "#";
 
