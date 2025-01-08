@@ -1586,9 +1586,13 @@ function createDropdownStructure(main_title, title, data) {
       for (let i = 0; i < checkboxes.length; i++) {
         checkboxes[i].addEventListener("click", handleCheckboxClick);
       }
+      const selectAllBtn = categoryDiv.getElementsByClassName("select-all-btn");
+      for (let i = 0; i < selectAllBtn.length; i++) {
+        selectAllBtn[i].addEventListener("click", handleSelectAllClick);
+      }
       const resetBtn = categoryDiv.getElementsByClassName("reset-btn");
       for (let i = 0; i < resetBtn.length; i++) {
-      resetBtn[i].addEventListener("click", handleResetClick);
+      resetBtn[i].addEventListener("click", handleStructuredResetClick);
       }
       dropdownList.appendChild(categoryDiv);
       categoryIndex++;
@@ -1654,24 +1658,45 @@ function createDropdownStructure(main_title, title, data) {
 
   return dropdown;
 }
-function handleResetClick(event) {
-  event.preventDefault(); 
+function handleSelectAllClick(event) {
+  event.preventDefault();
 
-  // Find the parent .checkbox-wrapper of the clicked reset button
-  const checkboxWrapper = event.target.closest(".checkbox-wrapper");
-  // Get the parent container of this "Reset" button for structure dropdown
-  const parentContainer = resetBtn.closest(".select-all");
-  if (parentContainer) {
-    // Get all checked checkboxes within this parent container
-    const checkedCheckboxes = parentContainer.querySelectorAll(
-      ".checkbox-element-wrapper .w-checkbox-input.w--redirected-checked"
+  // Find the parent .select-all of the clicked select all button
+  const selectAllWrapper = event.target.closest(".select-all");
+
+  if (selectAllWrapper) {
+    // Find all divs with class 'w-checkbox-input--inputType-custom'
+    const customCheckboxDivs = selectAllWrapper.querySelectorAll(
+      ".w-checkbox-input--inputType-custom:not(.is-minus):not(.w--redirected-checked)"
     );
 
-    // Simulate a click on each of those checkboxes to uncheck them
-    checkedCheckboxes.forEach((checkbox) => {
-      checkbox.click(); // This triggers the checkbox's event listener
+    customCheckboxDivs.forEach((div) => {
+      // Trigger a click event on the div itself
+      div.click(); // This assumes the div has an event listener for 'click'
     });
-  } else if (checkboxWrapper) {
+  }
+}
+function handleStructuredResetClick(event) {
+      e.preventDefault();
+
+      // Get the parent container of this "Reset" button
+      const parentContainer = resetBtn.closest(".select-all");
+
+      // Get all checked checkboxes within this parent container
+      const checkedCheckboxes = parentContainer.querySelectorAll(
+        '.checkbox-element-wrapper .w-checkbox-input.w--redirected-checked'
+      );
+
+      // Simulate a click on each of those checkboxes to uncheck them
+      checkedCheckboxes.forEach((checkbox) => {
+        checkbox.click(); // This triggers the checkbox's event listener
+      });
+}
+function handleResetClick(event) {
+  event.preventDefault();
+  // Find the parent .checkbox-wrapper of the clicked reset button
+  const checkboxWrapper = event.target.closest(".checkbox-wrapper");
+  if (checkboxWrapper) {
     // Find all elements with the class "w--redirected-checked" within this specific checkbox-wrapper
     const checkedDivs = checkboxWrapper.querySelectorAll(
       ".w--redirected-checked"
