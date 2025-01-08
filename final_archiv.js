@@ -1005,6 +1005,7 @@ function handleToggleClick(category, value) {
     );
     currentDiv.classList.remove("w--redirected-checked");
   }
+  loadFData();
 }
 // Get the results wrapper element
 function handleCheckboxClick(event) {
@@ -1690,6 +1691,8 @@ function handleResetAllClick(event) {
   const url = new URL(window.location.href);
   url.search = "";
   window.history.pushState({}, "", url.href);
+
+  loadFData();
 }
 function handleStructuredResetClick(event) {
       event.preventDefault();
@@ -1745,29 +1748,24 @@ async function fetchFilters() {
 document.addEventListener("DOMContentLoaded", async function () {
   await fetchFilters();
   handleQueryParamChange();
-  sort_random = "true";
-  const sortToggle = document.getElementsByClassName("random-switch")[0];
-  document
-    .querySelector(".results-tag_wrapper")
-    .addEventListener("mouseup", loadFData);
-  const toggle = document.getElementsByClassName("toggle")[0];
   
   await loadFData();
-  const selectAllBtn = document.getElementsByClassName("dropdown-btn-wrapper");
-  for (s of selectAllBtn) {
-    s.addEventListener("mouseup", loadFData);
-  }
+  //Reset All Button Handling
   const resetAllButton = document.getElementsByClassName("reset-all-btn")[0];
   resetAllButton.removeAttribute("href");
   resetAllButton.addEventListener("mouseup", handleResetAllClick);
   resetAllButton.href = "#";
 
+  //Search Input Hnalding
   const search = document.getElementsByClassName("search-field w-input")[0];
   search.addEventListener("keypress", (event) => {
     if (event.key == "Enter") {
       loadFData(event);
     }
   });
+  //Random Switch Logicc
+  sort_random = "true";
+  const sortToggle = document.getElementsByClassName("random-switch")[0];
   sortToggle.addEventListener("click", () => {
     if (sort_random == "false") {
       sort_random = "true";
