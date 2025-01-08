@@ -1753,17 +1753,10 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   const resetAllButton = document.getElementsByClassName("reset-all-btn")[0];
   resetAllButton.addEventListener("mouseup", () => {
-    // Remove all active filters without page reload
-    document.querySelectorAll(".fs-cmsfilter_active").forEach((filter) => {
-      filter.classList.remove("fs-cmsfilter_active");
-    });
-    document.querySelectorAll(".w--redirected-checked").forEach((filter) => {
-      filter.classList.remove("w--redirected-checked");
-    });
-    // Reset URL without reload
-    const currentUrl = new URL(window.location.href);
-    window.history.pushState({}, "", currentUrl.origin + currentUrl.pathname);
-    loadFData(null, false);
+    const url = new URL(window.location.href);
+    const baseUrl = url.origin + url.pathname;
+    window.history.pushState({}, "", baseUrl);
+    loadFData();
   });
   resetAllButton.href = "#";
 
