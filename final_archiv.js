@@ -1588,8 +1588,10 @@ function createDropdownStructure(main_title, title, data) {
       for (let i = 0; i < checkboxes.length; i++) {
         checkboxes[i].addEventListener("click", handleCheckboxClick);
       }
-      const resetBtn = categoryDiv.getElementsByClassName("reset-btn")[0];
-      resetBtn.addEventListener("click", handleResetClick);
+      const resetBtn = categoryDiv.getElementsByClassName("reset-btn");
+      for (let i = 0; i < resetBtn.length; i++) {
+      resetBtn[i].addEventListener("click", handleResetClick);
+      }
       dropdownList.appendChild(categoryDiv);
       categoryIndex++;
     }
