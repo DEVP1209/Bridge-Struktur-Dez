@@ -907,7 +907,7 @@ function handleQueryParamChange() {
       // Add 'w--redirected-checked' class to the corresponding checkbox
       if (value.charAt(0) == "-") {
         const currentDiv = document.querySelector(
-          `#${category}__${value.toLowerCase()}-minus`
+          `#${category}__${value.toLowerCase().substring(1)}-minus`
         );
         if (currentDiv) {
           currentDiv.classList.add("w--redirected-checked");
@@ -927,7 +927,7 @@ function updateQueryParam(category, value) {
   // Get the current URL and its search parameters
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.search);
-
+  params.delete("page");
   // Get the existing values for the category, if any
   const existingValues = params.get(category)
     ? params.get(category).split(",")
@@ -1677,6 +1677,13 @@ function handleSelectAllClick(event) {
     });
   }
   loadFData();
+}
+function handleResetAllClick(event) {
+  event.preventDefault();
+  const resetBtns = document.querySelectorAll(".reset-btn");
+  for (let i = 0; i < resetBtns.length; i++) {
+    resetBtns[i].click();
+  }
 }
 function handleStructuredResetClick(event) {
       event.preventDefault();
