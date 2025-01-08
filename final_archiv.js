@@ -866,7 +866,9 @@ window.loadFData = async function (e) {
           const pagination = document.getElementsByClassName(
             "w-pagination-wrapper pagination"
           )[0];
+          if(pagination){
           pagination.style.display = "none";
+          }
         } else {
           let plan = await renderData(data);
 
