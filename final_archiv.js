@@ -891,14 +891,13 @@ async function updatePagination(newPage) {
 }
 
 ////////// Checkbox Click logic
-async function handleQueryParamChange() {
+ function handleQueryParamChange() {
   // Get the current URL and its search parameters
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.search);
   // Remove the 'page' parameter if it exists
   params.delete("https://www.bildzeitschrift.com/dev-archiv?page");
   // Iterate over each parameter in the URL
-  await loadFData();
   params.forEach((values, category) => {
     // Split the values by comma in case there are multiple values for a category
     const valueArray = values.split(",");
@@ -1735,6 +1734,7 @@ async function fetchFilters() {
 }
 
 document.addEventListener("DOMContentLoaded", async function () {
+  await fetchFilters();
   handleQueryParamChange();
   sort_random = "true";
   let selection_excluding = "false";
@@ -1744,7 +1744,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     .querySelector(".results-tag_wrapper")
     .addEventListener("mouseup", loadFData);
   const toggle = document.getElementsByClassName("toggle")[0];
-  await fetchFilters();
+  
   await loadFData();
   const selectAllBtn = document.getElementsByClassName("dropdown-btn-wrapper");
   for (s of selectAllBtn) {
@@ -1752,12 +1752,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   }
 
   const resetAllButton = document.getElementsByClassName("reset-all-btn")[0];
-  resetAllButton.addEventListener("mouseup", () => {
-    const url = new URL(window.location.href);
-    const baseUrl = url.origin + url.pathname;
-    window.history.pushState({}, "", baseUrl);
-    loadFData();
-  });
+  resetAllButton.addEventListener("mouseup", handleResetAllClick);
   resetAllButton.href = "#";
 
   const search = document.getElementsByClassName("search-field w-input")[0];
