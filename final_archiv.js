@@ -891,20 +891,21 @@ async function updatePagination(newPage) {
 }
 
 ////////// Checkbox Click logic
-function handleQueryParamChange() {
+async function handleQueryParamChange() {
   // Get the current URL and its search parameters
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.search);
   // Remove the 'page' parameter if it exists
   params.delete("https://www.bildzeitschrift.com/dev-archiv?page");
   // Iterate over each parameter in the URL
+  await loadFData();
   params.forEach((values, category) => {
     // Split the values by comma in case there are multiple values for a category
     const valueArray = values.split(",");
     // Iterate over the values and call toggleTag for each
     valueArray.forEach((value) => {
       toggleTag(category, value);
-
+      
       // Add 'w--redirected-checked' class to the corresponding checkbox
       if (value.charAt(0) == "-") {
         const currentDiv = document.getElementById(`${category}__${value.toLowerCase().substring(1)}-minus`);
@@ -912,9 +913,7 @@ function handleQueryParamChange() {
           currentDiv.classList.add("w--redirected-checked");
         }
       } else {
-        const currentDiv = document.querySelector(
-          `#${category}__${value.toLowerCase()}`
-        );
+        const currentDiv = document.getElementById(`#${category}__${value.toLowerCase()}`);
         if (currentDiv) {
           currentDiv.classList.add("w--redirected-checked");
         }
@@ -1791,6 +1790,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     // window.addEventListener("popstate", function (event) {
     //   loadFData();
     // });
-    loadFData();
+    // loadFData();
   });
 });
