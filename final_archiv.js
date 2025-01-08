@@ -1352,7 +1352,8 @@ function createCheckboxElement(main_title, title, value, id) {
   const checkbox = document.createElement("div");
   checkbox.className =
     "w-checkbox-input w-checkbox-input--inputType-custom checkbox";
-  checkbox.id = `${main_title.toLowerCase().charAt(0)}_${title.replace(
+  let currentIdPrefix = (main_title == "Datum" || title == "Titelseite" || title == "Titel") ?  "" : `${main_title.toLowerCase().charAt(0)}_`
+  checkbox.id = `${currentIdPrefix}${title.replace(
     /\//g,
     "-"
   )}__${value.toLowerCase()}`;
@@ -1382,7 +1383,7 @@ function createCheckboxElement(main_title, title, value, id) {
   const minusCheckbox = document.createElement("div");
   minusCheckbox.className =
     "w-checkbox-input w-checkbox-input--inputType-custom checkbox is-minus";
-  minusCheckbox.id = `${main_title.toLowerCase().charAt(0)}_${title.replace(
+  minusCheckbox.id = `${currentIdPrefix}${title.replace(
     /\//g,
     "-"
   )}__${value.toLowerCase()}-minus`;
