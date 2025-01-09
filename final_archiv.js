@@ -1099,15 +1099,17 @@ function createDropdownSection(title, categoryData) {
     if (isCollapsed) {
       accordionContent.style.display = "flex";
       accordionContent.offsetHeight;
+      accordionContent.style.transition = "opacity 0.3s ease-in, height 0.3s ease-in";
       plusLine1.style.transform =
         "translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg)";
-      plusLine1.style.transition = "100ms ease-in";
+      plusLine1.style.transition = "200ms ease-in";
       accordionContent.style.opacity = "1";
     } else {
+      accordionContent.style.transition = "opacity 0.3s ease-in-out, height 0.3s ease-in-out";
       accordionContent.style.opacity = "0";
       plusLine1.style.transform =
         "translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(90deg) skew(0deg, 0deg)";
-      plusLine1.style.transition = "100ms ease-in-out";
+      plusLine1.style.transition = "200ms ease-in-out";
       setTimeout(() => {
         accordionContent.style.display = "none";
       }, 300);
