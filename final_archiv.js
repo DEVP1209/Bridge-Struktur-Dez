@@ -1589,7 +1589,15 @@ function createDropdownStructure(main_title, title, data) {
         ) {
           toggleButton.addEventListener("click", () => {
             const isExpanded = dropdownList.classList.contains("w--open");
-            dropdownList.classList.toggle("w--open");
+            let openDropdowns = document.querySelectorAll(".dropdown.inner.w-dropdown .w-dropdown-list.w--open");
+            for (let i = 0; i < openDropdowns.length; i++) {
+              openDropdowns[i].classList.remove("w--open");
+            }
+            if(!isExpanded){
+            dropdownList.classList.add("w--open");
+            }else{
+              dropdownList.classList.remove("w--open");
+            }
             toggleButton.setAttribute("aria-expanded", !isExpanded);
           });
         }
