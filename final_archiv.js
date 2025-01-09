@@ -1092,19 +1092,22 @@ function createDropdownSection(title, categoryData) {
   // Add click handler for accordion
   accordionTrigger.addEventListener("click", () => {
     const isCollapsed = accordionContent.style.display === "none";
-
+    let openDropdowns = document.querySelectorAll(".w--open");
+    for (let i = 0; i < openDropdowns.length; i++) {
+        openDropdowns[i].classList.remove("w--open");
+      }
     if (isCollapsed) {
       accordionContent.style.display = "flex";
       accordionContent.offsetHeight;
       plusLine1.style.transform =
         "translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg)";
-      plusLine1.style.transition = "300ms ease-in";
+      plusLine1.style.transition = "100ms ease-in";
       accordionContent.style.opacity = "1";
     } else {
       accordionContent.style.opacity = "0";
       plusLine1.style.transform =
         "translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(90deg) skew(0deg, 0deg)";
-      plusLine1.style.transition = "300ms ease-in-out";
+      plusLine1.style.transition = "100ms ease-in-out";
       setTimeout(() => {
         accordionContent.style.display = "none";
       }, 300);
@@ -1323,6 +1326,10 @@ function createDropdown(main_title, title, values) {
 
   // Add click handlers
   trigger.addEventListener("click", () => {
+    let openDropdowns = document.querySelectorAll(".w--open");
+    for (let i = 0; i < openDropdowns.length; i++) {
+      openDropdowns[i].classList.remove("w--open");
+    }
     const isExpanded = dropdownList.classList.contains("w--open");
     dropdownList.classList.toggle("w--open");
     trigger.setAttribute("aria-expanded", !isExpanded);
@@ -1748,7 +1755,6 @@ async function fetchFilters() {
 document.addEventListener("DOMContentLoaded", async function () {
   await fetchFilters();
   handleQueryParamChange();
-  
   await loadFData();
   //Reset All Button Handling
   const resetAllButton = document.getElementsByClassName("reset-all-btn")[0];
@@ -1780,6 +1786,5 @@ document.addEventListener("DOMContentLoaded", async function () {
         sortToggle.classList.add("is--off");
       }
     }
-    loadFData();
   });
 });
