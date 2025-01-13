@@ -819,11 +819,7 @@ window.loadFData = async function (e) {
       try {
         let data;
         if (url.split("?").length > 1) {
-          const sortToggle = document
-            .getElementsByClassName("random-switch")[0]
-            .classList.contains("is--on")
-            ? "true"
-            : "false";
+          const sortToggle = sort_random.toString();
           const selection_exclude = "";
           const response = await fetch(
             `https://bildzeitschrift.netlify.app/.netlify/functions/loadData?sort_toggle=${sortToggle}&selectExcl=${selection_exclude}&${getQuery}`,
@@ -835,11 +831,7 @@ window.loadFData = async function (e) {
           );
           data = await response.json();
         } else {
-          const sortToggle = document
-            .getElementsByClassName("random-switch")[0]
-            .classList.contains("is--on")
-            ? "true"
-            : "false";
+          const sortToggle = sort_random.toString();
           const randomOrder = 1;
           const selection_exclude = "";
           const response = await fetch(
@@ -1016,7 +1008,26 @@ function handleCheckboxClick(event) {
   toggleTag(category, value);
   loadFData();
 }
-
+function handleCheckboxReversal(event) {
+  const checkbox = event.target;
+  const category = checkbox.getAttribute("id").split("__")[0];
+  const value = checkbox.getAttribute("data-name");
+  if (value.charAt(0) == "-") {
+    if(document.querySelector(`div[data-name="${value.substring(1)}"]`).classList.contains("w--redirected-checked")){
+      let value2 = value.substring(1);
+      updateQueryParam(category, value2);
+      toggleTag(category, value2);
+  }
+}
+else{
+  if(document.querySelector(`div[data-name="-${value}"]`).classList.contains("w--redirected-checked")){
+    let value2 = `-${value}`;
+    updateQueryParam(category, value2);
+    toggleTag(category, value2);
+  }
+}
+handleCheckboxClick(event);
+}
 function toTitleCase(str) {
   return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 }
@@ -1184,7 +1195,7 @@ function createSingleCheckboxElement(title, value, id) {
     .replace(/\//g, "-")
     .toLowerCase()}__${value.toLowerCase()}`;
   checkbox.setAttribute("data-name", value);
-  checkbox.addEventListener("click", handleCheckboxClick);
+  checkbox.addEventListener("click", handleCheckboxReversal);
   const input = document.createElement("input");
   input.type = "checkbox";
   input.id = id;
@@ -1203,7 +1214,7 @@ function createSingleCheckboxElement(title, value, id) {
     .replace(/\//g, "-")
     .toLowerCase()}__${value.toLowerCase()}-minus`;
   minusCheckbox.setAttribute("data-name", `-${value}`);
-  minusCheckbox.addEventListener("click", handleCheckboxClick);
+  minusCheckbox.addEventListener("click", handleCheckboxReversal);
   const minusInput = document.createElement("input");
   minusInput.type = "checkbox";
   minusInput.id = `${id}-minus`;
@@ -1372,7 +1383,7 @@ function createCheckboxElement(main_title, title, value, id) {
     "-"
   ).toLowerCase()}__${value.toLowerCase()}`;
   checkbox.setAttribute("data-name", value);
-  checkbox.addEventListener("click", handleCheckboxClick);
+  checkbox.addEventListener("click", handleCheckboxReversal);
   const input = document.createElement("input");
   input.type = "checkbox";
   input.id = id;
@@ -1402,7 +1413,7 @@ function createCheckboxElement(main_title, title, value, id) {
     "-"
   ).toLowerCase()}__${value.toLowerCase()}-minus`;
   minusCheckbox.setAttribute("data-name", `-${value}`);
-  minusCheckbox.addEventListener("click", handleCheckboxClick);
+  minusCheckbox.addEventListener("click", handleCheckboxReversal);
   const minusInput = document.createElement("input");
   minusInput.type = "checkbox";
   minusInput.id = `${id}-minus`;
@@ -1609,7 +1620,7 @@ function createDropdownStructure(main_title, title, data) {
         "w-checkbox-input--inputType-custom"
       );
       for (let i = 0; i < checkboxes.length; i++) {
-        checkboxes[i].addEventListener("click", handleCheckboxClick);
+        checkboxes[i].addEventListener("click", handleCheckboxReversal);
       }
       const selectAllBtn = categoryDiv.getElementsByClassName("select-all-btn");
       for (let i = 0; i < selectAllBtn.length; i++) {
@@ -1672,7 +1683,7 @@ function createDropdownStructure(main_title, title, data) {
         "w-checkbox-input--inputType-custom"
       );
       for (let i = 0; i < checkboxes.length; i++) {
-        checkboxes[i].addEventListener("click", handleCheckboxClick);
+        checkboxes[i].addEventListener("click", handleCheckboxReversal);
       }
       dropdownList.appendChild(valueDiv);
     });
@@ -1712,7 +1723,7 @@ function handleResetAllClick(event) {
   const url = new URL(window.location.href);
   url.search = "";
   window.history.pushState({}, "", url.href);
-
+  document.getElementsByClassName("search-field w-input")[0].value = "";
   loadFData();
 }
 function handleStructuredResetClick(event) {
@@ -1780,7 +1791,11 @@ document.addEventListener("DOMContentLoaded", async function () {
   const search = document.getElementsByClassName("search-field w-input")[0];
   search.addEventListener("keypress", (event) => {
     if (event.key == "Enter") {
-      loadFData(event);
+      category = "search"
+      value = search.value;
+      updateQueryParam(category, value);
+      toggleTag(category, value);
+      loadFData();
     }
   });
   //Random Switch Logicc
@@ -1800,5 +1815,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         sortToggle.classList.add("is--off");
       }
     }
+    loadFData();
   });
 });
