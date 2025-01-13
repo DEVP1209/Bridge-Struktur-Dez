@@ -584,6 +584,7 @@ async function renderData(data) {
         leftArrowImage.className = "pagination-arrow left disabled-clicks";
         leftArrowButton.style.marginRight = "0px";
         leftArrowButton.style.paddingRight = "0px";
+        leftArrowButton.style.cursor = "pointer";
         leftArrowButton.append(leftArrowImage);
         pageFragment.append(leftArrowButton);
         leftArrowButton.setAttribute("data-page", currentPage - 10);
@@ -599,6 +600,7 @@ async function renderData(data) {
       leftArrowImage.src =
         "https://res.cloudinary.com/wdy-bzs/image/upload/v1651849092/asset/Arrow.svg";
       leftArrowImage.className = "pagination-arrow left disabled-clicks";
+      leftArrowButton.style.cursor = "pointer";
       leftArrowButton.style.paddingLeft = "0px";
       leftArrowButton.style.paddingRight = "0px";
       leftArrowButton.append(leftArrowImage);
@@ -611,6 +613,7 @@ async function renderData(data) {
         const pageButton = document.createElement("div");
         const pageDiv = document.createElement("div");
         pageDiv.className = "disabled-clicks";
+        pageButton.style.cursor = "pointer";
         pageDiv.textContent = i;
         pageButton.className = "pagination-page-button w-inline-block";
         pageButton.setAttribute("data-page", i);
@@ -627,6 +630,7 @@ async function renderData(data) {
       if (currentPage < 5) {
         for (i = 1; i <= 5; i++) {
           const pageButton = document.createElement("div");
+          pageButton.style.cursor = "pointer";
           const pageDiv = document.createElement("div");
           pageDiv.className = "disabled-clicks";
           pageDiv.textContent = i;
@@ -644,9 +648,12 @@ async function renderData(data) {
         const pageDots = document.createElement("div");
         pageDots.textContent = "...";
         pageDots.className = "pagination-dots-button";
+        pageDots.style.cursor = "pointer";
         pageFragment.append(pageDots);
+        
 
         const lastPageButton = document.createElement("div");
+        lastPageButton.style.cursor = "pointer";
         const lastPageDiv = document.createElement("div");
         lastPageDiv.className = "disabled-clicks";
         lastPageDiv.textContent = pageCount;
@@ -659,6 +666,7 @@ async function renderData(data) {
         paginationWrapper.append(pageFragment);
       } else if (currentPage >= 5 && currentPage <= pageCount - 4) {
         const firstPageButton = document.createElement("div");
+        firstPageButton.style.cursor = "pointer";
         const firstPageDiv = document.createElement("div");
         firstPageDiv.className = "disabled-clicks";
         firstPageDiv.textContent = "1";
@@ -671,10 +679,12 @@ async function renderData(data) {
         const pageDots = document.createElement("div");
         pageDots.textContent = "...";
         pageDots.className = "pagination-dots-button disabled-clicks";
+        pageDots.style.cursor = "pointer";
         pageFragment.append(pageDots);
         var j = currentPage - 1;
         for (i = 0; i < 3; i++) {
           const pageButton = document.createElement("div");
+          pageButton.style.cursor = "pointer";
           const pageDiv = document.createElement("div");
           pageDiv.className = "disabled-clicks";
           pageDiv.textContent = j;
@@ -692,6 +702,7 @@ async function renderData(data) {
         const midPageDots = document.createElement("div");
         midPageDots.textContent = "...";
         midPageDots.className = "pagination-dots-button disabled-clicks";
+        midPageDots.style.cursor = "pointer";
         pageFragment.append(midPageDots);
 
         const lastPageButton = document.createElement("div");
@@ -702,10 +713,12 @@ async function renderData(data) {
         lastPageButton.setAttribute("data-page", pageCount); // Check here , maybe i
         lastPageButton.addEventListener("click", handlePaginationClick);
         lastPageButton.append(lastPageDiv);
+        lastPageButton.style.cursor = "pointer";
         pageFragment.append(lastPageButton);
         paginationWrapper.append(pageFragment);
       } else {
         const firstPageButton = document.createElement("div");
+        firstPageButton.style.cursor = "pointer";
         const firstPageDiv = document.createElement("div");
         firstPageDiv.className = "disabled-clicks";
         firstPageDiv.textContent = "1";
@@ -719,10 +732,12 @@ async function renderData(data) {
         const pageDots = document.createElement("div");
         pageDots.textContent = "...";
         pageDots.className = "pagination-dots-button";
+        pageDots.style.cursor = "pointer";
         pageFragment.append(pageDots);
 
         for (i = pageCount - 4; i <= pageCount; i++) {
           const pageButton = document.createElement("div");
+          pageButton.style.cursor = "pointer";  
           const pageDiv = document.createElement("div");
           pageDiv.className = "disabled-clicks";
           pageDiv.textContent = i;
@@ -748,6 +763,7 @@ async function renderData(data) {
       rightArrowButton.setAttribute("aria-label", "Next Page");
       const rightArrowImage = document.createElement("img");
       rightArrowButton.style.marginLeft = 10;
+      rightArrowButton.style.cursor = "pointer";
       rightArrowImage.width = "45";
       rightArrowImage.loading = "lazy";
       rightArrowImage.src =
@@ -763,7 +779,7 @@ async function renderData(data) {
           "w-pagination-right pagination-button-next keep-params 10xarrow";
         rightArrowButton.setAttribute("aria-label", "Next Page");
         const rightArrowImage = document.createElement("img");
-        rightArrowImage.style;
+        rightArrowButton.style.cursor = "pointer";
         rightArrowImage.width = "45";
         rightArrowButton.style.marginLeft = "0px";
         rightArrowImage.loading = "lazy";
@@ -791,14 +807,14 @@ window.loadFData = async function (e) {
       : currentUrl.searchParams.set("search", searchValue);
     window.history.replaceState({}, document.title, currentUrl.href);
   }
-  if (!e || e.key == "Enter") {
-    var currentUrl = new URL(window.location.href);
-    if (currentUrl.searchParams.get("search")) {
-      let searchValue = (document.getElementsByClassName(
-        "search-field w-input"
-      )[0].value = String(currentUrl.searchParams.get("search")));
-    }
-  }
+  // if (!e || e.key == "Enter") {
+  //   var currentUrl = new URL(window.location.href);
+  //   if (currentUrl.searchParams.get("search")) {
+  //     let searchValue = (document.getElementsByClassName(
+  //       "search-field w-input"
+  //     )[0].value = String(currentUrl.searchParams.get("search")));
+  //   }
+  // }
   setTimeout(async () => {
     await (async () => {
       const url = window.location.href;
@@ -1013,17 +1029,21 @@ function handleCheckboxReversal(event) {
   const category = checkbox.getAttribute("id").split("__")[0];
   const value = checkbox.getAttribute("data-name");
   if (value.charAt(0) == "-") {
-    if(document.querySelector(`div[data-name="${value.substring(1)}"]`).classList.contains("w--redirected-checked")){
+    let otherCheckbox = document.querySelector(`div[data-name="${value.substring(1)}"]`)
+    if(otherCheckbox.classList.contains("w--redirected-checked")){
       let value2 = value.substring(1);
       updateQueryParam(category, value2);
       toggleTag(category, value2);
+      otherCheckbox.classList.remove("w--redirected-checked");
   }
 }
 else{
-  if(document.querySelector(`div[data-name="-${value}"]`).classList.contains("w--redirected-checked")){
+  let otherCheckbox = document.querySelector(`div[data-name="-${value}"]`)
+  if(otherCheckbox.classList.contains("w--redirected-checked")){
     let value2 = `-${value}`;
     updateQueryParam(category, value2);
     toggleTag(category, value2);
+    otherCheckbox.classList.remove("w--redirected-checked");
   }
 }
 handleCheckboxClick(event);
@@ -1492,7 +1512,15 @@ function createDropdownStructure(main_title, title, data) {
 
   toggleBtn.addEventListener("click", () => {
     const isExpanded = dropdownList.classList.contains("w--open");
-    dropdownList.classList.toggle("w--open");
+    let openDropdowns = document.querySelectorAll(".w--open");
+    for (let i = 0; i < openDropdowns.length; i++) {
+      openDropdowns[i].classList.remove("w--open");
+    }
+    if(!isExpanded){
+    dropdownList.classList.add("w--open");
+    }else{
+      dropdownList.classList.remove("w--open");
+    }
     toggleBtn.setAttribute("aria-expanded", !isExpanded);
   });
   // Add nested category dropdowns
@@ -1795,6 +1823,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       value = search.value;
       updateQueryParam(category, value);
       toggleTag(category, value);
+      search.value = "";
       loadFData();
     }
   });
