@@ -1814,7 +1814,19 @@ document.addEventListener("DOMContentLoaded", async function () {
   resetAllButton.removeAttribute("href");
   resetAllButton.addEventListener("mouseup", handleResetAllClick);
   resetAllButton.href = "#";
-
+   // Filter-label Handling
+  const filterLabels = document.getElementsByClassName("filter-element-label");
+  for (let i = 0; i < filterLabels.length; i++) {
+    filterLabels[i].addEventListener("click", (event) => {
+      const label = event.target.closest('.w-checkbox');
+      if (label) {
+        const checkbox = label.querySelector('.w-checkbox-input--inputType-custom');
+        if (checkbox) {
+          checkbox.click();
+        }
+      }
+    });
+  }
   //Search Input Hnalding
   const search = document.getElementsByClassName("search-field w-input")[0];
   search.addEventListener("keypress", (event) => {
