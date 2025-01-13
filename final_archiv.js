@@ -999,7 +999,7 @@ function toggleTag(category, value) {
     });
     // Append the new tag to the container
     if(value.charAt(0) == "-"){
-      newTag.style.backgroundColor = "var(--peru) !important";
+      newTag.style.backgroundColor = "#bf8563 !important";
     }
     container.appendChild(newTag);
   }
