@@ -1000,7 +1000,7 @@ function toggleTag(category, value) {
     // Append the new tag to the container
     if(value.charAt(0) == "-"){
       newTag.style.backgroundColor = "var(--peru) !important";
-    }x
+    }
     container.appendChild(newTag);
   }
 }
