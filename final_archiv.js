@@ -998,12 +998,16 @@ function toggleTag(category, value) {
       handleToggleClick(category, value);
     });
     // Append the new tag to the container
+    if(value.charAt(0) == "-"){
+      newTag.style.backgroundColor = "var(--peru) !important";
+    }x
     container.appendChild(newTag);
   }
 }
 function handleToggleClick(category, value) {
   updateQueryParam(category, value);
   toggleTag(category, value);
+  if(category != "search"){
   if (value.charAt(0) == "-") {
     const currentDiv = document.querySelector(`div[data-name="${value}"]`);
     currentDiv.classList.remove("w--redirected-checked");
@@ -1013,6 +1017,7 @@ function handleToggleClick(category, value) {
     );
     currentDiv.classList.remove("w--redirected-checked");
   }
+}
   loadFData();
 }
 // Get the results wrapper element
